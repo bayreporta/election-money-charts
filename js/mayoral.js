@@ -640,14 +640,15 @@
 
 // ------- DETECT CANDIDATE ------- //
 	function detectCandidate(){
-		var grabTitle = $(document).find("title").text();
+		/*var grabTitle = $(document).find("title").text();
 		console.log(grabTitle)
 
 		for (i = 0 ; i < candidateDB.length ; i++){
 			if (grabTitle === candidateDB[i]){
 				candidate = i;
 			}
-		}
+		}*/
+		candidate = 2;
 	}
 
 // ------- POPULATE SUMMARY DATA ------- //
