@@ -413,137 +413,20 @@
 		<h1><strong></strong></h1>
 		<p>this should only take a moment</p>
 	</div>
-	<div id="cf-chart">		
+	<div id="cf-chart">
 		<div id="cf-choose">
+			<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
+				<option value="All">All</option>
+				<option value="District Attorney">District Attorney</option>
+				<option value="Supervisor: District 4">Supervisor: District 4</option>
+				<option value="Supervisor: District 5">Supervisor: District 5</option>
+			</select>
 			<select id="overall-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
 				<option value="Cash Spent">Cash Spent</option>
-				<option value="Sectors">Sectors/Industries</option>
 				<option value="Contributors">Top Contributors</option>
 				<option value="Sectors">Geography</option>
 			</select>
-		</div>
-		<div id="cf-contribute" class="cf-canvas">
-			<div class="cf-title" style="float:none;">
-				<h2>Top Contributors 2013-2014</h2>
-				<h4>Last Report 1/30/2014</h4>
-			</div>
-			<div id="top-employer" class="cf-infobox">
-				<h4>Top 5 Employers</h4>
-				<ul>
-					<li><span>Homemaker</span>: $<span>18,450</span></li>
-					<li><span>A B & I Foundary</span>: $<span>7,000</span></li>
-					<li><span>Not Employed</span>: $<span>5,970</span></li>
-					<li><span>DaVita HealthCare Partners, Inc.</span>: $<span>5,650</span></li>
-					<li><span>San Francisco Regional Center</span>: $<span>5,100</span></li>
-				</ul>
-			</div>
-			<div class="highlights" id="cf-average">
-				<h4>$309</h4>
-				<p>average reported contribution</p>
-			</div>
-			<div class="highlights" id="cf-no">
-				<h4>1,541</h4>
-				<p>number of contributions</p>
-			</div>	
-			<p class="chart-footer">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>
-
-		</div>
-		<div id="cf-stacked" class="cf-canvas">
-			<div class="stacked-bar-chart">
-				<div class="cf-head">
-					<div class="cf-title">
-						<h2>Where Contributions Came From (hover over bars for details)</h2>
-						<h4></h4>
-					</div>
-					<div id="cf-legend">
-						<div class="cf-legend-opt"><p>LEGEND:</p></div>
-						<div class="cf-legend-opt"><p>Oakland</p></div>
-						<div class="cf-legend-opt"><p>Bay Area</p></div>
-						<div class="cf-legend-opt"><p>California</p></div>
-						<div class="cf-legend-opt"><p>Outside California</p></div>								
-					</div>
-					<div class="stacked-bar-row" id="1">
-						<div class="bar-label">
-							<p class="the-label">Patrick McCullough</p>
-						</div>
-						<div class="bar-data">
-							<div id="oakland" class="bar-seg"></div>
-							<div id="bayarea" class="bar-seg"></div>
-							<div id="cali" class="bar-seg"></div>
-							<div id="notcali" class="bar-seg"></div>
-						</div>
-					</div>
-					<div class="stacked-bar-row" id="2">
-						<div class="bar-label">
-							<p class="the-label">Bryan Parker</p>
-						</div>
-						<div class="bar-data">
-							<div id="oakland" class="bar-seg"></div>
-							<div id="bayarea" class="bar-seg"></div>
-							<div id="cali" class="bar-seg"></div>
-							<div id="notcali" class="bar-seg"></div>
-						</div>
-					</div>
-					<div class="stacked-bar-row" id="3">
-						<div class="bar-label">
-							<p class="the-label">Jean Quan</p>
-						</div>
-						<div class="bar-data">
-							<div id="oakland" class="bar-seg"></div>
-							<div id="bayarea" class="bar-seg"></div>
-							<div id="cali" class="bar-seg"></div>
-							<div id="notcali" class="bar-seg"></div>
-						</div>
-					</div>
-					<div class="stacked-bar-row" id="4">
-						<div class="bar-label">
-							<p class="the-label">Libby Schaaf</p>
-						</div>
-						<div class="bar-data">
-							<div id="oakland" class="bar-seg"></div>
-							<div id="bayarea" class="bar-seg"></div>
-							<div id="cali" class="bar-seg"></div>
-							<div id="notcali" class="bar-seg"></div>
-						</div>
-					</div>
-					<div class="stacked-bar-row" id="5">
-						<div class="bar-label">
-							<p class="the-label">Dan Siegel</p>
-						</div>
-						<div class="bar-data">
-							<div id="oakland" class="bar-seg"></div>
-							<div id="bayarea" class="bar-seg"></div>
-							<div id="cali" class="bar-seg"></div>
-							<div id="notcali" class="bar-seg"></div>
-						</div>
-					</div>
-					<div class="stacked-bar-row" id="6">
-						<div class="bar-label">
-							<p class="the-label">Joe Tuman</p>
-						</div>
-						<div class="bar-data">
-							<div id="oakland" class="bar-seg"></div>
-							<div id="bayarea" class="bar-seg"></div>
-							<div id="cali" class="bar-seg"></div>
-							<div id="notcali" class="bar-seg"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="cf-industry" class="cf-canvas">
-				<div class="drill-bar-chart">
-					<div class="cf-head">
-						<div class="cf-title">
-							<h2>Total Cash Raised 2013-2014</h2>
-							<h4>Last Report 1/30/2014</h4>
-						</div>
-						<div class="cf-detail">
-							<p><strong>Click to Go Back</strong></p>
-						</div>	
-					</div>
-				</div>
 		</div>
 		<div id="cf-summary" class="cf-canvas">
 			<div class="bar-chart">
@@ -608,14 +491,22 @@
 
 <script>
 	// ------- GLOBAL ------- //
-		var mayoralDB = [];
-		var maxBarWidth = 630;
-		var updated = "Data Updated on 2/1/2014";
-		var mayoralCand = ["Patrick McCullough","Bryan Parker","Jean Quan","Libby Schaff","Dan Siegel","Joe Tuman"];
-		var sectorList = ["Agribusiness","Communications","Construction","Consulting","Defense and Law Enforcement","Education","Elected Officials and Public Employees","Energy and Natural Resources","Finance, Insurance, and Real Estate","Health","Ideological/Single Issue","Labor","Lawyers and Lobbyists","Manufacturing","Misc. Business","Non-Profit","Other","Retired","Technology","Transportation"]
+		var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdFo3Tnl5cmpnZXUydVloYUZSZnR5RHc&output=html";
+		var candidateDB = [];
+		var candidates = {
+			all:8,
+			da:4,
+			dfour:2,
+			dfive:2
+		};
+		var maxBarWidth = 400;
+		var updated = "3/17/2014";
+		var mayoralCand = [];
 		var currentBars = 6;
 		var view = "Cash Raised";
-
+		var race = "All";
+		var raceTotal = candidates.all;
+		
 	// ------- CHOSEN ------- //	
 		$(document).ready(function(){
 			var config = {
@@ -640,7 +531,7 @@
 				$("#loading h1:eq(0)").html("Lubricating Political Wheels...");
 			} 
 			else if (random === 2){
-				$("#loading h1:eq(0)").html("Connecting to DAC Central Server...");
+				$("#loading h1:eq(0)").html("Connecting to Central Server...");
 			}
 			else if (random === 3){
 				$("#loading h1:eq(0)").html("Circumventing NSA Snooping...");
@@ -649,7 +540,7 @@
 				$("#loading h1:eq(0)").html("Consulting Consultants...");
 			}
 			else if (random === 5){
-				$("#loading h1:eq(0)").html("Populating Pixels...");
+				$("#loading h1:eq(0)").html("Populating Plazoids...");
 			}
 			else if (random === 6){
 				$("#loading h1:eq(0)").html("Sizing Up War Chests...");
@@ -661,7 +552,7 @@
 				$("#loading h1:eq(0)").html("Verifying Accounting...");
 			}
 			else if (random === 9){
-				$("#loading h1:eq(0)").html("Loading Stuff and Things...");
+				$("#loading h1:eq(0)").html("Handshaking Good Ole Boys...");
 			}
 			else if (random === 10){
 				$("#loading h1:eq(0)").html("Communicating Telepathically...");
@@ -669,53 +560,70 @@
 		});
 
 	// ------- TABLETOP ------- //
-		var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdDVyeE9ONFctMnRSU2VjanhZTUJsN1E&output=html";
-
-
 		$(document).ready(function(){
 				Tabletop.init( { key: gsheet,
 			                     callback: setTheScene,
-			                     wanted: ["admin","overall"],
+			                     wanted: ["Summary"],
 			                     debug: true } );
 		});
-
-
 
 	// ------- GET AND POPULATE CANDIDATE INFO ------- //
 
 		function setTheScene(data, tabletop){
-			$.each( tabletop.sheets("overall").all(), function(i, overall) {
+			//pull spreadsheet data into arrays
+			$.each( tabletop.sheets("Summary").all(), function(i, summary) {
 				var insertRow = [];
-				insertRow[0] = overall.item;
-				insertRow[1] = parseInt(overall.amount);
-				mayoralDB.push(insertRow);
+				insertRow[0] = summary.category;
+				insertRow[1] = summary.all;
+				insertRow[2] = summary.bass;
+				insertRow[3] = summary.kerrigan;
+				insertRow[4] = summary.latour;
+				insertRow[5] = summary.sundberg;
+				insertRow[6] = summary.dollison;
+				insertRow[7] = summary.firpo;
+				insertRow[8] = summary.fleming;
+				insertRow[9] = summary.klein;
+				candidateDB.push(insertRow);
 			});
-			$(".cf-title h4").html(updated); //when last updated
+						
+			
+			//when last updated
+			$(".cf-title h4").html("Data Updated on " + updated); 
 
 			//loading
 			$("#cf-chart").css("visibility","visible").css("height","auto");
 			$("#loading").remove();
-
-
-			drawSummary()
+			
+			//draw first chart
+			resetSummaryBars(view);
+			renameSummaryLabels(view);
+			$(".cf-canvas").css("display","none");
+			$("#cf-summary").css("display","block").animate({
+				height:500
+			});
+			drawContributions()
 		}
 
-		function drawSummary(){
+		function drawContributions(){
 			var data = [];
 			var dataWidth = [];
 			var commas = [];
 
 			//size up data
-			for (i=0 ; i < 6 ; i++){
-				var ii = i+1;
-				data[i] = mayoralDB[ii][1];
-				commas[i] = commaSeparateNumber(mayoralDB[ii][1]);
-
+			for (i=0 ; i < raceTotal; i++){
+				var ii = i+2;
+				data[i] = parseInt(candidateDB[5][ii]);
+				commas[i] = commaSeparateNumber(data[i]);
 			}
-
+			console.log(data)
+			
+			//find highest value in array
 			var maxValue = Math.max.apply(null, data);
+			
+			//figure out the width for each bar
 			for (i = 0 ; i < data.length ; i++){
 				dataWidth[i] = (data[i] / maxValue) * maxBarWidth;
+				console.log(dataWidth[i])
 			}
 
 			//populate data
@@ -726,6 +634,8 @@
 					width:dataWidth[i]
 				})
 			}
+			
+			//meta
 			$("#cf-summary .cf-title h2").text("Total Cash Raised 2013-14");
 			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(data[0] + data[1] + data[2] + data[3] + data[4] + data[5]) + " contributed total</h4>");
 			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans.</p>");
@@ -740,8 +650,8 @@
 			//size up data
 			for (i=0 ; i < 6 ; i++){
 				var ii = i+8;
-				data[i] = mayoralDB[ii][1];
-				commas[i] = commaSeparateNumber(mayoralDB[ii][1]);
+				data[i] = candidateDB[ii][1];
+				commas[i] = commaSeparateNumber(candidateDB[ii][1]);
 
 			}
 
@@ -765,46 +675,6 @@
 			sortBars();
 		}
 
-		function drawSectors(){
-			var data = [];
-			var dataWidth = [];
-			var commas = [];
-
-			//reset color
-			$(".bar-data").css("background","#91cf60");
-
-			//size up data
-			for (i=0 ; i < 136 ; i++){
-				var ii = i+14;
-				data[i] = mayoralDB[ii][1];
-				commas[i] = commaSeparateNumber(mayoralDB[ii][1]);
-			}
-
-			//get highest value in array
-			var maxValue = Math.max.apply(null, data);
-
-			//establish bar width
-			for (i = 0 ; i < data.length ; i++){
-				dataWidth[i] = (data[i] / maxValue) * maxBarWidth;
-			}
-
-			//populate sector data
-			var x = 0; // tracks position on canvas
-			for (i=0 ; i < data.length ; i++){
-				if ( i === 0 || i === 8 ||i === 17 ||i === 21 || i === 28 || i === 33 || i === 39 || i === 46 || i === 53 || i === 62 || i === 67 || i === 75 || i === 82 || i === 85 || i === 91 || i === 102 || i === 112 || i === 117 || i === 124 || i === 129 ){
-					$("#cf-summary .bar-row:eq(" + x + ")").attr("value",data[i]);
-					$("#cf-summary .bar-data:eq(" + x + ") p").text("$" + commas[i]);
-					$("#cf-summary .bar-data:eq(" + x + ")").animate({
-						width:dataWidth[i]
-					})
-					x = x + 1;
-				}
-			}
-			$("#cf-summary .cf-title h2").html("Total Contributions by Sector/Industry 2013-14<br>(click on bar to drill down)");
-			$("#cf-summary").append("<p class=\"chart-footer\">Sector and industry classifications are the result of an analysis of contributors and best reflects the type of business an employer is engaged in. The classifications may change after further analysis is conducted.</p>");
-			sortBars();
-		}
-
 		function drawGeography(){
 				var data = [];
 				var dataWidth = [];
@@ -815,8 +685,8 @@
 				//size up data
 				for (i=0 ; i < 24 ; i++){
 					var ii = i+205;
-					data[i] = mayoralDB[ii][1];
-					commas[i] = commaSeparateNumber(mayoralDB[ii][1]);
+					data[i] = candidateDB[ii][1];
+					commas[i] = commaSeparateNumber(candidateDB[ii][1]);
 				}
 
 				var ii= 0;
@@ -884,61 +754,28 @@
 				sortGeo();
 		}
 
-		function resetBars(view){
+		function resetSummaryBars(view){
 			//reset text and colors for chart
 			$(".chart-h4").remove();
 			$(".chart-footer").remove();
 			$(".bar-row").remove();
 
-			if (view === "Sectors/Industries"){
-				for (i = 1 ; i < 20 ; i++){
-					$("#cf-summary .bar-chart").append("<div class=\"bar-row pointer\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
-				}
-			}
-			else if (view === "Cash Raised"){
-				for (i = 1 ; i < 7 ; i++){
+			if (view === "Cash Raised"){
+				for (i = 1 ; i < raceTotal; i++){
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
 			}
 			else if (view === "Cash Spent"){
-				for (i = 1 ; i < 7 ; i++){
+				for (i = 1 ; i < raceTotal; i++){
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
 			}		
 		}
 
-		function renameLabels(view){
-			console.log(view)
-			if (view === "Cash Raised" || view === "Cash Spent"){
-				$("#cf-summary .bar-row:eq(0) .bar-label p").html(mayoralCand[0]);
-				$("#cf-summary .bar-row:eq(1) .bar-label p").html(mayoralCand[1]);
-				$("#cf-summary .bar-row:eq(2) .bar-label p").html(mayoralCand[2]);
-				$("#cf-summary .bar-row:eq(3) .bar-label p").html(mayoralCand[3]);
-				$("#cf-summary .bar-row:eq(4) .bar-label p").html(mayoralCand[4]);
-				$("#cf-summary .bar-row:eq(5) .bar-label p").html(mayoralCand[5]);
-			}
-			else if (view === "Sectors/Industries" ){
-				$("#cf-summary .bar-row:eq(0) .bar-label p").html(sectorList[0]);
-				$("#cf-summary .bar-row:eq(1) .bar-label p").html(sectorList[1]);
-				$("#cf-summary .bar-row:eq(2) .bar-label p").html(sectorList[2]);
-				$("#cf-summary .bar-row:eq(3) .bar-label p").html(sectorList[3]);
-				$("#cf-summary .bar-row:eq(4) .bar-label p").html(sectorList[4]);
-				$("#cf-summary .bar-row:eq(5) .bar-label p").html(sectorList[5]);
-				$("#cf-summary .bar-row:eq(6) .bar-label p").html(sectorList[6]);
-				$("#cf-summary .bar-row:eq(7) .bar-label p").html(sectorList[7]);
-				$("#cf-summary .bar-row:eq(8) .bar-label p").html(sectorList[8]);
-				$("#cf-summary .bar-row:eq(9) .bar-label p").html(sectorList[9]);
-				$("#cf-summary .bar-row:eq(10) .bar-label p").html(sectorList[10]);
-				$("#cf-summary .bar-row:eq(11) .bar-label p").html(sectorList[11]);
-				$("#cf-summary .bar-row:eq(12) .bar-label p").html(sectorList[12]);
-				$("#cf-summary .bar-row:eq(13) .bar-label p").html(sectorList[13]);
-				$("#cf-summary .bar-row:eq(14) .bar-label p").html(sectorList[14]);
-				$("#cf-summary .bar-row:eq(15) .bar-label p").html(sectorList[15]);
-				$("#cf-summary .bar-row:eq(16) .bar-label p").html(sectorList[16]);
-				$("#cf-summary .bar-row:eq(17) .bar-label p").html(sectorList[17]);
-				$("#cf-summary .bar-row:eq(18) .bar-label p").html(sectorList[18]);
-				$("#cf-summary .bar-row:eq(19) .bar-label p").html(sectorList[19]);
-				$("#cf-summary .bar-row:eq(20) .bar-label p").html(sectorList[20]);
+		function renameSummaryLabels(view){
+			for (i = 0; i < raceTotal; i++){
+				var ii=i+2;
+				$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
 			}
 		}
 
@@ -983,171 +820,7 @@
 		    }
 		    return val;
 		}
-
-	// ------- SECTOR/INDUSTRY DRILLDOWN------- //
-		$(document).ready(function(){
-			$("#cf-summary .bar-chart").on("click",".bar-row", function(){
-				var sector = $(this).find(".bar-label p").html();
-				var iRow, iHeight, iStart;
-
-				if (view === "Sectors/Industries"){
-					if (sector === "Retired" || sector === "Consulting"){
-						return;
-					}
-					else {
-						//establish number of industries
-						if (sector === "Agribusiness"){
-							iRow = 7;
-							iHeight = 455;
-							iStart = 15;
-						}
-						else if (sector === "Communications"){
-							iRow = 7;
-							iHeight = 455;
-							iStart = 23;
-						}
-						else if (sector === "Construction"){
-							iRow = 3;
-							iHeight = 285;
-							iStart = 32;
-						}
-						else if (sector === "Defense and Law Enforcement"){
-							iRow = 4;
-							iHeight = 320;
-							iStart = 29;
-						}
-						else if (sector === "Technology"){
-							iRow = 4;
-							iHeight = 320;
-							iStart = 139;
-						}
-						else if (sector === "Education"){
-							iRow = 5;
-							iHeight = 370;
-							iStart = 48;
-						}
-						else if (sector === "Elected Officials and Public Employees"){
-							iRow = 6;
-							iHeight = 410;
-							iStart = 54;
-						}
-						else if (sector === "Energy and Natural Resources"){
-							iRow = 6;
-							iHeight = 410;
-							iStart = 61;
-						}
-						else if (sector === "Finance, Insurance, and Real Estate"){
-							iRow = 8;
-							iHeight = 500;
-							iStart = 68;
-						}
-						else if (sector === "Health"){
-							iRow = 4;
-							iHeight = 320;
-							iStart = 77;
-						}
-						else if (sector === "Ideological/Single Issue"){
-							iRow = 4;
-							iHeight = 320;
-							iStart = 82;
-						}
-						else if (sector === "Labor"){
-							iRow = 6;
-							iHeight = 410;
-							iStart = 90;
-						}
-						else if (sector === "Lawyers and Lobbyists"){
-							iRow = 2;
-							iHeight = 240;
-							iStart = 97;
-						}
-						else if (sector === "Manufacturing"){
-							iRow = 3;
-							iHeight = 285;
-							iStart = 100;
-						}
-						else if (sector === "Misc. Business"){
-							iRow = 10;
-							iHeight = 590;
-							iStart = 106;
-						}
-						else if (sector === "Non-Profit"){
-							iRow = 8;
-							iHeight = 500;
-							iStart = 117;
-						}
-						else if (sector === "Other"){
-							iRow = 4;
-							iHeight = 320;
-							iStart = 127;
-						}
-						else if (sector === "Transportation"){
-							iRow = 6;
-							iHeight = 410;
-							iStart = 144;
-						}
-
-						//switch divs and clean canvas
-						$("#cf-summary .bar-chart").css("display","none");
-						$("#cf-industry .drill-bar-chart").css("display","block");
-						$("#cf-summary").css("display","none");
-						$("#cf-industry").css("display","block");
-						$("#cf-industry .bar-row").remove();
-
-						$("#cf-summary").animate({
-							height:iHeight
-						});
-
-						//populate bars
-						var e = iStart;
-						for (i = 0 ; i < iRow ; i++){
-							$("#cf-industry .drill-bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\">" + mayoralDB[e][0] + "</p></div><div class=\"bar-data\"><p></p></div></div>");
-							e = e + 1;
-						}
-						drawIndustry(iStart, iRow);
-
-					}
-				}
-				else {
-					return;
-				}
-
-			});
-		});
-
-		function drawIndustry(iStart, iRow){
-			var data = [];
-			var dataWidth = [];
-			var commas = [];
-
-			//size up data
-			for (i=0 ; i < iRow ; i++){
-				var ii = i+iStart;
-				console.log(iStart)
-				data[i] = mayoralDB[ii][1];
-				commas[i] = commaSeparateNumber(mayoralDB[ii][1]);
-
-			}
-
-			var maxValue = Math.max.apply(null, data);
-			for (i = 0 ; i < data.length ; i++){
-				dataWidth[i] = (data[i] / maxValue) * maxBarWidth;
-			}
-
-			//populate data
-			for (i=0 ; i < data.length ; i++){
-				$("#cf-industry .bar-row:eq(" + i + ")").attr("value",data[i]);
-				$("#cf-industry .bar-data:eq(" + i + ") p").text("$" + commas[i]);
-				$("#cf-industry .bar-data:eq(" + i + ")").animate({
-					width:dataWidth[i]
-				})
-
-
-			}
-			$("#cf-industry .cf-title h2").text(view + " Drilldown 2013-14");
-			sortIndustry();
-		}
-
+	
 
 	// ------- CHART BACK TO SECTOR FROM INDUSTRY------- //
 		$(document).ready(function(){
@@ -1156,8 +829,8 @@
 				$("#cf-industry .drill-bar-chart").css("display","none");
 				$("#cf-summary").css("display","block");
 				$("#cf-industry").css("display","none");
-				resetBars(view)
-				renameLabels(view);
+				resetSummaryBars(view)
+				renameSummaryLabels(view);
 				$(".cf-canvas").css("display","none");					
 				$("#cf-summary").css("display","block").animate({
 					height:1125
@@ -1179,17 +852,17 @@
 
 				//Change view
 				if (view === "Cash Raised"){
-					resetBars(view);
-					renameLabels(view);
+					resetSummaryBars(view);
+					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block").animate({
 						height:500
 					});
-					drawSummary()
+					drawContributions()
 				}
 				else if (view === "Top Contributors"){
-					resetBars(view);
-					renameLabels(view);
+					resetSummaryBars(view);
+					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-contribute").css("display","block").animate({
 						height:400
@@ -1204,8 +877,8 @@
 					drawGeography();
 				}
 				else if (view === "Sectors/Industries"){
-					resetBars(view)
-					renameLabels(view);
+					resetSummaryBars(view)
+					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");					
 					$("#cf-summary").css("display","block").animate({
 						height:1075
@@ -1213,8 +886,8 @@
 					drawSectors()
 				}
 				else if (view === "Cash Spent"){
-					resetBars(view)
-					renameLabels(view);
+					resetSummaryBars(view)
+					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block").animate({
 						height:500
