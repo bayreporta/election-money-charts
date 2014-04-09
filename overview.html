@@ -413,10 +413,10 @@
 	<div id="cf-chart">
 		<div id="cf-choose">
 			<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
-				<option value="All">All</option>
-				<option value="District Attorney">District Attorney</option>
-				<option value="Supervisor: District 4">Supervisor: District 4</option>
-				<option value="Supervisor: District 5">Supervisor: District 5</option>
+				<option value="0">All</option>
+				<option value="1">District Attorney</option>
+				<option value="2">Supervisor: District 4</option>
+				<option value="3">Supervisor: District 5</option>
 			</select>
 			<select id="overall-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
@@ -493,22 +493,14 @@
 			label:125, //labels for bars
 			maxBarWidth:400 //max bar length
 		}
+		var raceTotal = [8,4,2,2]; //manually enter the number of candidates for each race, in order you placed in list above
+		var raceColumns = [2,6,2,4]; // manually enter the column where this race data starts on the Summary sheet of GSheet
 		var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdFo3Tnl5cmpnZXUydVloYUZSZnR5RHc&output=html";
 		var candidateDB = [];
-		var candidates = { //enter races here
-			all:8,
-			da:4,
-			dfour:2,
-			dfive:2
-		};
-		var updated = "3/17/2014";
-		var mayoralCand = [];
-		var currentBars = 6;
-		var view = "Cash Raised";
-		var race = "All";
-		var raceTotal = candidates.all;
-		
-	// ------- CHOSEN ------- //	
+		var updated = "3/17/2014"; //update based on last update of data
+		var view = "Cash Raised"; //leave default
+		var race = 0; //leave default
+		// ------- CHOSEN ------- //	
 		$(document).ready(function(){
 			var config = {
 		      '.chosen-select'           : {},
@@ -521,12 +513,10 @@
 		      $(selector).chosen(config[selector]);
 		    }
 		});
-		
-	// ------- ADJUST DIMENSIONS ------- //
+		// ------- ADJUST DIMENSIONS ------- //
 		$(document).ready(function(){
 			$("#loading").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-head").add(".cf-title").add("#cf-summary").css("width",dimensions.overall);
 		});
-
 	// ------- FUNNY GREETINGS ------- //
 		$(document).ready(function(){
 			var random = Math.round(Math.random() * 10);
@@ -564,7 +554,6 @@
 				$("#loading h1:eq(0)").html("Communicating Telepathically...");
 			}
 		});
-
 	// ------- TABLETOP ------- //
 		$(document).ready(function(){
 				Tabletop.init( { key: gsheet,
@@ -572,9 +561,7 @@
 			                     wanted: ["Summary"],
 			                     debug: true } );
 		});
-
 	// ------- GET AND POPULATE CANDIDATE INFO ------- //
-
 		function setTheScene(data, tabletop){
 			//pull spreadsheet data into arrays
 			$.each( tabletop.sheets("Summary").all(), function(i, summary) {
@@ -611,17 +598,22 @@
 
 		function drawContributions(){
 			var data = [];
-			var all = parseInt(candidateDB[5][1]);
+			var all = 0;
 			var dataWidth = [];
 			var commas = [];
 
 			//size up data
-			for (i=0 ; i < raceTotal; i++){
-				var ii = i+2;
+			var ii = raceColumns[race];
+			for (i=0 ; i < raceTotal[race]; i++){
 				data[i] = parseInt(candidateDB[5][ii]);
 				commas[i] = commaSeparateNumber(data[i]);
+				ii = ii + 1;
 			}
-			console.log(data)
+
+			//find total
+			for (i=0 ; i < data.length ; i++){
+				all = all + data[i]
+			}
 			
 			//find highest value in array
 			var maxValue = Math.max.apply(null, data);
@@ -650,17 +642,22 @@
 
 		function drawSpent(){
 			var data = [];
-			var all = parseInt(candidateDB[19][1]);
+			var all = 0;
 			var dataWidth = [];
 			var commas = [];
 
 			//size up data
-			for (i=0 ; i < raceTotal; i++){
-				var ii = i+2;
+			var ii = raceColumns[race];
+			for (i=0 ; i < raceTotal[race] ;  i++){
 				data[i] = parseInt(candidateDB[19][ii]);
 				commas[i] = commaSeparateNumber(data[i]);
+				ii = ii + 1;
 			}
-			console.log(data)
+
+			//find total
+			for (i=0 ; i < data.length ; i++){
+				all = all + data[i]
+			}
 			
 			//find highest value in array
 			var maxValue = Math.max.apply(null, data);
@@ -773,12 +770,12 @@
 			$(".bar-row").remove();
 
 			if (view === "Cash Raised"){
-				for (i = 1 ; i < raceTotal; i++){
+				for (i = 1 ; i < raceTotal[race] + 1; i++){
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
 			}
 			else if (view === "Cash Spent"){
-				for (i = 1 ; i < raceTotal; i++){
+				for (i = 1 ; i < raceTotal[race] + 1; i++){
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
 			}		
@@ -789,25 +786,15 @@
 		}
 
 		function renameSummaryLabels(view){
-			for (i = 0; i < raceTotal; i++){
-				var ii=i+2;
+			var ii = raceColumns[race];
+			for (i = 0; i < raceTotal[race]; i++){
 				$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
+				ii = ii + 1;
 			}
 		}
 
 		function sortBars(){
 			var $wrapper = $('.bar-chart'),
-		        $articles = $wrapper.find('.bar-row');
-		    [].sort.call($articles, function(a,b) {
-		        return +$(b).attr('value') - +$(a).attr('value');
-		    });
-		    $articles.each(function(){
-		        $wrapper.append(this);
-		    });
-		}
-
-		function sortIndustry(){
-			var $wrapper = $('.drill-bar-chart'),
 		        $articles = $wrapper.find('.bar-row');
 		    [].sort.call($articles, function(a,b) {
 		        return +$(b).attr('value') - +$(a).attr('value');
@@ -827,81 +814,66 @@
 		        $wrapper.append(this);
 		    });
 		}
-
 	// ------- COMMAS!!------- //
-
 		function commaSeparateNumber(val){
 		    while (/(\d+)(\d{3})/.test(val.toString())){
 		      val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
 		    }
 		    return val;
 		}
-	
-
-	// ------- CHART BACK TO SECTOR FROM INDUSTRY------- //
-		$(document).ready(function(){
-			$(".cf-detail").on("click", function(){
-				$("#cf-summary .bar-chart").css("display","block");
-				$("#cf-industry .drill-bar-chart").css("display","none");
+	// ------- WHAT TO DRAW?------- //
+		function redrawCanvas(){
+			//magically hide and show chart divs
+			$("#cf-summary .bar-chart").css("display","block");
+			$("#cf-industry .drill-bar-chart").css("display","none");
+			$("#cf-summary").css("display","block");
+			$("#cf-industry").css("display","none");
+			//Change view
+			if (view === "Cash Raised"){
+				resetSummaryBars(view);
+				renameSummaryLabels(view);
+				$(".cf-canvas").css("display","none");
 				$("#cf-summary").css("display","block");
-				$("#cf-industry").css("display","none");
+				drawContributions()
+			}
+			else if (view === "Top Contributors"){
+				resetSummaryBars(view);
+				renameSummaryLabels(view);
+				$(".cf-canvas").css("display","none");
+				$("#cf-contribute").css("display","block");
+				$("#cf-contribute").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>");
+			}
+			else if (view === "Geography"){
+				$(".cf-canvas").css("display","none");
+				$("#cf-stacked").css("display","block").animate({
+					height:420
+				});
+				drawGeography();
+			}
+			else if (view === "Cash Spent"){
 				resetSummaryBars(view)
 				renameSummaryLabels(view);
-				$(".cf-canvas").css("display","none");					
-				$("#cf-summary").css("display","block").animate({
-					height:1125
+				$(".cf-canvas").css("display","none");
+				$("#cf-summary").css("display","block");
+				drawSpent()
+			}
+			else if (view === "Achievements"){
+				$(".cf-canvas").css("display","none");
+				$("#cf-achieve").css("display","block").animate({
+					height:300
 				});
-				drawSectors()
-			})
-		});
-
+			}
+		}
 	// ------- CHART SHIFTING------- //
 		$(document).ready(function(){
+			$("#race_options_chosen").on("click","ul > li", function(){
+				race = parseInt($(this).attr("value"));	
+				redrawCanvas();			
+			})
+			
 			$("#overall_options_chosen").on("click","ul > li", function(){
 				view = $(this).html(); //detect view
-
-				//magically hide and show chart divs
-				$("#cf-summary .bar-chart").css("display","block");
-				$("#cf-industry .drill-bar-chart").css("display","none");
-				$("#cf-summary").css("display","block");
-				$("#cf-industry").css("display","none");
-
-				//Change view
-				if (view === "Cash Raised"){
-					resetSummaryBars(view);
-					renameSummaryLabels(view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					drawContributions()
-				}
-				else if (view === "Top Contributors"){
-					resetSummaryBars(view);
-					renameSummaryLabels(view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-contribute").css("display","block");
-					$("#cf-contribute").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>");
-				}
-				else if (view === "Geography"){
-					$(".cf-canvas").css("display","none");
-					$("#cf-stacked").css("display","block").animate({
-						height:420
-					});
-					drawGeography();
-				}
-				else if (view === "Cash Spent"){
-					resetSummaryBars(view)
-					renameSummaryLabels(view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					drawSpent()
-				}
-				else if (view === "Achievements"){
-					$(".cf-canvas").css("display","none");
-					$("#cf-achieve").css("display","block").animate({
-						height:300
-					});
-				}
+				redrawCanvas();
 			})
 		});
-	
 </script>
