@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="http://oaktowndata.com/wp-content/themes/tiny-forge/chosen.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/tabletop.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/chosen.jquery.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/caltip.min.js"></script>
 <style>
-		#loading, #cand-nointerface {
+		#loading {
 			position:relative;
 			height:300px;
 			width:960px;
@@ -269,7 +269,7 @@
 			}
 
 				#cf-summary {
-					height:500px;
+					padding: 0 0 25px 0;
 				}
 
 
@@ -326,7 +326,6 @@
 
 
 		.bar-row, .stacked-bar-row {
-			width:891px;
 			height:30px;
 			margin:0 0 15px 0;
 
@@ -339,8 +338,6 @@
 
 
 		.bar-label {
-			width:250px;
-			height:50px;
 			font-size:12px;
 			text-align:right;
 			border-right:1px solid #000;
@@ -491,15 +488,19 @@
 
 <script>
 	// ------- GLOBAL ------- //
+		var dimensions = {
+			overall:550, //entire app
+			label:125, //labels for bars
+			maxBarWidth:400 //max bar length
+		}
 		var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdFo3Tnl5cmpnZXUydVloYUZSZnR5RHc&output=html";
 		var candidateDB = [];
-		var candidates = {
+		var candidates = { //enter races here
 			all:8,
 			da:4,
 			dfour:2,
 			dfive:2
 		};
-		var maxBarWidth = 400;
 		var updated = "3/17/2014";
 		var mayoralCand = [];
 		var currentBars = 6;
@@ -519,6 +520,11 @@
 		    for (var selector in config) {
 		      $(selector).chosen(config[selector]);
 		    }
+		});
+		
+	// ------- ADJUST DIMENSIONS ------- //
+		$(document).ready(function(){
+			$("#loading").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-head").add(".cf-title").add("#cf-summary").css("width",dimensions.overall);
 		});
 
 	// ------- FUNNY GREETINGS ------- //
@@ -597,15 +603,15 @@
 			//draw first chart
 			resetSummaryBars(view);
 			renameSummaryLabels(view);
+			$(".bar-label").css("width",dimensions.label);
 			$(".cf-canvas").css("display","none");
-			$("#cf-summary").css("display","block").animate({
-				height:500
-			});
+			$("#cf-summary").css("display","block");
 			drawContributions()
 		}
 
 		function drawContributions(){
 			var data = [];
+			var all = parseInt(candidateDB[5][1]);
 			var dataWidth = [];
 			var commas = [];
 
@@ -622,7 +628,7 @@
 			
 			//figure out the width for each bar
 			for (i = 0 ; i < data.length ; i++){
-				dataWidth[i] = (data[i] / maxValue) * maxBarWidth;
+				dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
 				console.log(dataWidth[i])
 			}
 
@@ -637,27 +643,32 @@
 			
 			//meta
 			$("#cf-summary .cf-title h2").text("Total Cash Raised 2013-14");
-			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(data[0] + data[1] + data[2] + data[3] + data[4] + data[5]) + " contributed total</h4>");
+			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(all) + " contributed total</h4>");
 			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans.</p>");
 			sortBars();
 		}
 
 		function drawSpent(){
 			var data = [];
+			var all = parseInt(candidateDB[19][1]);
 			var dataWidth = [];
 			var commas = [];
 
 			//size up data
-			for (i=0 ; i < 6 ; i++){
-				var ii = i+8;
-				data[i] = candidateDB[ii][1];
-				commas[i] = commaSeparateNumber(candidateDB[ii][1]);
-
+			for (i=0 ; i < raceTotal; i++){
+				var ii = i+2;
+				data[i] = parseInt(candidateDB[19][ii]);
+				commas[i] = commaSeparateNumber(data[i]);
 			}
-
+			console.log(data)
+			
+			//find highest value in array
 			var maxValue = Math.max.apply(null, data);
+			
+			//figure out the width for each bar
 			for (i = 0 ; i < data.length ; i++){
-				dataWidth[i] = (data[i] / maxValue) * maxBarWidth;
+				dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
+				console.log(dataWidth[i])
 			}
 
 			//populate data
@@ -668,10 +679,11 @@
 					width:dataWidth[i]
 				})
 			}
+			
 			$("#cf-summary .bar-data").css("background","#fc8d59");
 			$("#cf-summary .cf-title h2").text("Total Cash Spent 2013-14");
-			$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#fc8d59;\">$" + commaSeparateNumber(data[0] + data[1] + data[2] + data[3] + data[4] + data[5]) + " spent total</h4>");
-			$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses excluding accured expenses.</p>");
+			$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#fc8d59;\">$" + commaSeparateNumber(all) + " spent total</h4>");
+			$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses excluding accured expenses. Numbers are rounded to nearest dollar.</p>");
 			sortBars();
 		}
 
@@ -770,6 +782,10 @@
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
 			}		
+			
+			//resize labels
+			$(".bar-label").css("width",dimensions.label);
+			
 		}
 
 		function renameSummaryLabels(view){
@@ -855,18 +871,14 @@
 					resetSummaryBars(view);
 					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block").animate({
-						height:500
-					});
+					$("#cf-summary").css("display","block");
 					drawContributions()
 				}
 				else if (view === "Top Contributors"){
 					resetSummaryBars(view);
 					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");
-					$("#cf-contribute").css("display","block").animate({
-						height:400
-					});
+					$("#cf-contribute").css("display","block");
 					$("#cf-contribute").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>");
 				}
 				else if (view === "Geography"){
@@ -876,22 +888,11 @@
 					});
 					drawGeography();
 				}
-				else if (view === "Sectors/Industries"){
-					resetSummaryBars(view)
-					renameSummaryLabels(view);
-					$(".cf-canvas").css("display","none");					
-					$("#cf-summary").css("display","block").animate({
-						height:1075
-					});
-					drawSectors()
-				}
 				else if (view === "Cash Spent"){
 					resetSummaryBars(view)
 					renameSummaryLabels(view);
 					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block").animate({
-						height:500
-					});
+					$("#cf-summary").css("display","block");
 					drawSpent()
 				}
 				else if (view === "Achievements"){
