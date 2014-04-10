@@ -1,9 +1,15 @@
 <link rel="stylesheet" href="http://oaktowndata.com/wp-content/themes/tiny-forge/chosen.css">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/tabletop.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/chosen.jquery.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/caltip.min.js"></script>
 <style>
+		#cf-container h1, h2, h3 {
+			font-family:"helvetica neue",helvetica,san-serif;
+		}
+		
+		#cf-canvas 
+		
 		#loading {
 			position:relative;
 			height:300px;
@@ -14,13 +20,14 @@
 			margin:100px 0;
 		}
 
-			#loading h1, #cand-nointerface h1 {
-				font-size:72px;
-			}
+		#loading h1 {
+			font-size:4.5em;
+		}
 
-			#loading p, #cand-nointerface p {
-				font-size:48px;
-			}
+		#loading p {
+			font-family:"helvetica neue",helvetica,san-serif;
+			font-size:3em;
+		}
 
 
 		#cand-nointerface {
@@ -33,76 +40,76 @@
 			height:420px;
 		}
 
-			#cf-legend {
-				width:960px;
-				height:30px;
-			}
+		#cf-legend {
+			width:960px;
+			height:30px;
+		}
 
-				.cf-legend-opt {
-					width:auto;
-					height:20px;
-					padding:5px;
-					float:left;
-					margin:0 20px;
-					border:1px solid #8c9b93;
-				}
+		.cf-legend-opt {
+			width:auto;
+			height:20px;
+			padding:5px;
+			float:left;
+			margin:0 20px;
+			border:1px solid #8c9b93;
+		}
 
-					.cf-legend-opt p {
-						text-align:center;
-						font-size:12px;
-						font-weight:700;
-					}
+		.cf-legend-opt p {
+			text-align:center;
+			font-size:12px;
+			font-weight:700;
+		}
 
-					.cf-legend-opt:first-of-type {
-						border:none;
-						font-weight:700;
-						margin:0 20px 0 262px;
-					}
+		.cf-legend-opt:first-of-type {
+			border:none;
+			font-weight:700;
+			margin:0 20px 0 262px;
+		}
 
-					.cf-legend-opt:nth-of-type(2) {
-						background:#2b83ba;
-					}
+		.cf-legend-opt:nth-of-type(2) {
+			background:#2b83ba;
+		}
 
-					.cf-legend-opt:nth-of-type(3) {
-						background:#abdda4;
-					}
+		.cf-legend-opt:nth-of-type(3) {
+			background:#abdda4;
+		}
 
-					.cf-legend-opt:nth-of-type(4) {
-						background:#fdae61;
-					}
+		.cf-legend-opt:nth-of-type(4) {
+			background:#fdae61;
+		}
 
-					.cf-legend-opt:nth-of-type(5) {
-						background:#d7191c;
-					}
+		.cf-legend-opt:nth-of-type(5) {
+			background:#d7191c;
+		}
 
-			.stacked-bar-chart {
-				width:960px;
-			}
+		.stacked-bar-chart {
+			width:960px;
+		}
 
-			.stacked-bar-chart .bar-data {
-				width:600px;
-			}
+		.stacked-bar-chart .bar-data {
+			width:600px;
+		}
 
-			.bar-seg {
-				height:30px;
-				float:left;
-			}
+		.bar-seg {
+			height:30px;
+			float:left;
+		}
 
-			#oakland {
-				background:#2b83ba;
-			}
+		#oakland {
+			background:#2b83ba;
+		}
 
-			#bayarea {
-				background:#abdda4;
-			}
+		#bayarea {
+			background:#abdda4;
+		}
 
-			#cali {
-				background:#fdae61;
-			}
+		#cali {
+			background:#fdae61;
+		}
 
-			#notcali {
-				background:#d7191c;
-			}
+		#notcali {
+			background:#d7191c;
+		}
 
 
 	/* --------CANDIDATE INTRO--------  */
@@ -258,27 +265,27 @@
 			visibility:hidden;
 		}	
 
-			#cf-choose {
-				margin:10px 0 0 0;
-				width:960px;
-				height:35px;
-			}
+		#cf-choose {
+		margin:10px 0 0 0;
+		width:960px;
+		height:35px;
+	}
 
-			#cf-draw {
+		#cf-draw {
 
-			}
+		}
 
-				#cf-summary {
-					padding: 0 0 25px 0;
-				}
+		#cf-summary {
+			padding: 0 0 25px 0;
+		}
 
 
-				#cf-contribute {
-					display:none;
-					width:960px;
-				}
+		#cf-contribute {
+			display:none;
+			width:960px;
+		}
 
-				#cf-geography, #cf-sectors, #cf-expenses, #cf-achieve, #cf-employ {display:none;}
+		#cf-geography, #cf-expenses, #cf-achieve, #cf-employ {display:none;}
 
 
 		.cf-detail {
@@ -292,37 +299,39 @@
 			text-align: center;
 		}
 
-				.cf-detail:hover {
-					border:solid 2px #4c5b52;
-				}
+		.cf-detail:hover {
+			border:solid 2px #4c5b52;
+		}
 
-					.cf-detail p {
-						color:#4C5B52;
-						font-weight:900 !important;
-						background:#d3d3d3;
-					}
+		.cf-detail p {
+			color:#4C5B52;
+			font-weight:900 !important;
+			background:#d3d3d3;
+		}
 
-					.bar-chart {
-						width:960px;
-					}
+		.bar-chart {
+			width:960px;
+		}
 
-					.cf-head {
-						width:960px;
-						height:120px;
-					}
+		.cf-head {
+			width:960px;
+			height:120px;
+		}
 
-						.cf-title {
-							width:960px;
-						}
+		.cf-title {
+			width:960px;
+		}
 
-							.cf-title h2 {
-								margin:0 0 0 0 !important;
-								font-size:24px;
-							}
+		.cf-title h2 {
+			margin:0 0 0 0 !important;
+			font-size:1.5em;
+		}
 
-							.cf-title h4 {
-								margin:0 0 20px 0 !important;
-							}
+		.cf-title h4 {
+			font-family:"helvetica neue",helvetica,san-serif;
+			font-weight:400;
+			margin:0 0 20px 0 !important;
+		}
 
 
 		.bar-row, .stacked-bar-row {
@@ -405,7 +414,7 @@
 		}
 </style>
 
-<div>
+<div id="cf-container">
 	<div id="loading">
 		<h1><strong></strong></h1>
 		<p>this should only take a moment</p>
@@ -421,85 +430,37 @@
 			<select id="overall-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
 				<option value="Cash Spent">Cash Spent</option>
-				<option value="Contributors">Top Contributors</option>
-				<option value="Sectors">Geography</option>
+				<!--<option value="Contributors">Top Contributors</option>
+				<option value="Geography">Geography</option>-->
 			</select>
 		</div>
 		<div id="cf-summary" class="cf-canvas">
 			<div class="bar-chart">
 				<div class="cf-head">
 					<div class="cf-title">
-						<h2>Total Cash Raised 2013-2014</h2>
-						<h4>Last Report 1/30/2014</h4>
+						<h2></h2>
+						<h4></h4>
 					</div>
 				</div>	
-				<div class="bar-row" id="1">
-					<div class="bar-label">
-						<p class="the-label">Patrick McCullough</p>
-					</div>
-					<div class="bar-data">
-						<p></p>
-					</div>
-				</div>
-				<div class="bar-row" id="2">
-					<div class="bar-label">
-						<p class="the-label">Bryan Parker</p>
-					</div>
-					<div class="bar-data">
-						<p></p>
-					</div>
-				</div>
-				<div class="bar-row" id="3">
-					<div class="bar-label">
-						<p class="the-label">Jean Quan</p>
-					</div>
-					<div class="bar-data">
-						<p></p>
-					</div>
-				</div>
-				<div class="bar-row" id="4">
-					<div class="bar-label">
-						<p class="the-label">Libby Schaaf</p>
-					</div>
-					<div class="bar-data">
-						<p></p>
-					</div>
-				</div>
-				<div class="bar-row" id="5">
-					<div class="bar-label">
-						<p class="the-label">Dan Siegel</p>
-					</div>
-					<div class="bar-data">
-						<p></p>
-					</div>
-				</div>
-				<div class="bar-row" id="6">
-					<div class="bar-label">
-						<p class="the-label">Joe Tuman</p>
-					</div>
-					<div class="bar-data">
-						<p></p>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
 <script>
-	// ------- GLOBAL ------- //
-		var dimensions = {
-			overall:550, //entire app
-			label:125, //labels for bars
-			maxBarWidth:400 //max bar length
-		}
-		var raceTotal = [8,4,2,2]; //manually enter the number of candidates for each race, in order you placed in list above
-		var raceColumns = [2,6,2,4]; // manually enter the column where this race data starts on the Summary sheet of GSheet
-		var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdFo3Tnl5cmpnZXUydVloYUZSZnR5RHc&output=html";
-		var candidateDB = [];
-		var updated = "3/17/2014"; //update based on last update of data
-		var view = "Cash Raised"; //leave default
-		var race = 0; //leave default
+		// ------- GLOBAL ------- //
+			var dimensions = {
+				overall:550, //entire app size
+				label:125, //labels for bars
+				maxBarWidth:400 //max bar length
+			}
+			var raceTotal = [8,4,2,2]; //manually enter the number of candidates for each race, in order you placed in list above
+			var raceColumns = [2,6,2,4]; // manually enter the column where this race data starts on the Summary sheet of GSheet
+			var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdFo3Tnl5cmpnZXUydVloYUZSZnR5RHc&output=html"; 
+			var candidateDB = []; //stores all summary data
+			var updated = "3/17/2014"; //when was the data updated?
+			var view = "Cash Raised"; //leave default
+			var race = 0; //leave default
 		// ------- CHOSEN ------- //	
 		$(document).ready(function(){
 			var config = {
@@ -605,7 +566,7 @@
 			//size up data
 			var ii = raceColumns[race];
 			for (i=0 ; i < raceTotal[race]; i++){
-				data[i] = parseInt(candidateDB[5][ii]);
+				data[i] = parseInt(candidateDB[5][ii]) + parseInt(candidateDB[11][ii]);
 				commas[i] = commaSeparateNumber(data[i]);
 				ii = ii + 1;
 			}
@@ -636,7 +597,7 @@
 			//meta
 			$("#cf-summary .cf-title h2").text("Total Cash Raised 2013-14");
 			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(all) + " contributed total</h4>");
-			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans.</p>");
+			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
 			sortBars();
 		}
 
