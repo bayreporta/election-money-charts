@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="http://oaktowndata.com/wp-content/themes/tiny-forge/chosen.css">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/tabletop.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/chosen.jquery.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/caltip.min.js"></script>
@@ -8,7 +8,11 @@
 			font-family:"helvetica neue",helvetica,san-serif;
 		}
 		
-		#cf-canvas 
+		#cf-container {
+			height:1000px;
+			width:960px;
+		}
+		
 		
 		#loading {
 			position:relative;
@@ -37,16 +41,15 @@
 
 		#cf-stacked {
 			display:none;
-			height:420px;
 		}
 
 		#cf-legend {
 			width:960px;
-			height:30px;
+			height:100px;
 		}
 
 		.cf-legend-opt {
-			width:auto;
+			width:50px;
 			height:20px;
 			padding:5px;
 			float:left;
@@ -58,27 +61,22 @@
 			text-align:center;
 			font-size:12px;
 			font-weight:700;
+			margin:30px 0 0 0;
 		}
 
-		.cf-legend-opt:first-of-type {
-			border:none;
-			font-weight:700;
-			margin:0 20px 0 262px;
-		}
-
-		.cf-legend-opt:nth-of-type(2) {
+		.cf-legend-opt:nth-of-type(1) {
 			background:#2b83ba;
 		}
 
-		.cf-legend-opt:nth-of-type(3) {
+		.cf-legend-opt:nth-of-type(2) {
 			background:#abdda4;
 		}
 
-		.cf-legend-opt:nth-of-type(4) {
+		.cf-legend-opt:nth-of-type(3) {
 			background:#fdae61;
 		}
 
-		.cf-legend-opt:nth-of-type(5) {
+		.cf-legend-opt:nth-of-type(4) {
 			background:#d7191c;
 		}
 
@@ -317,6 +315,11 @@
 			width:960px;
 			height:120px;
 		}
+		
+		.cf-stack-head {
+			width:960px;
+			height:170px;
+		}
 
 		.cf-title {
 			width:960px;
@@ -430,8 +433,8 @@
 			<select id="overall-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
 				<option value="Cash Spent">Cash Spent</option>
-				<!--<option value="Contributors">Top Contributors</option>
-				<option value="Geography">Geography</option>-->
+				<!--<option value="Contributors">Top Contributors</option>-->
+				<option value="Geography">Geography</option>
 			</select>
 		</div>
 		<div id="cf-summary" class="cf-canvas">
@@ -444,6 +447,21 @@
 				</div>	
 			</div>
 		</div>
+		<div id="cf-stacked" class="cf-canvas">
+			<div class="stacked-bar-chart">
+				<div class="cf-stack-head">
+					<div class="cf-title">
+						<h2>Where Contributions Came From <br>(hover over bars for details)</h2>
+						<h4></h4>
+					</div>
+					<div id="cf-legend">
+						<div class="cf-legend-opt"><p></p></div>
+						<div class="cf-legend-opt"><p></p></div>
+						<div class="cf-legend-opt"><p></p></div>								
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -453,6 +471,20 @@
 				overall:550, //entire app size
 				label:125, //labels for bars
 				maxBarWidth:400 //max bar length
+			}
+			var stackedControl = {
+				geography:{
+					legendItems:3,
+					legendLabels:["Humboldt","California","Elsewhere"],
+					legendColor:["#1b9e77","#d95f02","#7570b3"],
+					legendBars:{
+						two:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div></div>",
+						three:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div></div></div>",
+						four:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div><div id=\"geo4\" class=\"bar-seg\"></div></div></div>"
+					}
+				}
+			
+				
 			}
 			var raceTotal = [8,4,2,2]; //manually enter the number of candidates for each race, in order you placed in list above
 			var raceColumns = [2,6,2,4]; // manually enter the column where this race data starts on the Summary sheet of GSheet
@@ -476,7 +508,7 @@
 		});
 		// ------- ADJUST DIMENSIONS ------- //
 		$(document).ready(function(){
-			$("#loading").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-head").add(".cf-title").add("#cf-summary").css("width",dimensions.overall);
+			$("#loading").add("#cf-container").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").css("width",dimensions.overall);
 		});
 	// ------- FUNNY GREETINGS ------- //
 		$(document).ready(function(){
@@ -582,7 +614,6 @@
 			//figure out the width for each bar
 			for (i = 0 ; i < data.length ; i++){
 				dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
-				console.log(dataWidth[i])
 			}
 
 			//populate data
@@ -646,32 +677,29 @@
 		}
 
 		function drawGeography(){
-				var data = [];
-				var dataWidth = [];
-				var total = [];
-				var commas = [];
-
+				var data = [], dataWidth = [], total = [], commas = [];
 
 				//size up data
-				for (i=0 ; i < 24 ; i++){
-					var ii = i+205;
-					data[i] = candidateDB[ii][1];
-					commas[i] = commaSeparateNumber(candidateDB[ii][1]);
+				var ii = raceColumns[race];
+				for (i=0 ; i < raceTotal[race] ;  i++){
+					data[i] = new Array();
+					commas[i] = new Array();
+					data[i][0] = parseInt(candidateDB[20][ii]);
+					data[i][1] = parseInt(candidateDB[22][ii]);
+					data[i][2] = parseInt(candidateDB[23][ii]);
+					commas[i][0] = commaSeparateNumber(data[i][0]);
+					commas[i][1] = commaSeparateNumber(data[i][1]);
+					commas[i][2] = commaSeparateNumber(data[i][2]);
+					ii = ii + 1;
 				}
-
-				var ii= 0;
-				var iii = 1;
-				var iv = 2;
-				var v = 3;
-				for (i=0 ; i < 6 ; i++){
-					total[i] = (data[ii] + data[iii] + data[iv] + data[v]);
-					ii = ii + 4;
-					iii = iii +4;
-					iv = iv +4;
-					v = v +4;
+				//calculate the total for each candidate
+				for (i=0 ; i < raceTotal[race] ; i++){
+					total[i] = (data[i][0] + data[i][1] + data[i][2]);
 				}
-
-
+				console.log(data)
+				console.log(commas)
+				console.log(total)
+				/*
 				//populate data
 				$("#cf-stacked .stacked-bar-row:eq(0)").attr("value",((data[0] / total[0]) * 100));
 				$("#cf-stacked .stacked-bar-row:eq(1)").attr("value",((data[4] / total[1]) * 100));
@@ -680,10 +708,6 @@
 				$("#cf-stacked .stacked-bar-row:eq(4)").attr("value",((data[16] / total[4]) * 100));
 				$("#cf-stacked .stacked-bar-row:eq(5)").attr("value",((data[20] / total[5]) * 100));
 
-				ii=0
-				iii = 1;
-				iv = 2;
-				v = 3;
 				for (i=0 ; i < 6 ; i++){
 					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(0)").animate({
 						width:((data[ii] / total[i]) * 100) + "%"
@@ -721,14 +745,12 @@
 				//adjust for siegel
 				$("#cf-stacked .stacked-bar-row:eq(4)").remove();
 				$("#cf-stacked").append("<p class=\"chart-footer\">Bay Area contributions include contributions from all cities in the North, South and East Bay, including the Peninsula EXCLUDING Oakland. California contributions include all contributions from California EXCLUDING Bay Area. Candidates with no contributions excluded from chart.</p>");
-				sortGeo();
+				sortGeo();*/
 		}
 
 		function resetSummaryBars(view){
 			//reset text and colors for chart
-			$(".chart-h4").remove();
-			$(".chart-footer").remove();
-			$(".bar-row").remove();
+			$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").remove();
 
 			if (view === "Cash Raised"){
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -740,18 +762,54 @@
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
 			}		
-			
+			else if (view === "Geography"){
+				var geographyStackedSubBars;
+				//determine number of stacked sub bars
+				switch(stackedControl.geography.legendItems){
+					case 2:
+						geographyStackedSubBars = stackedControl.geography.legendBars.two;
+						break;
+					case 3:
+						geographyStackedSubBars = stackedControl.geography.legendBars.three;
+						break;
+					case 4:
+						geographyStackedSubBars = stackedControl.geography.legendBars.four;
+						break;
+				}
+				//populate bars based on number of candidates
+				for (i = 1 ; i < raceTotal[race] + 1; i++){
+					$("#cf-stacked").append(geographyStackedSubBars);
+				}				
+				//tag each row with unique ID
+				for (i = 1 ; i < raceTotal[race] + 1; i++){
+					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("id", i);
+				}
+				//populate legend
+				for (i = 0 ; i < stackedControl.geography.legendItems ; i++){
+					$("#cf-legend").append("<div class=\"cf-legend-opt\"><p>" + stackedControl.geography.legendLabels[i] + "</p></div>");
+					$(".cf-legend-opt:eq(" + i + ")").css("background", stackedControl.geography.legendColor[i]);
+				}
+			}			
 			//resize labels
-			$(".bar-label").css("width",dimensions.label);
-			
+			$(".bar-label").css("width",dimensions.label);			
 		}
 
 		function renameSummaryLabels(view){
 			var ii = raceColumns[race];
-			for (i = 0; i < raceTotal[race]; i++){
-				$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
-				ii = ii + 1;
+			if (view === "Cash Raised" || view === "Cash Spent"){
+				for (i = 0; i < raceTotal[race]; i++){
+					$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
+					ii = ii + 1;
+				}
 			}
+			else if (view === "Geography"){
+				for (i = 0; i < raceTotal[race]; i++){
+					$("#cf-stacked .stacked-bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
+					ii = ii + 1;
+				}
+			}
+			
+			
 		}
 
 		function sortBars(){
@@ -806,9 +864,9 @@
 			}
 			else if (view === "Geography"){
 				$(".cf-canvas").css("display","none");
-				$("#cf-stacked").css("display","block").animate({
-					height:420
-				});
+				$("#cf-stacked").css("display","block");
+				resetSummaryBars(view);
+				renameSummaryLabels(view);
 				drawGeography();
 			}
 			else if (view === "Cash Spent"){
