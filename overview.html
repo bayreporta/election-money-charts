@@ -200,7 +200,6 @@
 				}
 
 		#chart-footer {
-
 		}		
 
 	/* --------CF OVERVIEW--------  */
@@ -413,7 +412,7 @@
 			font-style:italic;
 			font-size:12px;
 			color:#8c9b93;
-			margin:30px 0 0 0;
+			margin:30px 0 15px 0;
 		}
 </style>
 
@@ -467,13 +466,16 @@
 
 <script>
 		// ------- GLOBAL ------- //
+			//input dimensions for graphic
 			var dimensions = {
 				overall:550, //entire app size
 				label:125, //labels for bars
 				maxBarWidth:400 //max bar length
 			}
+			//input options for stacked bar graphs
 			var stackedControl = {
 				geography:{
+					footer:"Contributions show here refer to itemized contributions with a location attached. Humboldt refers to all donations from incorporated and unincorporated communities in Humboldt County. California contributions include all contributions from California EXCLUDING Humboldt County.",
 					legendItems:3,
 					legendLabels:["Humboldt","California","Elsewhere"],
 					legendColor:["#1b9e77","#d95f02","#7570b3"],
@@ -482,9 +484,7 @@
 						three:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div></div></div>",
 						four:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div><div id=\"geo4\" class=\"bar-seg\"></div></div></div>"
 					}
-				}
-			
-				
+				}	
 			}
 			var raceTotal = [8,4,2,2]; //manually enter the number of candidates for each race, in order you placed in list above
 			var raceColumns = [2,6,2,4]; // manually enter the column where this race data starts on the Summary sheet of GSheet
@@ -677,7 +677,7 @@
 		}
 
 		function drawGeography(){
-				var data = [], dataWidth = [], total = [], commas = [];
+				var data = [], dataWidth = [], total = [], commas = [], colors = [];
 
 				//size up data
 				var ii = raceColumns[race];
@@ -696,56 +696,27 @@
 				for (i=0 ; i < raceTotal[race] ; i++){
 					total[i] = (data[i][0] + data[i][1] + data[i][2]);
 				}
-				console.log(data)
-				console.log(commas)
-				console.log(total)
-				/*
-				//populate data
-				$("#cf-stacked .stacked-bar-row:eq(0)").attr("value",((data[0] / total[0]) * 100));
-				$("#cf-stacked .stacked-bar-row:eq(1)").attr("value",((data[4] / total[1]) * 100));
-				$("#cf-stacked .stacked-bar-row:eq(2)").attr("value",((data[8] / total[2]) * 100));
-				$("#cf-stacked .stacked-bar-row:eq(3)").attr("value",((data[12] / total[3]) * 100));
-				$("#cf-stacked .stacked-bar-row:eq(4)").attr("value",((data[16] / total[4]) * 100));
-				$("#cf-stacked .stacked-bar-row:eq(5)").attr("value",((data[20] / total[5]) * 100));
-
-				for (i=0 ; i < 6 ; i++){
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(0)").animate({
-						width:((data[ii] / total[i]) * 100) + "%"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(0)").caltip({
-						title:"Oakland",
-						content:"$" + commas[ii] + " (" + Math.round(((data[ii] / total[i]) * 100)) + "%" + ")"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(1)").animate({
-						width:((data[iii] / total[i]) * 100) + "%"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(1)").caltip({
-						title:"Bay Area",
-						content:"$" + commas[iii] + " (" + Math.round(((data[iii] / total[i]) * 100)) + "%" + ")"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(2)").animate({
-						width:((data[iv] / total[i]) * 100) + "%"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(2)").caltip({
-						title:"California",
-						content:"$" + commas[iv] + " (" + Math.round(((data[iv] / total[i]) * 100)) + "%" + ")"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(3)").animate({
-						width:((data[v] / total[i]) * 100) + "%"
-					})
-					$("#cf-stacked .bar-data:eq(" + i + ") .bar-seg:eq(3)").caltip({
-						title:"Outside California",
-						content:"$" + commas[v] + " (" + Math.round(((data[v] / total[i]) * 100)) + "%" + ")"
-					})
-					ii = ii + 4;
-					iii = iii +4;
-					iv = iv +4;
-					v = v +4;
+				//sorting by first legend item
+				for (i=0 ; i < raceTotal[race] ; i++){
+					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
 				}
-				//adjust for siegel
-				$("#cf-stacked .stacked-bar-row:eq(4)").remove();
-				$("#cf-stacked").append("<p class=\"chart-footer\">Bay Area contributions include contributions from all cities in the North, South and East Bay, including the Peninsula EXCLUDING Oakland. California contributions include all contributions from California EXCLUDING Bay Area. Candidates with no contributions excluded from chart.</p>");
-				sortGeo();*/
+				//populate data
+				colors = stackedControl.geography.legendColor;
+				console.log(colors)
+				for (i=0 ; i < raceTotal[race] ; i++){
+					for (x = 0 ; x < stackedControl.geography.legendItems ; x++){
+						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
+							width:((data[i][x] / total[i]) * 100) + "%"
+						})
+						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
+							title:stackedControl.geography.legendLabels[x],
+							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
+						})
+					}
+				}
+				//footer
+				$("#cf-stacked").append("<p class=\"chart-footer\">" + stackedControl.geography.footer + "</p>");
+				sortGeo();
 		}
 
 		function resetSummaryBars(view){
@@ -778,17 +749,21 @@
 				}
 				//populate bars based on number of candidates
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
-					$("#cf-stacked").append(geographyStackedSubBars);
+					$(".stacked-bar-chart").append(geographyStackedSubBars);
 				}				
 				//tag each row with unique ID
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
 					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("id", i);
 				}
+				//Give Max Width to Bars
+				$(".stacked-bar-row").css("width", dimensions.overall);
+				$(".stacked-bar-row .bar-data").css("width", dimensions.maxBarWidth);
 				//populate legend
 				for (i = 0 ; i < stackedControl.geography.legendItems ; i++){
 					$("#cf-legend").append("<div class=\"cf-legend-opt\"><p>" + stackedControl.geography.legendLabels[i] + "</p></div>");
 					$(".cf-legend-opt:eq(" + i + ")").css("background", stackedControl.geography.legendColor[i]);
 				}
+	
 			}			
 			//resize labels
 			$(".bar-label").css("width",dimensions.label);			
