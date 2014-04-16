@@ -49,8 +49,8 @@
 		}
 
 		.cf-legend-opt {
-			width:50px;
-			height:20px;
+			width:30px;
+			height:15px;
 			padding:5px;
 			float:left;
 			margin:0 20px;
@@ -61,23 +61,7 @@
 			text-align:center;
 			font-size:12px;
 			font-weight:700;
-			margin:30px 0 0 0;
-		}
-
-		.cf-legend-opt:nth-of-type(1) {
-			background:#2b83ba;
-		}
-
-		.cf-legend-opt:nth-of-type(2) {
-			background:#abdda4;
-		}
-
-		.cf-legend-opt:nth-of-type(3) {
-			background:#fdae61;
-		}
-
-		.cf-legend-opt:nth-of-type(4) {
-			background:#d7191c;
+			margin:30px 0 0 -10px;
 		}
 
 		.stacked-bar-chart {
@@ -92,23 +76,6 @@
 			height:30px;
 			float:left;
 		}
-
-		#oakland {
-			background:#2b83ba;
-		}
-
-		#bayarea {
-			background:#abdda4;
-		}
-
-		#cali {
-			background:#fdae61;
-		}
-
-		#notcali {
-			background:#d7191c;
-		}
-
 
 	/* --------CANDIDATE INTRO--------  */
 
@@ -366,7 +333,6 @@
 		.bar-data {
 			width:0;
 			height:30px;
-			background:#91cf60;
 			float:left;
 		}
 
@@ -423,17 +389,21 @@
 	</div>
 	<div id="cf-chart">
 		<div id="cf-choose">
-			<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
+			<select id="race-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
 				<option value="0">All</option>
 				<option value="1">District Attorney</option>
 				<option value="2">Supervisor: District 4</option>
 				<option value="3">Supervisor: District 5</option>
 			</select>
-			<select id="overall-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
+			<select id="overall-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
 				<option value="Cash Spent">Cash Spent</option>
 				<!--<option value="Contributors">Top Contributors</option>-->
 				<option value="Geography">Geography</option>
+			</select>
+			<select id="stacked-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
+				<option value="Percent of Contributions">Percent of Contributions</option>
+				<option value="Total Contributions">Total Contributions</option>
 			</select>
 		</div>
 		<div id="cf-summary" class="cf-canvas">
@@ -493,6 +463,7 @@
 			var updated = "3/17/2014"; //when was the data updated?
 			var view = "Cash Raised"; //leave default
 			var race = 0; //leave default
+			var stacked = 0; //leave default
 		// ------- CHOSEN ------- //	
 		$(document).ready(function(){
 			var config = {
@@ -626,6 +597,7 @@
 			}
 			
 			//meta
+			$(".bar-data").css("background","#91cf60");
 			$("#cf-summary .cf-title h2").text("Total Cash Raised 2013-14");
 			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(all) + " contributed total</h4>");
 			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
@@ -677,8 +649,10 @@
 		}
 
 		function drawGeography(){
-				var data = [], dataWidth = [], total = [], commas = [], colors = [];
-
+			var data = [], dataWidth = [], total = [], commas = [], colors = [], dataWidth = [];
+			//unhide stacked option
+			$("#stacked_options_chosen").css("visibility","visible");		
+			if (stacked === 0){
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race] ;  i++){
@@ -702,12 +676,11 @@
 				}
 				//populate data
 				colors = stackedControl.geography.legendColor;
-				console.log(colors)
 				for (i=0 ; i < raceTotal[race] ; i++){
 					for (x = 0 ; x < stackedControl.geography.legendItems ; x++){
 						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
-						})
+						}).attr("value", data[i][x]);
 						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
 							title:stackedControl.geography.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
@@ -716,10 +689,65 @@
 				}
 				//footer
 				$("#cf-stacked").append("<p class=\"chart-footer\">" + stackedControl.geography.footer + "</p>");
-				sortGeo();
+			}		
+			else if (stacked === 1){
+				//size up data
+				var ii = raceColumns[race];
+				for (i=0 ; i < raceTotal[race] ;  i++){
+					data[i] = new Array();
+					commas[i] = new Array();
+					data[i][0] = parseInt(candidateDB[20][ii]);
+					data[i][1] = parseInt(candidateDB[22][ii]);
+					data[i][2] = parseInt(candidateDB[23][ii]);
+					commas[i][0] = commaSeparateNumber(data[i][0]);
+					commas[i][1] = commaSeparateNumber(data[i][1]);
+					commas[i][2] = commaSeparateNumber(data[i][2]);
+					ii = ii + 1;
+				}
+				//calculate the total for each candidate
+				for (i=0 ; i < raceTotal[race] ; i++){
+					total[i] = (data[i][0] + data[i][1] + data[i][2]);
+				}
+				//sorting by first legend item
+				for (i=0 ; i < raceTotal[race] ; i++){
+					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
+				}
+				//find highest value in array
+				var maxValue = Math.max.apply(null, total);
+				//figure out the width for each bar
+				for (i = 0 ; i < total.length ; i++){
+					dataWidth[i] = (total[i] / maxValue) * dimensions.maxBarWidth;
+				}
+				//populate data
+				colors = stackedControl.geography.legendColor;
+				for (i=0 ; i < raceTotal[race] ; i++){
+					for (x = 0 ; x < stackedControl.geography.legendItems ; x++){
+						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
+							width:((data[i][x] / total[i]) * 100) + "%"
+						}).attr("value", data[i][x]);
+						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
+							title:stackedControl.geography.legendLabels[x],
+							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
+						})
+					}
+				}				
+				for (i=0 ; i < total.length ; i++){
+					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",total[i]);
+					$("#cf-stacked .bar-data:eq(" + i + ")").animate({
+						width:dataWidth[i] + "px"
+					})
+				}
+				//footer
+				$("#cf-stacked").append("<p class=\"chart-footer\">" + stackedControl.geography.footer + "</p>");
+			}		
+			sortGeo();
+			
 		}
 
+
 		function resetSummaryBars(view){
+			//visibility stacked option
+			$("#stacked_options_chosen").css("visibility","hidden");
 			//reset text and colors for chart
 			$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").remove();
 
@@ -799,14 +827,27 @@
 		}
 
 		function sortGeo(){
-			var $wrapper = $('.stacked-bar-chart'),
-		        $articles = $wrapper.find('.stacked-bar-row');
-		    [].sort.call($articles, function(a,b) {
-		        return +$(b).attr('value') - +$(a).attr('value');
-		    });
-		    $articles.each(function(){
-		        $wrapper.append(this);
-		    });
+			//percent or total sort
+			if (stacked === 0){
+				var $wrapper = $('.stacked-bar-chart'),
+			        $articles = $wrapper.find('.stacked-bar-row');
+			    [].sort.call($articles, function(a,b) {
+			        return +$(b).attr('value') - +$(a).attr('value');
+			    });
+			    $articles.each(function(){
+			        $wrapper.append(this);
+			    });
+			}
+			else {
+				var $wrapper = $('.stacked-bar-chart'),
+			        $articles = $wrapper.find('.stacked-bar-row');
+			    [].sort.call($articles, function(a,b) {
+			        return +$(b).attr('value') - +$(a).attr('value');
+			    });
+			    $articles.each(function(){
+			        $wrapper.append(this);
+			    });
+			}
 		}
 	// ------- COMMAS!!------- //
 		function commaSeparateNumber(val){
@@ -867,6 +908,17 @@
 			
 			$("#overall_options_chosen").on("click","ul > li", function(){
 				view = $(this).html(); //detect view
+				redrawCanvas();
+			})
+			
+			$("#stacked_options_chosen").on("click","ul > li", function(){
+				var $x = $(this).html(); //detect view
+				if ($x === "Percent of Contributions"){
+					stacked = 0;
+				}
+				else {
+					stacked = 1;
+				}
 				redrawCanvas();
 			})
 		});
