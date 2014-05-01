@@ -175,41 +175,6 @@
 			margin:0 0 20px 0;
 		}
 
-
-
-		#cf-options {
-			float:left;
-			width:960px;
-			margin:0 0 10px 0;
-		}
-
-			#cf-options img {
-				width:100px;
-				height:100px;
-				cursor:pointer;
-				border:1px solid #4c5b52;
-				opacity:0.4;
-			}
-
-			#cf-options div {
-				margin:20px 109px;
-				float:left;
-				width:100px;
-				height:125px;
-			}
-
-			#cf-options h4 {
-				width:80px;
-				margin:0 10px;
-				text-align:center;
-				font-size:12px;
-				color:#4c5b52;
-			}
-
-			#cf-options img:hover {
-				opacity:1;
-			}
-
 		#cf-text {
 			padding:20px 0 20px 0;
 			border-bottom:solid 2px #4c5b52;
@@ -380,6 +345,39 @@
 			color:#8c9b93;
 			margin:30px 0 15px 0;
 		}
+		
+	#cf-options {
+		float:left;
+		width:960px;
+		margin:0 0 10px 0;
+	}
+
+		#cf-options img {
+			width:100px;
+			height:100px;
+			cursor:pointer;
+			border:1px solid #4c5b52;
+			opacity:0.4;
+		}
+
+		#cf-options div {
+			margin:20px 15%;
+			float:left;
+			width:100px;
+			height:125px;
+		}
+
+		#cf-options h4 {
+			width:80px;
+			margin:0 10px;
+			text-align:center;
+			font-size:12px;
+			color:#4c5b52;
+		}
+
+		#cf-options img:hover {
+			opacity:1;
+		}
 </style>
 
 <div id="cf-container">
@@ -389,7 +387,7 @@
 	</div>
 	<div id="cf-chart">
 		<div id="cf-choose">
-			<select id="race-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
+			<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
 				<option value="0">All</option>
 				<option value="1">District Attorney</option>
 				<option value="2">Supervisor: District 4</option>
@@ -398,10 +396,11 @@
 			<select id="overall-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
 				<option value="Cash Spent">Cash Spent</option>
+				<option value="Retirees">Retirees</option>
 				<!--<option value="Contributors">Top Contributors</option>-->
 				<option value="Geography">Geography</option>
 			</select>
-			<select id="stacked-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
+			<select id="stacked-options" class="chosen-select" style="width:180px;float:left;" tabindex="2">
 				<option value="Percent of Contributions">Percent of Contributions</option>
 				<option value="Total Contributions">Total Contributions</option>
 			</select>
@@ -459,7 +458,7 @@
 			var raceTotal = [8,4,2,2]; //manually enter the number of candidates for each race, in order you placed in list above
 			var raceColumns = [2,6,2,4]; // manually enter the column where this race data starts on the Summary sheet of GSheet
 			var gsheet = "https://docs.google.com/spreadsheet/pub?key=0AnZDmytGK63SdFo3Tnl5cmpnZXUydVloYUZSZnR5RHc&output=html"; 
-			var candidateDB = []; //stores all summary data
+			var candidateDB = [], mainDB = []; //stores all summary data
 			var updated = "3/17/2014"; //when was the data updated?
 			var view = "Cash Raised"; //leave default
 			var race = 0; //leave default
@@ -479,7 +478,7 @@
 		});
 		// ------- ADJUST DIMENSIONS ------- //
 		$(document).ready(function(){
-			$("#loading").add("#cf-container").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").css("width",dimensions.overall);
+			$("#loading").add("#cf-container").add("#cf-options").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").css("width",dimensions.overall);
 		});
 	// ------- FUNNY GREETINGS ------- //
 		$(document).ready(function(){
@@ -522,7 +521,7 @@
 		$(document).ready(function(){
 				Tabletop.init( { key: gsheet,
 			                     callback: setTheScene,
-			                     wanted: ["Summary"],
+			                     wanted: ["Summary","Main"],
 			                     debug: true } );
 		});
 	// ------- GET AND POPULATE CANDIDATE INFO ------- //
@@ -542,7 +541,21 @@
 				insertRow[9] = summary.klein;
 				candidateDB.push(insertRow);
 			});
-						
+			
+			$.each( tabletop.sheets("Main").all(), function(i, main) {
+				var insertRow = [];
+				insertRow[0] = main.item;
+				insertRow[1] = main.all;
+				insertRow[2] = main.bass;
+				insertRow[3] = main.kerrigan;
+				insertRow[4] = main.latour;
+				insertRow[5] = main.sundberg;
+				insertRow[6] = main.dollison;
+				insertRow[7] = main.firpo;
+				insertRow[8] = main.fleming;
+				insertRow[9] = main.klein;
+				mainDB.push(insertRow);
+			});			
 			
 			//when last updated
 			$(".cf-title h4").html("Data Updated on " + updated); 
@@ -604,6 +617,50 @@
 			sortBars();
 		}
 
+		function drawRetired(){
+			var data = [];
+			var all = 0;
+			var dataWidth = [];
+			var commas = [];
+
+			//size up data
+			var ii = raceColumns[race];
+			for (i=0 ; i < raceTotal[race]; i++){
+				data[i] = parseInt(mainDB[21][ii]);
+				commas[i] = commaSeparateNumber(data[i]);
+				ii = ii + 1;
+			}
+			console.log(data)
+			//find total
+			for (i=0 ; i < data.length ; i++){
+				all = all + data[i]
+			}
+			
+			//find highest value in array
+			var maxValue = Math.max.apply(null, data);
+			
+			//figure out the width for each bar
+			for (i = 0 ; i < data.length ; i++){
+				dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
+			}
+
+			//populate data
+			for (i=0 ; i < data.length ; i++){
+				$("#cf-summary .bar-row:eq(" + i + ")").attr("value",data[i]);
+				$("#cf-summary .bar-data:eq(" + i + ") p").text("$" + commas[i]);
+				$("#cf-summary .bar-data:eq(" + i + ")").animate({
+					width:dataWidth[i]
+				})
+			}
+			
+			//meta
+			$(".bar-data").css("background","#91cf60");
+			$("#cf-summary .cf-title h2").text("Total Cash from Retirees: 2013-14");
+			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(all) + " contributed total</h4>");
+			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
+			sortBars();
+		}
+
 		function drawSpent(){
 			var data = [];
 			var all = 0;
@@ -613,7 +670,7 @@
 			//size up data
 			var ii = raceColumns[race];
 			for (i=0 ; i < raceTotal[race] ;  i++){
-				data[i] = parseInt(candidateDB[19][ii]);
+				data[i] = parseInt(candidateDB[20][ii]);
 				commas[i] = commaSeparateNumber(data[i]);
 				ii = ii + 1;
 			}
@@ -744,7 +801,6 @@
 			
 		}
 
-
 		function resetSummaryBars(view){
 			//visibility stacked option
 			$("#stacked_options_chosen").css("visibility","hidden");
@@ -752,6 +808,11 @@
 			$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").remove();
 
 			if (view === "Cash Raised"){
+				for (i = 1 ; i < raceTotal[race] + 1; i++){
+					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
+				}
+			}
+			else if (view === "Retirees"){
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
@@ -799,7 +860,7 @@
 
 		function renameSummaryLabels(view){
 			var ii = raceColumns[race];
-			if (view === "Cash Raised" || view === "Cash Spent"){
+			if (view === "Cash Raised" || view === "Cash Spent" || view === "Retirees"){
 				for (i = 0; i < raceTotal[race]; i++){
 					$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
 					ii = ii + 1;
@@ -877,6 +938,13 @@
 				$(".cf-canvas").css("display","none");
 				$("#cf-contribute").css("display","block");
 				$("#cf-contribute").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>");
+			}
+			if (view === "Retirees"){
+				resetSummaryBars(view);
+				renameSummaryLabels(view);
+				$(".cf-canvas").css("display","none");
+				$("#cf-summary").css("display","block");
+				drawRetired();
 			}
 			else if (view === "Geography"){
 				$(".cf-canvas").css("display","none");
