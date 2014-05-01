@@ -634,6 +634,7 @@
 			for (i=0 ; i < raceTotal[race]; i++){
 				$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(0) img").attr("src", mainDB[2][ii]);
 				var temp = parseInt(mainDB[22][ii]);
+				$(".summary-row:eq("+i+")").attr("value",temp);
 				data[i] = new Array();
 				data[i][0] = "$" + commaSeparateNumber(temp);
 				switch(race){
@@ -683,6 +684,7 @@
 					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css("color","#CE5F75");
 				}
 			}
+			sortSummary();
 		}
 
 		function drawContributions(){
@@ -962,7 +964,7 @@
 			//visibility stacked option
 			$("#stacked_options_chosen").css("visibility","hidden");
 			//reset text and colors for chart
-			$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").remove();
+			$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").add(".summary-row").remove();
 
 			if (view === "Cash Raised" || view === "Retirees" || view === "Loans" || view === "Cash Spent"){
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -1035,6 +1037,17 @@
 			
 		}
 
+		function sortSummary(){
+			var $wrapper = $('#cf-overview'),
+		        $articles = $wrapper.find('.summary-row');
+		    [].sort.call($articles, function(a,b) {
+		        return +$(b).attr('value') - +$(a).attr('value');
+		    });
+		    $articles.each(function(){
+		        $wrapper.append(this);
+		    });
+		}
+
 		function sortBars(){
 			var $wrapper = $('.bar-chart'),
 		        $articles = $wrapper.find('.bar-row');
@@ -1097,6 +1110,13 @@
 				$(".cf-canvas").css("display","none");
 				$("#cf-contribute").css("display","block");
 				$("#cf-contribute").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>");
+			}
+			else if (view === "Summary"){
+				resetSummaryBars(view);
+				renameSummaryLabels(view);
+				$(".cf-canvas").css("display","none");
+				$("#cf-overview").css("display","block");
+				drawSummary();
 			}
 			else if (view === "Loans"){
 				resetSummaryBars(view);
