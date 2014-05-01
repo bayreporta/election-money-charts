@@ -396,6 +396,7 @@
 			<select id="overall-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
 				<option value="Cash Raised">Cash Raised</option>
 				<option value="Cash Spent">Cash Spent</option>
+				<option value="Loans">Loans</option>
 				<option value="Retirees">Retirees</option>
 				<!--<option value="Contributors">Top Contributors</option>-->
 				<option value="Geography">Geography</option>
@@ -617,6 +618,51 @@
 			sortBars();
 		}
 
+		function drawLoans(){
+			var data = [];
+			var all = 0;
+			var dataWidth = [];
+			var commas = [];
+
+			//size up data
+			var ii = raceColumns[race];
+			for (i=0 ; i < raceTotal[race]; i++){
+				data[i] = parseInt(candidateDB[12][ii]);
+				commas[i] = commaSeparateNumber(data[i]);
+				ii = ii + 1;
+			}
+			console.log(data)
+			//find total
+			for (i=0 ; i < data.length ; i++){
+				all = all + data[i]
+			}
+			
+			//find highest value in array
+			var maxValue = Math.max.apply(null, data);
+			
+			//figure out the width for each bar
+			for (i = 0 ; i < data.length ; i++){
+				dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
+			}
+
+			//populate data
+			for (i=0 ; i < data.length ; i++){
+				$("#cf-summary .bar-row:eq(" + i + ")").attr("value",data[i]);
+				$("#cf-summary .bar-data:eq(" + i + ") p").text("$" + commas[i]);
+				$("#cf-summary .bar-data:eq(" + i + ")").animate({
+					width:dataWidth[i]
+				})
+			}
+			
+			
+			//meta
+			$(".bar-data").css("background","#5FADCE");
+			$("#cf-summary .cf-title h2").text("Loans: 2013-14");
+			$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#5FADCE;>$" + commaSeparateNumber(all) + " contributed total</h4>");
+			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
+			sortBars();
+		}
+
 		function drawRetired(){
 			var data = [];
 			var all = 0;
@@ -698,9 +744,9 @@
 				})
 			}
 			
-			$("#cf-summary .bar-data").css("background","#fc8d59");
+			$("#cf-summary .bar-data").css("background","#CE5F75");
 			$("#cf-summary .cf-title h2").text("Total Cash Spent 2013-14");
-			$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#fc8d59;\">$" + commaSeparateNumber(all) + " spent total</h4>");
+			$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#CE5F75;\">$" + commaSeparateNumber(all) + " spent total</h4>");
 			$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses excluding accured expenses. Numbers are rounded to nearest dollar.</p>");
 			sortBars();
 		}
@@ -807,17 +853,7 @@
 			//reset text and colors for chart
 			$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").remove();
 
-			if (view === "Cash Raised"){
-				for (i = 1 ; i < raceTotal[race] + 1; i++){
-					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
-				}
-			}
-			else if (view === "Retirees"){
-				for (i = 1 ; i < raceTotal[race] + 1; i++){
-					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
-				}
-			}
-			else if (view === "Cash Spent"){
+			if (view === "Cash Raised" || view === "Retirees" || view === "Loans" || view === "Cash Spent"){
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
 					$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 				}
@@ -860,7 +896,7 @@
 
 		function renameSummaryLabels(view){
 			var ii = raceColumns[race];
-			if (view === "Cash Raised" || view === "Cash Spent" || view === "Retirees"){
+			if (view === "Cash Raised" || view === "Cash Spent" || view === "Retirees" || view === "Loans"){
 				for (i = 0; i < raceTotal[race]; i++){
 					$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
 					ii = ii + 1;
@@ -939,7 +975,14 @@
 				$("#cf-contribute").css("display","block");
 				$("#cf-contribute").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself. Average amount per contribution based off of all reported contributions; contributions under $100 typically don't have to be reported.</p>");
 			}
-			if (view === "Retirees"){
+			else if (view === "Loans"){
+				resetSummaryBars(view);
+				renameSummaryLabels(view);
+				$(".cf-canvas").css("display","none");
+				$("#cf-summary").css("display","block");
+				drawLoans();
+			}
+			else if (view === "Retirees"){
 				resetSummaryBars(view);
 				renameSummaryLabels(view);
 				$(".cf-canvas").css("display","none");
