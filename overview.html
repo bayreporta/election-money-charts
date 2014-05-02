@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="http://oaktowndata.com/wp-content/themes/tiny-forge/chosen.css">
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/tabletop.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/chosen.jquery.js"></script>
 <script src="http://oaktowndata.com/wp-content/js/caltip.min.js"></script>
@@ -390,7 +390,7 @@
 	}
 	
 	.donor-row {
-		height:125px;
+		height:175px;
 		margin: 0 0 10px 0;
 		padding: 0 0 10px 0;
 		border-bottom: 1px solid #8c9b93;
@@ -400,7 +400,7 @@
 	}
 		.donor-cell{
 			width:37.295454545%;
-			height:125px;
+			height:175px;
 			float:left;
 			border-left:1px solid #8c9b93;
 		}
@@ -426,8 +426,7 @@
 			font:400 .8em/1.2em "helvetica neue";
 			color:#4c5b52;
 			width:88%;
-			margin:10px 10px;
-			height:35px;
+			margin:15px 10px;
 			text-align:center;
 		}
 		.donor-cell img {
@@ -436,7 +435,9 @@
 			height:75px;
 			border:1px solid #8c9b93;
 		}
-		
+	.cf-canvas {
+		font-family:"helvetica neue",san-serif;
+	}
 	.summary-row {
 		height:125px;
 		margin: 0 0 10px 0;
@@ -758,12 +759,18 @@
 			var ii = raceColumns[race];				
 			for (i=0 ; i < raceTotal[race]; i++){
 				data[i] = new Array();
-				data[i][0] = mainDB[12][ii];
-				data[i][1] = "$" + commaSeparateNumber(parseInt(mainDB[11][ii]));
-				data[i][2] = mainDB[14][ii];
-				data[i][3] = "$" + commaSeparateNumber(parseInt(mainDB[13][ii]));
-				data[i][4] = mainDB[16][ii];
-				data[i][5] = "$" + commaSeparateNumber(parseInt(mainDB[15][ii]));				
+				data[i][0] = mainDB[10][ii];
+				data[i][1] = "$" + commaSeparateNumber(parseInt(mainDB[9][ii]));
+				data[i][2] = mainDB[28][ii];
+				data[i][3] = "$" + commaSeparateNumber(parseInt(mainDB[27][ii]));
+				data[i][4] = mainDB[30][ii];
+				data[i][5] = "$" + commaSeparateNumber(parseInt(mainDB[29][ii]));
+				data[i][6] = mainDB[12][ii];
+				data[i][7] = "$" + commaSeparateNumber(parseInt(mainDB[11][ii]));
+				data[i][8] = mainDB[14][ii];
+				data[i][9] = "$" + commaSeparateNumber(parseInt(mainDB[13][ii]));
+				data[i][10] = mainDB[16][ii];
+				data[i][11] = "$" + commaSeparateNumber(parseInt(mainDB[15][ii]));
 				ii = ii + 1;
 			}
 			
@@ -775,13 +782,43 @@
 				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(1)").html(data[i][3]);
 				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(0)").html(data[i][4]);
 				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(1)").html(data[i][5]);
-				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(0)").html(data[i][0]);
-				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").html(data[i][1]);
-				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(0)").html(data[i][2]);
-				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").html(data[i][3]);
-				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(0)").html(data[i][4]);
-				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").html(data[i][5]);				
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(0)").html(data[i][6]);
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").html(data[i][7]);
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(0)").html(data[i][8]);
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").html(data[i][9]);
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(0)").html(data[i][10]);
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").html(data[i][11]);		
+				
+				var $a = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(1)").html();
+				var $b = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(1)").html();
+				var $c = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(1)").html();
+				var $d = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").html();
+				var $e = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").html();
+				var $f = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").html();
+				
+				if ($a === "$NaN"){
+					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(1)").remove();
+				}
+				if ($b === "$NaN"){
+					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(1)").remove();
+				}
+				if ($c === "$NaN"){
+					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(1)").remove();
+				}
+				if ($d === "$NaN"){
+					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").remove();
+				}
+				if ($e === "$NaN"){
+					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").remove();
+				}
+				if ($f === "$NaN"){
+					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").remove();
+				}
+					
 			}			
+			if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
+				$("#cf-donors .donor-row:eq("+ i +") .donor-cell p").remove();
+			}		
 		}
 		
 		function drawContributions(){
@@ -886,7 +923,6 @@
 				commas[i] = commaSeparateNumber(data[i]);
 				ii = ii + 1;
 			}
-			console.log(data)
 			//find total
 			for (i=0 ; i < data.length ; i++){
 				all = all + data[i]
@@ -913,7 +949,7 @@
 			$(".bar-data").css("background","#91cf60");
 			$("#cf-summary .cf-title h2").text("Total Cash from Retirees: 2013-14");
 			$("#cf-summary").append("<h4 class=\"chart-h4\">$" + commaSeparateNumber(all) + " contributed total</h4>");
-			$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
+			$("#cf-summary").append("<p class=\"chart-footer\">This includes all reported contributions and miscellaneous increases to cash from people who identified themselves as Retired.</p>");
 			sortBars();
 		}
 
@@ -1109,6 +1145,7 @@
 				for (i = 1 ; i < raceTotal[race] + 1; i++){
 					$("#cf-donors").append("<div class=\"donor-row\" id=\""+i+"\"><div class=\"donor-cell\"><img src=\"\"><p></p><p></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div></div>");
 				}				
+				$("#cf-donors").append("<p class=\"chart-footer\">Top employers include the total number of contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself.</p>");
 			}
 			//resize labels
 			$(".bar-label").css("width",dimensions.label);			
