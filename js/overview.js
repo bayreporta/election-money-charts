@@ -8,7 +8,7 @@
 		//input options for stacked bar graphs
 		var stackedControl = {
 			geography:{
-				footer:"Contributions show here refer to itemized contributions with a location attached. Humboldt refers to all donations from incorporated and unincorporated communities in Humboldt County. California contributions include all contributions from California EXCLUDING Humboldt County.",
+				footer:"Contributions shown here refer to itemized contributions with a location attached. Humboldt refers to all donations from incorporated and unincorporated communities in Humboldt County. California contributions include all contributions from California EXCLUDING Humboldt County.",
 				legendItems:3,
 				legendLabels:["Humboldt","California","Elsewhere"],
 				legendColor:["#91cf60","#5FADCE","#CE5F75"],
