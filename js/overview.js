@@ -436,7 +436,7 @@
 		$("#cf-summary .bar-data").css("background","#CE5F75");
 		$("#cf-summary .cf-title h2").text("Total Cash Spent 2013-14");
 		$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#CE5F75;\">$" + commaSeparateNumber(all) + " spent total</h4>");
-		$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses excluding accured expenses. Numbers are rounded to nearest dollar.</p>");
+		$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses including accured expenses. Numbers are rounded to nearest dollar.</p>");
 		sortBars();
 	}
 
