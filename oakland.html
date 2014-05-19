@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Oakland Campaign Finance</title>
+	<link rel="stylesheet" href="css/overview.min.css">
+	<link rel="stylesheet" href="css/chosen.css">
+</head>
+<body>
+	<div id="cf-container">
+		<div id="loading">
+			<h1><strong></strong></h1>
+			<p>this should only take a moment</p>
+		</div>
+		<div id="cf-chart">
+			<div id="cf-choose">
+				<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
+					<option value="0">All</option>
+					<option value="1">Mayoral</option>
+				</select>
+				<select id="overall-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
+					<option value="Summary">Summary</option>
+					<option value="Cash Raised">Cash Raised</option>
+					<option value="Cash Spent">Cash Spent</option>
+					<option value="Loans">Loans</option>
+					<option value="Top Donors">Top Donors</option>
+					<option value="Geography">Geography</option>
+					<option value="Retirees">Retirees</option>			
+				</select>
+				<select id="stacked-options" class="chosen-select" style="width:180px;float:left;" tabindex="2">
+					<option value="Percent of Contributions">Percent of Contributions</option>
+					<option value="Total Contributions">Total Contributions</option>
+				</select>
+			</div>
+			<div id="cf-overview" class="cf-canvas">
+				<div class="cf-head">
+					<div class="cf-title">
+						<h2>Candidate Summary</h2>
+						<h4></h4>
+					</div>
+				</div>
+			</div>
+			<div id="cf-donors" class="cf-canvas">
+				<div class="cf-head">
+					<div class="cf-title">
+						<h2>Top Donors</h2>
+						<h4></h4>
+						<p><span>Top Contributors</span><span>Top Employers</span></p>
+					</div>
+				</div>
+			</div>
+			<div id="cf-summary" class="cf-canvas">
+				<div class="bar-chart">
+					<div class="cf-head">
+						<div class="cf-title">
+							<h2></h2>
+							<h4></h4>
+						</div>
+					</div>	
+				</div>
+			</div>
+			<div id="cf-stacked" class="cf-canvas">
+				<div class="stacked-bar-chart">
+					<div class="cf-stack-head">
+						<div class="cf-title">
+							<h2>Where Contributions Came From <br>(hover over bars for details)</h2>
+							<h4></h4>
+						</div>
+						<div id="cf-legend">
+							<div class="cf-legend-opt"><p></p></div>
+							<div class="cf-legend-opt"><p></p></div>
+							<div class="cf-legend-opt"><p></p></div>								
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="js/tabletop.js"></script>
+	<script src="js/chosen.jquery.js"></script>
+	<script src="js/caltip.min.js"></script>
+	<script src="js/overview-2.js"></script>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-9510600-9', 'bayreporta.com');
+	  ga('send', 'pageview');
+
+	</script>
+</body>
+</html>
