@@ -445,8 +445,8 @@
 				data[i] = new Array();
 				commas[i] = new Array();
 				data[i][0] = parseInt(candidateDB[19][ii]);
-				data[i][1] = parseInt(candidateDB[20][ii]);
-				data[i][2] = parseInt(candidateDB[21][ii]);
+				data[i][1] = parseInt(candidateDB[20][ii]) - data[i][0];
+				data[i][2] = parseInt(candidateDB[21][ii]) - (data[i][0] + data[i][1]);
 				data[i][3] = parseInt(candidateDB[22][ii]);
 				commas[i][0] = commaSeparateNumber(data[i][0]);
 				commas[i][1] = commaSeparateNumber(data[i][1]);
@@ -485,8 +485,8 @@
 				data[i] = new Array();
 				commas[i] = new Array();
 				data[i][0] = parseInt(candidateDB[19][ii]);
-				data[i][1] = parseInt(candidateDB[20][ii]);
-				data[i][2] = parseInt(candidateDB[21][ii]);
+				data[i][1] = parseInt(candidateDB[20][ii]) - data[i][0];
+				data[i][2] = parseInt(candidateDB[21][ii]) - (data[i][0] + data[i][1]);
 				data[i][3] = parseInt(candidateDB[22][ii]);
 				commas[i][0] = commaSeparateNumber(data[i][0]);
 				commas[i][1] = commaSeparateNumber(data[i][1]);
