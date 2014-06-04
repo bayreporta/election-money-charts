@@ -474,3 +474,34 @@
 		margin:12px 0;
 		text-align:left;
 	}
+
+/* SUMMARY CHARTS */
+
+.cf-head-labels {
+	border-bottom:1px solid #aaa;
+	height:60px;
+}
+
+.cf-head-labels p {
+	position:relative;
+	font-weight:300;
+}
+
+#cf-head-label-0 p {
+	top:40px;
+	left:31%;
+}
+
+#cf-head-label-1 p {
+	top:6px;
+	left:54%;
+}
+
+#cf-head-label-2 p {
+	top:-28px;
+	left:80%;
+}
+
+#cf-overview .cf-head {
+	height:140px;
+}

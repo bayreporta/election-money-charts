@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Oakland Campaign Finance</title>
-	<link rel="stylesheet" href="css/overview.min.css">
+	<link rel="stylesheet" href="css/overview.css">
 	<link rel="stylesheet" href="css/chosen.css">
 </head>
 <body>
@@ -15,8 +15,7 @@
 		<div id="cf-chart">
 			<div id="cf-choose">
 				<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
-					<option value="0">All</option>
-					<option value="1">Mayoral</option>
+					<option value="0">Mayoral</option>
 				</select>
 				<select id="overall-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
 					<option value="Summary">Summary</option>
@@ -31,12 +30,20 @@
 					<option value="Percent of Contributions">Percent of Contributions</option>
 					<option value="Total Contributions">Total Contributions</option>
 				</select>
+				<select id="summary-options" class="chosen-select" style="width:180px;float:left;" tabindex="2">
+					<option value="Overview">Overview</option>
+				</select>
 			</div>
 			<div id="cf-overview" class="cf-canvas">
 				<div class="cf-head">
 					<div class="cf-title">
 						<h2>Candidate Summary</h2>
 						<h4></h4>
+					</div>
+					<div class="cf-head-labels">
+						<div id="cf-head-label-0"><p>War Chest</p></div>
+						<div id="cf-head-label-1"><p>Cash Raised</p></div>
+						<div id="cf-head-label-2"><p>Cash Spent</p></div>
 					</div>
 				</div>
 			</div>

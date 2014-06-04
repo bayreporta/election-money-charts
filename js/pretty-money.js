@@ -133,6 +133,7 @@
 	
 	function drawSummary(){
 		var data = [];
+		$("#summary_options_chosen").css("display","block");
 		//size up data
 		var ii = raceColumns[race];				
 		for (i=0 ; i < raceTotal[race]; i++){
@@ -437,7 +438,7 @@
 	function drawGeography(){
 		var data = [], dataWidth = [], total = [], commas = [], colors = [], dataWidth = [];
 		//unhide stacked option
-		$("#stacked_options_chosen").css("visibility","visible");		
+		$("#stacked_options_chosen").css("display","block");		
 		if (stacked === 0){
 			//size up data
 			var ii = raceColumns[race];
@@ -535,8 +536,9 @@
 	}
 
 	function resetSummaryBars(view){
-		//visibility stacked option
-		$("#stacked_options_chosen").css("visibility","hidden");
+		//visibility stacked and summary options
+		$("#stacked_options_chosen").css("display","none");
+		$("#summary_options_chosen").css("display","none");
 		//reset text and colors for chart
 		$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").add(".summary-row").add(".donor-row").remove();
 
@@ -579,7 +581,7 @@
 		}			
 		else if (view === "Summary"){
 			for (i = 1 ; i < raceTotal[race] + 1; i++){
-				$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p>War Chest</p></div><div class=\"summary-cell\"><p></p><p>Cash Raised</p></div><div class=\"summary-cell\"><p></p><p>Cash Spent</p></div></div>");
+				$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div></div>");
 			}
 		}
 		else if (view === "Top Donors"){
