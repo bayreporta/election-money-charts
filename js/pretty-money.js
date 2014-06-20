@@ -133,7 +133,7 @@
 	
 	function drawSummary(){
 		var data = [];
-		$("#summary_options_chosen").css("display","block");
+		$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
 		//size up data
 		var ii = raceColumns[race];				
 		for (i=0 ; i < raceTotal[race]; i++){
@@ -264,7 +264,7 @@
 		var all = 0;
 		var dataWidth = [];
 		var commas = [];
-
+		$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 		//size up data
 		var ii = raceColumns[race];
 		for (i=0 ; i < raceTotal[race]; i++){
@@ -308,6 +308,7 @@
 		var all = 0;
 		var dataWidth = [];
 		var commas = [];
+		$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 
 		//size up data
 		var ii = raceColumns[race];
@@ -353,6 +354,7 @@
 		var all = 0;
 		var dataWidth = [];
 		var commas = [];
+		$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 
 		//size up data
 		var ii = raceColumns[race];
@@ -438,7 +440,7 @@
 	function drawGeography(){
 		var data = [], dataWidth = [], total = [], commas = [], colors = [], dataWidth = [];
 		//unhide stacked option
-		$("#stacked_options_chosen").css("display","block");		
+		$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");		
 		if (stacked === 0){
 			//size up data
 			var ii = raceColumns[race];
@@ -537,12 +539,13 @@
 
 	function resetSummaryBars(view){
 		//visibility stacked and summary options
-		$("#stacked_options_chosen").css("display","none");
-		$("#summary_options_chosen").css("display","none");
+		$("#stacked_options_chosen").css("visibility","hidden");
+		$("#summary_options_chosen").css("visibility","hidden");
+		$("#contribute_options_chosen").css("visibility","hidden");
 		//reset text and colors for chart
 		$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").add(".summary-row").add(".donor-row").remove();
 
-		if (view === "Cash Raised" || view === "Retirees" || view === "Loans" || view === "Cash Spent"){
+		if (view === "Cash Raised" || view === "Raised Summary" || view === "Retirees" || view === "Loans" || view === "Cash Spent"){
 			for (i = 1 ; i < raceTotal[race] + 1; i++){
 				$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 			}
@@ -596,7 +599,7 @@
 
 	function renameSummaryLabels(view){
 		var ii = raceColumns[race];
-		if (view === "Cash Raised" || view === "Cash Spent" || view === "Retirees" || view === "Loans"){
+		if (view === "Cash Raised" || view === "Raised Summary" || view === "Cash Spent" || view === "Retirees" || view === "Loans"){
 			for (i = 0; i < raceTotal[race]; i++){
 				$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
 				ii = ii + 1;
@@ -686,7 +689,7 @@
 		$("#cf-summary").css("display","block");
 		$("#cf-industry").css("display","none");
 		//Change view
-		if (view === "Cash Raised"){
+		if (view === "Cash Raised" || view === "Raised Summary"){
 			resetSummaryBars(view);
 			renameSummaryLabels(view);
 			$(".cf-canvas").css("display","none");
@@ -763,5 +766,9 @@
 				stacked = 1;
 			}
 			redrawCanvas();
+		})
+		$("#contribute_options_chosen").on("click","ul > li", function(){
+			view = $(this).attr("value"); //detect view
+			redrawCanvas();			
 		})
 	});
