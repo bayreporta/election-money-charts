@@ -3,8 +3,9 @@
 	}
 	
 	#cf-container {
-		height:1000px;
 		width:960px;
+		margin:0 auto;
+		overflow:hidden;
 	}
 	
 	
@@ -42,7 +43,7 @@
 	}
 
 	.cf-legend-opt {
-		width:30px;
+		width:51px;
 		height:15px;
 		padding:5px;
 		float:left;
@@ -54,7 +55,7 @@
 		text-align:center;
 		font-size:12px;
 		font-weight:700;
-		margin:30px 0 0 -10px;
+		margin:30px 0 0 0;
 	}
 
 	.stacked-bar-chart {

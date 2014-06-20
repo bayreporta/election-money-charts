@@ -437,6 +437,46 @@
 		sortBars();
 	}
 
+	function drawCashPerDays() {
+		var data = [], dataWidth = [], commas = [], all = 0;
+		$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
+		//size up data
+		var ii = raceColumns[race];
+		for (i=0 ; i < raceTotal[race]; i++){
+			data[i] = parseInt(mainDB[27][ii]);
+			commas[i] = commaSeparateNumber(data[i]);
+			ii = ii + 1;
+		}
+
+		//find total
+		all = parseInt(mainDB[27][1]);
+		
+		
+		//find highest value in array
+		var maxValue = Math.max.apply(null, data);
+		
+		//figure out the width for each bar
+		for (i = 0 ; i < data.length ; i++){
+			dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
+		}
+
+		//populate data
+		for (i=0 ; i < data.length ; i++){
+			$("#cf-summary .bar-row:eq(" + i + ")").attr("value",data[i]);
+			$("#cf-summary .bar-data:eq(" + i + ") p").text("$" + commas[i]);
+			$("#cf-summary .bar-data:eq(" + i + ")").animate({
+				width:dataWidth[i]
+			})
+		}
+		
+		//meta
+		$(".bar-data").css("background","#91cf60");
+		$("#cf-summary .cf-title h2").text("Cash Raised per Days Fundraising");
+		$("#cf-summary").append("<h4 class=\"chart-h4\">Average Overall $" + commaSeparateNumber(all) + "</h4>");
+		$("#cf-summary").append("<p class=\"chart-footer\">Figures represent the amount of cash contributions, including misc. increases to cash, divided by the number of days fundraising. Day one for fundraising is based off the earliest campaign contribution disclosed by the candidate.</p>");
+		sortBars();
+	}
+
 	function drawGeography(){
 		var data = [], dataWidth = [], total = [], commas = [], colors = [], dataWidth = [];
 		//unhide stacked option
@@ -545,7 +585,7 @@
 		//reset text and colors for chart
 		$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".cf-legend-opt").add(".summary-row").add(".donor-row").remove();
 
-		if (view === "Cash Raised" || view === "Raised Summary" || view === "Retirees" || view === "Loans" || view === "Cash Spent"){
+		if (view === "Cash Raised" || view === "Raised Summary" || view === "Retirees" || view === "CPD" || view === "Loans" || view === "Cash Spent"){			
 			for (i = 1 ; i < raceTotal[race] + 1; i++){
 				$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 			}
@@ -599,11 +639,11 @@
 
 	function renameSummaryLabels(view){
 		var ii = raceColumns[race];
-		if (view === "Cash Raised" || view === "Raised Summary" || view === "Cash Spent" || view === "Retirees" || view === "Loans"){
+		if (view === "Cash Raised" || view === "Raised Summary" || view === "Cash Spent" || view === "CPD" || view === "Retirees" || view === "Loans"){
 			for (i = 0; i < raceTotal[race]; i++){
 				$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(candidateDB[0][ii]);
 				ii = ii + 1;
-			}
+			}			
 		}
 		else if (view === "Geography"){
 			for (i = 0; i < raceTotal[race]; i++){
@@ -702,6 +742,13 @@
 			$(".cf-canvas").css("display","none");
 			$("#cf-overview").css("display","block");
 			drawSummary();
+		}
+		else if (view === "CPD"){			
+			resetSummaryBars(view);
+			renameSummaryLabels(view);
+			$(".cf-canvas").css("display","none");
+			$("#cf-summary").css("display","block");
+			drawCashPerDays();
 		}
 		else if (view === "Top Donors"){
 			resetSummaryBars(view);
