@@ -14,9 +14,7 @@
 		</div>
 		<div id="cf-chart">
 			<div id="cf-choose">
-				<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2">
-					<option value="0">Mayoral</option>
-				</select>
+				<select id="race-options" class="chosen-select" style="width:200px;float:left;" tabindex="2"></select>
 				<select id="overall-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
 					<option value="Summary">Summary</option>
 					<option value="Cash Raised">Cash Raised</option>
@@ -60,6 +58,17 @@
 					</div>
 				</div>
 			</div>
+			<div id="cf-expense-type" class="cf-canvas">
+				<div class="bar-chart">
+					<div class="cf-head">
+						<div class="cf-title">
+							<h2></h2>
+							<h4></h4>
+						</div>
+					</div>	
+					
+				</div>
+			</div>
 			<div id="cf-donors" class="cf-canvas">
 				<div class="cf-head">
 					<div class="cf-title">
@@ -97,6 +106,7 @@
 		</div>
 	</div>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="js/underscore-min.js"></script>
 	<script src="js/tabletop.js"></script>
 	<script src="js/chosen.jquery.js"></script>
 	<script src="js/caltip.min.js"></script>

@@ -234,11 +234,12 @@
 
 	.bar-chart {
 		width:960px;
+		min-height:200px;
 	}
 
 	.cf-head {
 		width:960px;
-		height:120px;
+		height:145px;
 	}
 	
 	.cf-stack-head {
