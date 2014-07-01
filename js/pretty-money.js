@@ -7,6 +7,7 @@
 		var updated = "12/31/2013"; //when was the data updated?
 		var view = "Summary"; //leave default
 		var stacked = 0; //leave default
+		var thisCandidate = 2;
 		
 		//input dimensions for graphic
 		var dimensions = {
@@ -16,7 +17,7 @@
 		}
 		
 		//candidate names and measures
-		var candidateDB = [];
+		var candidateDB = [], candidateList = [];
 		
 		//input options for stacked bar graphs
 		var stackedControl = {
@@ -49,6 +50,8 @@
 				//connect listeners to Chosen elements
 				$("#race_options_chosen").on("click","ul > li", function(){
 					race = parseInt($(this).attr("value"));	
+					thisCandidate = raceColumns[race];
+					$("#candidates_options_"+race+"_chosen .chosen-single span").text(candidateDB[race][0]);
 					chartFunctions.redrawCanvas();			
 				})
 
@@ -79,6 +82,12 @@
 					view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();			
 				})
+				for(i=0 ; i < raceTotal.length ; i++){
+					$("#candidates_options_"+i+"_chosen").on("click","ul > li", function(){
+						thisCandidate = $(this).attr("value"); //detect candidate
+						chartFunctions.redrawCanvas();			
+					})
+				}
 			},
 			commaSeparateNumber:function(val){
 			    while (/(\d+)(\d{3})/.test(val.toString())){
@@ -88,7 +97,7 @@
 			},
 			grabCandidates:function(){
 				var tempNames = [], tempRaces = [], parseRaces = [];
-				var ii = 0, iii = 0, iv = 0, v = 2, countRaces = 0, countCandidates = 0;
+				var ii = 0, iii = 0, iv = 0, v = 2, vi = 2, countRaces = 0, countCandidates = 0;
 				//grab names and races
 				for (i = 2 ; i < mainDB[0].length ; i++){
 					tempNames[ii] = mainDB[0][i];
@@ -137,7 +146,8 @@
 				for (i=0 ; i < countRaces ; i++){
 					$("#cf-expense-type .cf-title").append("<select id=\"candidates-options-"+i+"\" class=\"candidate-options chosen-select\" value=" + i + " class=\"chosen-select\" style=\"width:200px;float:left;\" tabindex=\"2\"></select>");
 					for (x=0 ; x < candidateDB[i].length ; x++){
-						$("#candidates-options-"+i+"").append("<option value=" + candidateDB[i][x] + ">" + candidateDB[i][x] + "</option>");
+						$("#candidates-options-"+i+"").append("<option value=" + vi + ">" + candidateDB[i][x] + "</option>");
+						vi = vi + 1;
 					}
 				}		
 			}
@@ -437,9 +447,7 @@
 				
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-expense-type .cf-title");
 				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				
-				var thisCandidate = raceColumns[race];
-
+								
 				//get data
 				for (i=0 ; i < 27;  i++){
 					data[i] = parseInt(summaryDB[ii][thisCandidate]);
