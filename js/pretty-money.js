@@ -185,7 +185,7 @@
 				$(".cf-title h4").html("Data Updated on " + updated); 
 
 				//loading
-				$("#cf-chart").css("visibility","visible").css("height","auto");
+				$("#cf-chart").css("visibility","visible");
 				$("#loading").remove();
 
 				//populate candidates and measures
@@ -206,6 +206,7 @@
 			drawSummary:function(){
 				var data = [];
 				$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];				
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -265,6 +266,7 @@
 			drawStatistics:function(){
 				var data = [];
 				$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];				
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -358,6 +360,7 @@
 				var dataWidth = [];
 				var commas = [];
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -402,6 +405,7 @@
 				var dataWidth = [];
 				var commas = [];
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 
 				//size up data
 				var ii = raceColumns[race];
@@ -447,7 +451,7 @@
 				
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-expense-type .cf-title");
 				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-								
+				$("#cf-choose-text h4:eq(2)").css("display","block");				
 				//get data
 				for (i=0 ; i < 27;  i++){
 					data[i] = parseInt(summaryDB[ii][thisCandidate]);
@@ -497,7 +501,7 @@
 				var dataWidth = [];
 				var commas = [];
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -541,6 +545,7 @@
 				var dataWidth = [];
 				var commas = [];
 				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race] ;  i++){
@@ -581,6 +586,7 @@
 			drawCashPerDays:function(){
 				var data = [], dataWidth = [], commas = [], all = 0;
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -621,7 +627,8 @@
 			drawGeography:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], dataWidth = [];
 				//unhide stacked option
-				$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");		
+				$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
+				$("#cf-choose-text h4:eq(2)").css("display","block");		
 				if (stacked === 0){
 					//size up data
 					var ii = raceColumns[race];
@@ -716,6 +723,12 @@
 				}		
 				chartFunctions.sortGeo();
 			},
+			drawAllDonors:function(){				
+				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-iframe .cf-title");
+				$(".cf-iframe-hold").append(mainDB[28][thisCandidate]);	
+				$("#cf-iframe .cf-title h2").text("All Donors 2013-14");
+			
+			},
 			// ------- REFRESHING CANVAS ------- //
 			redrawCanvas:function(){
 				//magically hide and show chart divs
@@ -728,6 +741,13 @@
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block");
 					chartFunctions.drawContributions()
+				}
+				else if (view === "All Donors"){
+					chartFunctions.resetCanvas(view);
+					chartFunctions.renameCanvas(view);
+					$(".cf-canvas").css("display","none");
+					$("#cf-iframe").css("display","block");
+					chartFunctions.drawAllDonors();
 				}
 				else if (view === "Summary" || view === "Ranking"){
 					chartFunctions.resetCanvas(view);
@@ -805,6 +825,8 @@
 				$("#summary_options_chosen").css("visibility","hidden");
 				$("#contribute_options_chosen").css("visibility","hidden");
 				$("#expenses_options_chosen").css("visibility","hidden");
+				$("#cf-choose-text h4:eq(2)").css("display","none");
+				$("#cf-chart").css("overflow-y","scroll");
 				for (i = 0 ; i < raceTotal.length ; i++){
 					$("#candidates_options_"+i+"_chosen").css("visibility","hidden");
 				}
@@ -820,6 +842,10 @@
 					for (i = 1 ; i < 28; i++){
 						$("#cf-expense-type .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 					}
+				}
+				else if (view === "All Donors"){
+					$("#cf-chart").css("overflow-y","hidden");
+					$("#cf-iframe iframe").remove();
 				}
 				else if (view === "Geography"){
 					var geographyStackedSubBars;
@@ -975,7 +1001,7 @@
 
 	// ------- ADJUST DIMENSIONS ------- //
 	$(document).ready(function(){
-		$("#loading").add("#cf-container").add("#cf-options").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").add("#cf-overview").add(".summary-row").css("width",dimensions.overall);
+		$("#loading").add("#cf-choose-text").add("#cf-container").add("#cf-options").add("#cf-chart").add("#cf-legend").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").add("#cf-overview").add(".summary-row").css("width",dimensions.overall);
 	});
 // ------- FUNNY GREETINGS ------- //
 	$(document).ready(function(){
