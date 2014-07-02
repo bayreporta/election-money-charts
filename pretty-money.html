@@ -29,9 +29,9 @@
 						<option value="Top Donors">Top Donors</option>
 						<option value="All Donors">All Donors</option>
 						<option value="Geography">Geography</option>
-						<option value="Achievements">Achievements</option>
+						<!--<option value="Achievements">Achievements</option>-->
 					</select>
-					<select id="stacked-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
+					<select id="stacked-options" class="chosen-select" style="width:170px;float:left;" tabindex="2">
 						<option value="Percent of Contributions">Percent of Contributions</option>
 						<option value="Total Contributions">Total Contributions</option>
 					</select>
@@ -49,6 +49,12 @@
 						<option value="Expenses Summary">Summary</option>
 						<option value="Expense Type">Expense Type</option>
 					</select>
+					<select id="ie-options" class="chosen-select" style="width:150px;float:left;" tabindex="2">
+						<option value="IE Summary">IE Summary</option>
+						<option value="IE Committees">IE Committees</option>
+						<option value="IE Candidates">IE Candidates</option>
+						<!--<option value="IE Donors">IE Donors</option> CONSIDERING LIKE ALL DONORS-->
+					</select>
 				</div>
 				
 			</div>
@@ -61,16 +67,29 @@
 					<div class="cf-iframe-hold"></div>
 				</div>
 			</div>
+				<div id="cf-ie" class="cf-canvas">
+						<div class="ie-bar-chart">
+							<div class="cf-ie-head">
+								<div class="cf-title">
+									<h2></h2>
+									<h4></h4>
+								</div>
+								<div id="cf-ie-legend">
+									
+								</div>
+							</div>
+						</div>
+				</div>
 			<div id="cf-overview" class="cf-canvas">
 				<div class="cf-head">
 					<div class="cf-title">
-						<h2>Candidate Summary</h2>
+						<h2></h2>
 						<h4></h4>
 					</div>
 					<div class="cf-head-labels">
-						<div id="cf-head-label-0"><p>War Chest</p></div>
-						<div id="cf-head-label-1"><p>Cash Raised</p></div>
-						<div id="cf-head-label-2"><p>Cash Spent</p></div>
+						<div id="cf-head-label-0"><p></p></div>
+						<div id="cf-head-label-1"><p></p></div>
+						<div id="cf-head-label-2"><p></p></div>
 					</div>
 				</div>
 			</div>
@@ -108,7 +127,7 @@
 				<div class="stacked-bar-chart">
 					<div class="cf-stack-head">
 						<div class="cf-title">
-							<h2>Where Contributions Came From <br>(hover over bars for details)</h2>
+							<h2></h2>
 							<h4></h4>
 						</div>
 						<div id="cf-legend">
