@@ -28,7 +28,7 @@
 				legendItems:2,
 				legendLabels:["Support","Oppose"],
 				legendColor:["rgb(145, 207, 96)","rgb(206, 95, 117)"],
-				legendBars:"<div class=\"ie-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div></div>"
+				legendBars:"<div class=\"ie-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><p></p></div>"
 			},
 			geography:{
 				footer:"Contributions shown here refer to itemized cash contributions with a location attached. Bay Area refers to all donations from incorporated and unincorporated communities in what is generally considered the Bay Area Region, minus Oakland. California contributions include all contributions from California EXCLUDING the Bay Area and Oakland. Numbers may not add up to 100% due to rounding.",
@@ -826,6 +826,14 @@
 				for (i=0; i < total.length; i++){
 					all = all + total[i];
 				}
+
+				//find highest value in array
+				var maxValue = Math.max.apply(null, total);
+
+				//figure out the width for each bar
+				for (i = 0 ; i < total.length ; i++){
+					dataWidth[i] = (total[i] / maxValue) * dimensions.maxBarWidth;
+				}
 				
 				//sorting by first legend item
 				for (i=0 ; i < raceTotal[race] ; i++){
@@ -839,11 +847,18 @@
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
 						}).attr("value", data[i][x]);
+						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
 							title:stackedControl.ie.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
 						})
 					}
+				}								
+				for (i=0 ; i < total.length ; i++){
+					$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("value",total[i]);
+					$("#cf-ie .bar-data:eq(" + i + ")").animate({
+						width:dataWidth[i] + "px"
+					})
 				}
 				
 
@@ -913,6 +928,7 @@
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
 						}).attr("value", data[i][x]);
+						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
 							title:stackedControl.ie.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
@@ -987,6 +1003,7 @@
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
 						}).attr("value", data[i][x]);
+						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
 							title:stackedControl.ie.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
@@ -1164,9 +1181,10 @@
 					for (i=1 ; i < ieNames.length ; i++){
 						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
 					}
+					console.log(ieNames)
 					//tag each row with unique ID
-					for (i=1 ; i < ieNames.length ; i++){
-						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
+					for (i = 1 ; i < ieNames.length + 1; i++){
+						$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("id", i);
 					}
 					//Give Max Width to Bars
 					$(".ie-bar-row").css("width", dimensions.overall);
@@ -1184,8 +1202,8 @@
 						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
 					}
 					//tag each row with unique ID
-					for (i=1 ; i < ieNames.length ; i++){
-						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
+					for (i = 1 ; i < ieNames.length + 1; i++){
+						$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("id", i);
 					}
 					//Give Max Width to Bars
 					$(".ie-bar-row").css("width", dimensions.overall);

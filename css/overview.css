@@ -333,8 +333,15 @@
 			text-align:right;
 			font-size:14px;
 			margin:6px 5px 6px 0;
-			color:#000000;
+			color:#333;
 			font-weight:700;
+		}
+		
+		#cf-ie .bar-data p {
+			position: relative;
+			right: 0px;
+			top: -24px;
+			margin:0;
 		}
 
 	.chart-h4 {
