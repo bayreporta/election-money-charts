@@ -22,9 +22,9 @@
 		var candidateDB = [], candidateList = [], ieNames = [];
 		
 		//input options for stacked bar graphs
-		var stackedControl = {
+		var chartControl = {
 			ie:{
-				footer:"All money spent by independent expenditure committees in support or opposition to a candidate.",
+				footer:"All money spent by independent expenditure committees in support or opposition to a candidate. If there is a huge difference between money supporting and opposing a candidate, it may not appear on the chart, but it will appear in the total amount of money spent on the candidate.",
 				legendItems:2,
 				legendLabels:["Support","Oppose"],
 				legendColor:["rgb(145, 207, 96)","rgb(206, 95, 117)"],
@@ -718,20 +718,20 @@
 						$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
 					}
 					//populate data
-					colors = stackedControl.geography.legendColor;
+					colors = chartControl.geography.legendColor;
 					for (i=0 ; i < raceTotal[race] ; i++){
-						for (x = 0 ; x < stackedControl.geography.legendItems ; x++){
+						for (x = 0 ; x < chartControl.geography.legendItems ; x++){
 							$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 								width:((data[i][x] / total[i]) * 100) + "%"
 							}).attr("value", data[i][x]);
 							$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-								title:stackedControl.geography.legendLabels[x],
+								title:chartControl.geography.legendLabels[x],
 								content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
 							})
 						}
 					}
 					//footer
-					$("#cf-stacked").append("<p class=\"chart-footer\">" + stackedControl.geography.footer + "</p>");
+					$("#cf-stacked").append("<p class=\"chart-footer\">" + chartControl.geography.footer + "</p>");
 				}		
 				else if (stacked === 1){
 					//size up data
@@ -764,14 +764,14 @@
 						dataWidth[i] = (total[i] / maxValue) * dimensions.maxBarWidth;
 					}
 					//populate data
-					colors = stackedControl.geography.legendColor;
+					colors = chartControl.geography.legendColor;
 					for (i=0 ; i < raceTotal[race] ; i++){
-						for (x = 0 ; x < stackedControl.geography.legendItems ; x++){
+						for (x = 0 ; x < chartControl.geography.legendItems ; x++){
 							$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 								width:((data[i][x] / total[i]) * 100) + "%"
 							}).attr("value", data[i][x]);
 							$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-								title:stackedControl.geography.legendLabels[x],
+								title:chartControl.geography.legendLabels[x],
 								content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
 							})
 						}
@@ -783,7 +783,7 @@
 						})
 					}
 					//footer
-					$("#cf-stacked").append("<p class=\"chart-footer\">" + stackedControl.geography.footer + "</p>");
+					$("#cf-stacked").append("<p class=\"chart-footer\">" + chartControl.geography.footer + "</p>");
 				}		
 				chartFunctions.sortGeo();
 			},
@@ -841,15 +841,15 @@
 				}
 								
 				//populate data
-				colors = stackedControl.ie.legendColor;
+				colors = chartControl.ie.legendColor;
 				for (i=0 ; i < raceTotal[race] ; i++){
-					for (x = 0 ; x < stackedControl.ie.legendItems ; x++){
+					for (x = 0 ; x < chartControl.ie.legendItems ; x++){
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
 						}).attr("value", data[i][x]);
 						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:stackedControl.ie.legendLabels[x],
+							title:chartControl.ie.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
 						})
 					}
@@ -865,7 +865,7 @@
 				//footer
 				$("#cf-ie .cf-title h2").html("Independent Expenditures Overview <br> (hover over bars for details)");
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-ie").append("<p class=\"chart-footer\">" + stackedControl.ie.footer + "</p>");
+				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
 				//sort
 				chartFunctions.sortIE();
 				//chartFunctions.sortGeo();
@@ -922,15 +922,15 @@
 				}
 				
 				//populate data
-				colors = stackedControl.ie.legendColor;
+				colors = chartControl.ie.legendColor;
 				for (i=0 ; i < ieNames.length ; i++){
-					for (x = 0 ; x < stackedControl.ie.legendItems ; x++){
+					for (x = 0 ; x < chartControl.ie.legendItems ; x++){
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
 						}).attr("value", data[i][x]);
 						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:stackedControl.ie.legendLabels[x],
+							title:chartControl.ie.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
 						})
 					}
@@ -944,7 +944,7 @@
 				//meta
 				$("#cf-ie .cf-title h2").html("Independent Expenditures Committees <br> (hover over bars for details)");
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-ie").append("<p class=\"chart-footer\">" + stackedControl.ie.footer + "</p>");
+				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
 				
 				//sort
 				chartFunctions.sortIE();
@@ -997,15 +997,15 @@
 				}
 				
 				//populate data
-				colors = stackedControl.ie.legendColor;
+				colors = chartControl.ie.legendColor;
 				for (i=0 ; i < ieNames.length ; i++){
-					for (x = 0 ; x < stackedControl.ie.legendItems ; x++){
+					for (x = 0 ; x < chartControl.ie.legendItems ; x++){
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
 							width:((data[i][x] / total[i]) * 100) + "%"
 						}).attr("value", data[i][x]);
 						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
 						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:stackedControl.ie.legendLabels[x],
+							title:chartControl.ie.legendLabels[x],
 							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
 						})
 					}
@@ -1019,7 +1019,7 @@
 				//meta
 				$("#cf-ie .cf-title h2").html("Independent Expenditures to Candidates <br> (hover over bars for details)");
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-ie").append("<p class=\"chart-footer\">" + stackedControl.ie.footer + "</p>");
+				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
 				//sort
 				chartFunctions.sortIE();
 				//kill zero rows
@@ -1160,7 +1160,7 @@
 					$(".cf-ie-head").css("height","170px");
 					//populate bars based on number of candidates
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
+						$(".ie-bar-chart").append(chartControl.ie.legendBars);
 					}				
 					//tag each row with unique ID
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -1170,16 +1170,16 @@
 					$(".ie-bar-row").css("width", dimensions.overall);
 					$(".ie-bar-row .bar-data").css("width", dimensions.maxBarWidth);
 					//populate legend
-					for (i = 0 ; i < stackedControl.ie.legendItems ; i++){
-						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + stackedControl.ie.legendLabels[i] + "</p></div>");
-						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", stackedControl.ie.legendColor[i]);
+					for (i = 0 ; i < chartControl.ie.legendItems ; i++){
+						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + chartControl.ie.legendLabels[i] + "</p></div>");
+						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}					
 				}
 				else if (view === "IE Committees"){
 					$(".cf-ie-head").css("height","170px");
 					//populate IE committees
-					for (i=1 ; i < ieNames.length ; i++){
-						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
+					for (i=1 ; i < ieNames.length + 1; i++){
+						$(".ie-bar-chart").append(chartControl.ie.legendBars);
 					}
 					console.log(ieNames)
 					//tag each row with unique ID
@@ -1190,16 +1190,16 @@
 					$(".ie-bar-row").css("width", dimensions.overall);
 					$(".ie-bar-row .bar-data").css("width", dimensions.maxBarWidth);
 					//populate legend
-					for (i = 0 ; i < stackedControl.ie.legendItems ; i++){
-						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + stackedControl.ie.legendLabels[i] + "</p></div>");
-						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", stackedControl.ie.legendColor[i]);
+					for (i = 0 ; i < chartControl.ie.legendItems ; i++){
+						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + chartControl.ie.legendLabels[i] + "</p></div>");
+						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}
 				}
 				else if (view === "IE Candidates"){
 					$(".cf-ie-head").css("height","260px");
 					//populate IE committees
-					for (i=1 ; i < ieNames.length ; i++){
-						$(".ie-bar-chart").append(stackedControl.ie.legendBars);
+					for (i=1 ; i < ieNames.length + 1 ; i++){
+						$(".ie-bar-chart").append(chartControl.ie.legendBars);
 					}
 					//tag each row with unique ID
 					for (i = 1 ; i < ieNames.length + 1; i++){
@@ -1209,9 +1209,9 @@
 					$(".ie-bar-row").css("width", dimensions.overall);
 					$(".ie-bar-row .bar-data").css("width", dimensions.maxBarWidth);
 					//populate legend
-					for (i = 0 ; i < stackedControl.ie.legendItems ; i++){
-						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + stackedControl.ie.legendLabels[i] + "</p></div>");
-						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", stackedControl.ie.legendColor[i]);
+					for (i = 0 ; i < chartControl.ie.legendItems ; i++){
+						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + chartControl.ie.legendLabels[i] + "</p></div>");
+						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}
 				}
 				else if (view === "Expense Type"){
@@ -1226,15 +1226,15 @@
 				else if (view === "Geography"){
 					var geographyStackedSubBars;
 					//determine number of stacked sub bars
-					switch(stackedControl.geography.legendItems){
+					switch(chartControl.geography.legendItems){
 						case 2:
-							geographyStackedSubBars = stackedControl.geography.legendBars.two;
+							geographyStackedSubBars = chartControl.geography.legendBars.two;
 							break;
 						case 3:
-							geographyStackedSubBars = stackedControl.geography.legendBars.three;
+							geographyStackedSubBars = chartControl.geography.legendBars.three;
 							break;
 						case 4:
-							geographyStackedSubBars = stackedControl.geography.legendBars.four;
+							geographyStackedSubBars = chartControl.geography.legendBars.four;
 							break;
 					}
 					//populate bars based on number of candidates
@@ -1249,9 +1249,9 @@
 					$(".stacked-bar-row").css("width", dimensions.overall);
 					$(".stacked-bar-row .bar-data").css("width", dimensions.maxBarWidth);
 					//populate legend
-					for (i = 0 ; i < stackedControl.geography.legendItems ; i++){
-						$("#cf-legend").append("<div class=\"cf-legend-opt\"><p>" + stackedControl.geography.legendLabels[i] + "</p></div>");
-						$(".cf-legend-opt:eq(" + i + ")").css("background", stackedControl.geography.legendColor[i]);
+					for (i = 0 ; i < chartControl.geography.legendItems ; i++){
+						$("#cf-legend").append("<div class=\"cf-legend-opt\"><p>" + chartControl.geography.legendLabels[i] + "</p></div>");
+						$(".cf-legend-opt:eq(" + i + ")").css("background", chartControl.geography.legendColor[i]);
 					}
 
 				}			
