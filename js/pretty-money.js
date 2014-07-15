@@ -23,7 +23,20 @@
 		
 		//input options for stacked bar graphs
 		var chartControl = {
+			summary:{
+				titleRanking:"Overall Rankings",
+				titleStats:"Overall Statistics",
+				footerStats:"<p class=\"chart-footer\">* Median Contribution means the contribution amount that falls in the middle of all the data. For example, if the median contribution for a candidate or ballot measure is $300, that means half of all the contributions are $300 or less.</p>"
+			},
+			donors:{
+				titleTop:"Top Contributors",
+				titleAll:"All Contributors",
+				footerTop:"<p class=\"chart-footer\">Top contributors include the total value of both cash and non-cash contributions from both individuals and entites that gave to the candidate. In the event of a tie, the top contributors are listed alphabetically. Top employers include the total value of both cash and non-cash contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself.</p>"
+			},
 			ie:{
+				titleOverview:"Independent Expenditures Overview<br>(hover over bars for details)",
+				titleCommittees:"Independent Expenditures Committees<br>(hover over bars for details)",
+				titleCandidates:"Independent Expenditures to Candidates<br>(hover over bars for details)",
 				footer:"All money spent by independent expenditure committees in support or opposition to a candidate. If there is a huge difference between money supporting and opposing a candidate, it may not appear on the chart, but it will appear in the total amount of money spent on the candidate.",
 				legendItems:2,
 				legendLabels:["Support","Oppose"],
@@ -300,26 +313,30 @@
 
 					//Ranking colors
 					if (data[i][1] === "1st"){
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css("color","#91cf60");
+						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});
 					}
 					else if (data[i][1] === "2nd" || data[i][1] === "3rd"){
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css("color","#5FADCE");
+						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css({color:"#8c9b93","font-weight":300});
 					}
 					else {
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css("color","#CE5F75");
+						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css({color:"#CE5F75","font-weight":700,"font-size":"2em"});
 					}
+					
 					if (data[i][2] === "1st"){
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css("color","#91cf60");
+						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});
 					}
 					else if (data[i][2] === "2nd" || data[i][2] === "3rd"){
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css("color","#5FADCE");
+						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css({color:"#8c9b93","font-weight":300});
 					}
 					else {
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css("color","#CE5F75");
+						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css({color:"#CE5F75","font-weight":700,"font-size":"2em"});
 					}
 				}
 				
-				$(".cf-title h2").text("Candidate Rankings");
+				//Descriptives
+				$(".cf-title h2").text(chartControl.summary.titleRanking);
+				
+				//Sorting
 				chartFunctions.sortSummary();
 			},
 			drawStatistics:function(){
@@ -329,7 +346,7 @@
 				//size up data
 				var ii = raceColumns[race];				
 				for (i=0 ; i < raceTotal[race]; i++){
-					var temp = parseInt(mainDB[9][ii]); //grabbing average contribution amount
+					var temp = parseInt(mainDB[29][ii]); //grabbing average contribution amount
 					$(".summary-row:eq("+i+")").attr("value",temp); //for sorting
 					data[i] = new Array();
 					data[i][0] = parseInt(mainDB[8][ii]); //grab # of contributions
@@ -340,11 +357,23 @@
 
 				//populate data
 				for (i=0 ; i < data.length ; i++){
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(1) p:eq(0)").html(data[i][0]).css("color","#5FADCE");
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").html(data[i][1]).css("color","rgb(145, 207, 96)");;
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").html(data[i][2]).css("color","#5FADCE");
+					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(1) p:eq(0)").html(data[i][0]);
+					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").html(data[i][1]);
+					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").html(data[i][2]);
 				}
+					
+				
+				
+				
+				//sorting
 				chartFunctions.sortStatistics();
+				
+				//descriptives
+				$("#cf-overview .cf-title h2").text(chartControl.summary.titleStats);
+				$("#cf-overview").append(chartControl.summary.footerStats);
+				
+				//styles
+				$("#cf-overview .summary-row:eq(0) .summary-cell:eq(2) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});;
 			},
 			drawTopDonors:function(){
 				var data = [];
@@ -409,6 +438,12 @@
 					}
 
 				}			
+				
+				//descriptives
+				$("#cf-donors .cf-title h2").text(chartControl.donors.titleTop);
+				$("#cf-donors").append(chartControl.donors.footerTop);
+				
+				//remove unused cells
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
 					$("#cf-donors .donor-row:eq("+ i +") .donor-cell p").remove();
 				}
@@ -790,8 +825,9 @@
 			drawAllDonors:function(){
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-iframe .cf-title");
 				$(".cf-iframe-hold").append(mainDB[28][thisCandidate]);	
-				$("#cf-iframe .cf-title h2").text("All Donors 2013-14");
-			
+				
+				//descriptives
+				$("#cf-iframe .cf-title h2").text(chartControl.donors.titleAll);
 			},
 			drawIEoverview:function(){
 				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0;
@@ -862,8 +898,8 @@
 				}
 				
 
-				//footer
-				$("#cf-ie .cf-title h2").html("Independent Expenditures Overview <br> (hover over bars for details)");
+				//Descriptives
+				$("#cf-ie .cf-title h2").html(chartControl.ie.titleOverview);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
 				//sort
@@ -941,8 +977,8 @@
 						width:dataWidth[i] + "px"
 					})
 				}
-				//meta
-				$("#cf-ie .cf-title h2").html("Independent Expenditures Committees <br> (hover over bars for details)");
+				//Descriptives
+				$("#cf-ie .cf-title h2").html(chartControl.ie.titleCommittees);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
 				
@@ -1016,8 +1052,8 @@
 						width:dataWidth[i] + "px"
 					})
 				}
-				//meta
-				$("#cf-ie .cf-title h2").html("Independent Expenditures to Candidates <br> (hover over bars for details)");
+				//Descriptives
+				$("#cf-ie .cf-title h2").html(chartControl.ie.titleCandidates);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
 				//sort
@@ -1268,7 +1304,7 @@
 						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div></div>");
 					}		
 					$("#cf-head-label-0").html("<p style=\"left:29%\">Contributions</p>");
-					$("#cf-head-label-1").html("<p style=\"left:52%\">Average Amount</p>");
+					$("#cf-head-label-1").html("<p style=\"left:52%\">Median Contribution *</p>");
 					$("#cf-head-label-2").html("<p style=\"left:78%\">Days Fundraising</p>");				
 					$("#cf-donors").append("<p class=\"chart-footer\">Average Amount is the total amount of reported cash contributions divided by the number of reported cash contributions. Days Fundraising starts with the first disclosed reported contribution listed on campaigin finance disclosure form.</p>");			
 				}
@@ -1276,7 +1312,6 @@
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-donors").append("<div class=\"donor-row\" id=\""+i+"\"><div class=\"donor-cell\"><img src=\"\"><p></p><p></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div></div>");
 					}
-					$("#cf-donors").append("<p class=\"chart-footer\">Top contributors include the total value of both cash and non-cash contributions from both individuals and entites that gave to the candidate. In the event of a tie, the top contributors are listed alphabetically. Top employers include the total value of both cash and non-cash contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself.</p>");
 				}	
 				//resize labels
 				$(".bar-label").css("width",dimensions.label);

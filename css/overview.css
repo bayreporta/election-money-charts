@@ -232,7 +232,7 @@
 	}
 
 	#cf-iframe iframe {
-		border-bottom:1px solid #aaa;
+		/*border-bottom:1px solid #aaa;*/
 	}
 
 	#cf-contribute {
@@ -272,6 +272,10 @@
 	.cf-head {
 		width:960px;
 		height:145px;
+		height:auto;
+		padding:0 0 10px 0;
+		margin:0 0 20px 0;
+		border-bottom:1px #aaa solid;
 	}
 	
 	.cf-stack-head, .cf-ie-head {
@@ -494,9 +498,9 @@
 	}
 	.summary-cell p:first-of-type {
 		text-align:center;
-		font: 700 1.5em "helvetica neue";
+		font: 300 1.5em "helvetica neue";
 		margin: 42px 0;
-		color:#5FADCE;
+		color:#8c9b93;
 	}
 	.summary-cell img {
 		margin:0 auto;
@@ -507,7 +511,7 @@
 	.summary-cell p:last-of-type {
 		text-align:center;
 		font:300 .8em/1em "helvetica neue";
-		color:#4c5b52;
+		color:#8c9b93;
 	}
 	.summary-cell:first-of-type p  {
 		font:300 .8em/1em "helvetica neue";
@@ -520,17 +524,26 @@
 /* SUMMARY CHARTS */
 
 .cf-head-labels {
-	border-bottom:1px solid #aaa;
-	height:60px;
+	margin: 55px 0 0 0;	
+}
+
+.cf-head-labels div {
+	float:left;
+	width:24.863636364%;
+}
+
+.cf-head-labels div:first-of-type {
+	margin-left:24.863636364%;
 }
 
 .cf-head-labels p {
-	position:relative;
 	font-weight:300;
+	font-size:.8em;
+	color:#8c9b93;
+	text-align:center;
 }
 
 #cf-head-label-0 p {
-	top:40px;
 	left:31%;
 }
 
