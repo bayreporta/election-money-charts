@@ -1,13 +1,12 @@
 	// ------- GLOBAL ------- //
 		var race = 0; //leave default
 		var raceTotal = []; //manually enter the number of candidates for each race, in order you placed in list above
-		var raceColumns = [2]; // manually enter the column where this race data starts on the Summary sheet of GSheet
+		var raceColumns = [2]; // leave default
 		var gsheet = "https://docs.google.com/spreadsheets/d/1q5EO4otxPF-t6QsoHTbffkVlvKBjrt8Fopi_dAWQMe0/pubhtml"; 
-		var summaryDB = [], mainDB = [], ieDB = []; //stores all summary data
+		var summaryDB = [], mainDB = [], ieDB = [], controlDB = []; //stores all summary data
 		var updated, ieUpdated; //when was the data updated?
-		var view = "Summary"; //leave default
 		var stacked = 0; //leave default
-		var thisCandidate = 2;
+		var thisCandidate = 2; //leave default
 		var defaultSubTopics = ["Ranking","Summary","IE Overview","Percent of Contributions"];
 		var ieLength; //ie length
 		
@@ -23,20 +22,44 @@
 		
 		//input options for stacked bar graphs
 		var chartControl = {
+			view:"",
 			summary:{
-				titleRanking:"Overall Rankings",
-				titleStats:"Overall Statistics",
+				ranking:true,
+				stats:true,
+				titleRanking:"",
+				titleStats:"",
 				footerStats:"<p class=\"chart-footer\">* Median Contribution means the contribution amount that falls in the middle of all the data. For example, if the median contribution for a candidate or ballot measure is $300, that means half of all the contributions are $300 or less.</p>"
 			},
+			cashRaised:{
+				cashRaised:true,
+				cashPerDay:true,
+				loans:true,
+				retiree:true,
+				cashRaisedTitle:"",
+				cashPerDayTitle:"",
+				loansTitle:"",
+				retireeTitle:""
+			},
+			cashSpent:{
+				cashSpent:true,
+				expenseType:true,
+				cashSpentTitle:"",
+				expenseTypeTitle:""
+			},
 			donors:{
-				titleTop:"Top Contributors",
-				titleAll:"All Contributors",
+				topDonors:true,
+				allDonors:true,
+				titleTop:"",
+				titleAll:"",
 				footerTop:"<p class=\"chart-footer\">Top contributors include the total value of both cash and non-cash contributions from both individuals and entites that gave to the candidate. In the event of a tie, the top contributors are listed alphabetically. Top employers include the total value of both cash and non-cash contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself.</p>"
 			},
 			ie:{
-				titleOverview:"Independent Expenditures Overview<br>(hover over bars for details)",
-				titleCommittees:"Independent Expenditures Committees<br>(hover over bars for details)",
-				titleCandidates:"Independent Expenditures to Candidates<br>(hover over bars for details)",
+				overview:true,
+				committees:true,
+				candidates:true,
+				titleOverview:"",
+				titleCommittees:"",
+				titleCandidates:"",
 				footer:"All money spent by independent expenditure committees in support or opposition to a candidate. If there is a huge difference between money supporting and opposing a candidate, it may not appear on the chart, but it will appear in the total amount of money spent on the candidate.",
 				legendItems:2,
 				legendLabels:["Support","Oppose"],
@@ -44,10 +67,12 @@
 				legendBars:"<div class=\"ie-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><p></p></div>"
 			},
 			geography:{
+				geography:true,
+				geographyTitle:"",
 				footer:"Contributions shown here refer to itemized cash contributions with a location attached. Bay Area refers to all donations from incorporated and unincorporated communities in what is generally considered the Bay Area Region, minus Oakland. California contributions include all contributions from California EXCLUDING the Bay Area and Oakland. Numbers may not add up to 100% due to rounding.",
 				legendItems:4,
 				legendLabels:["Oakland","Bay Area","California","Elsewhere"],
-				legendColor:["#5fce80","#5fadce","#ce5fad","#ce805f"],
+				legendColor:["#47819A","#5fadce","#B0D6E7","#D7EAF2"],
 				legendBars:{
 					two:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div></div>",
 					three:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div></div></div>",
@@ -57,6 +82,76 @@
 		}
 		// ------- UTILITY FUNCTIONS------- //
 		var utilityFunctions = {
+			chartDefaults:function(){
+				//size of chart and items
+				dimensions.overall = controlDB[22][1];
+				dimensions.label = controlDB[23][1];
+				dimensions.maxBarWidth = controlDB[24][1];
+				$("#loading").add("#cf-choose-text").add("#cf-container").add("#cf-options").add("#cf-chart").add("#cf-legend").add(".ie-bar-chart").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").add("#cf-overview").add(".summary-row").css("width",dimensions.overall);
+				//chart titles
+				chartControl.summary.titleRanking = controlDB[26][1];
+				chartControl.summary.titleStats = controlDB[27][1];
+				chartControl.cashRaised.cashRaisedTitle = controlDB[28][1];
+				chartControl.cashRaised.cashPerDayTitle = controlDB[29][1];
+				chartControl.cashRaised.loansTitle = controlDB[30][1];
+				chartControl.cashRaised.retireeTitle = controlDB[31][1];
+				chartControl.cashSpent.cashSpentTitle = controlDB[32][1];
+				chartControl.cashSpent.expenseTypeTitle = controlDB[33][1];
+				chartControl.ie.titleOverview = controlDB[34][1];
+				chartControl.ie.titleCommittees = controlDB[35][1];
+				chartControl.ie.titleCandidates = controlDB[36][1];
+				chartControl.donors.titleTop = controlDB[37][1];
+				chartControl.donors.titleAll = controlDB[38][1];
+				chartControl.geography.geographyTitle = controlDB[39][1];
+			},
+			populateTopics:function(){
+				var ii = 2, iii = 10;
+				//determine topics
+				for (i=0 ; i < 7 ; i++){
+					if (controlDB[ii][1] === "FALSE"){
+						$("#cf-choose option[value='"+ controlDB[ii][0] + "']").remove();
+					}
+					ii = ii + 1;
+				}	
+				
+				//determine charts
+				for (i=0 ; i < 13 ; i++){
+					if (controlDB[iii][1] === "FALSE"){
+						$("#cf-choose option[value='"+ controlDB[iii][0] + "']").remove();
+					}
+					iii = iii + 1;
+				}		
+			},
+			populateLeadChart:function(){
+				chartControl.view = controlDB[0][1];
+				chartFunctions.redrawCanvas();
+				$(".bar-label").css("width",dimensions.label);
+				if (controlDB[0][1] === "Stats"){
+					$("#summary_options_chosen .chosen-single span").text("Statistics");
+				}
+				else if (controlDB[0][1] === "Loans"){
+					$("#contribute_options_chosen .chosen-single span").text("Loans");
+				}	
+				else if (controlDB[0][1] === "CPD"){
+					$("#contribute_options_chosen .chosen-single span").text("Cash per Day");
+				}
+				else if (controlDB[0][1] === "Retirees"){
+					$("#contribute_options_chosen .chosen-single span").text("Retirees");
+				}
+				else if (controlDB[0][1] === "Expense Type"){
+					$("#expenses_options_chosen .chosen-single span").text("Expense Type");
+				}
+				else if (controlDB[0][1] === "IE Committees"){
+					$("#ie_options_chosen .chosen-single span").text("IE Committees");
+				}
+				else if (controlDB[0][1] === "IE Candidates"){
+					$("#ie_options_chosen .chosen-single span").text("IE Candidates");
+				}	
+				else if (controlDB[0][1] === "Geography"){
+					$("#overall_options_chosen .chosen-single span").text("Geography");
+				}
+				
+			},
 			executeChosen:function(){
 				var config = {
 			      '.chosen-select'           : {},
@@ -78,7 +173,7 @@
 				})
 
 				$("#overall_options_chosen").on("click","ul > li", function(){
-					view = $(this).html(); //detect view
+					chartControl.view = $(this).html(); //detect view
 					chartFunctions.redrawCanvas();
 				})
 
@@ -93,19 +188,19 @@
 					chartFunctions.redrawCanvas();
 				})
 				$("#contribute_options_chosen").on("click","ul > li", function(){
-					view = $(this).attr("value"); //detect view
+					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();			
 				})
 				$("#expenses_options_chosen").on("click","ul > li", function(){
-					view = $(this).attr("value"); //detect view
+					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();			
 				})
 				$("#summary_options_chosen").on("click","ul > li", function(){
-					view = $(this).attr("value"); //detect view
+					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();			
 				})
 				$("#ie_options_chosen").on("click","ul > li", function(){
-					view = $(this).attr("value"); //detect view
+					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();			
 				})
 				for(i=0 ; i < raceTotal.length ; i++){
@@ -240,6 +335,19 @@
 					ieDB.push(insertRow);
 				});		
 
+				$.each(tabletop.sheets("Control").all(), function(i, control){
+					var insertRow = [];
+					insertRow[0] = control.option;
+					insertRow[1] = control.command;
+					controlDB.push(insertRow)
+				})
+				
+				//chart defaults
+				utilityFunctions.chartDefaults();
+				
+				//determine what topics and subtopics are in use
+				utilityFunctions.populateTopics();
+				
 				//determine number of IE committees
 				ieLength = ieDB.length;
 
@@ -261,15 +369,11 @@
 				utilityFunctions.grabIEcommittees();
 
 				//chosen
-				utilityFunctions.executeChosen();
+				utilityFunctions.executeChosen();			
 				
-				//draw first chart				
-				chartFunctions.resetCanvas(view);
-				chartFunctions.renameCanvas(view);
-				$(".bar-label").css("width",dimensions.label);
-				$(".cf-canvas").css("display","none");
-				$("#cf-overview").css("display","block");
-				chartFunctions.drawSummary();
+				//toggle lead chart
+				utilityFunctions.populateLeadChart();
+				
 			},
 			// ------- DRAWING CHARTS BY TYPE ------- //
 			drawSummary:function(){
@@ -334,7 +438,8 @@
 				}
 				
 				//Descriptives
-				$(".cf-title h2").text(chartControl.summary.titleRanking);
+				$(".cf-title h2").html(chartControl.summary.titleRanking);
+				$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 				
 				//Sorting
 				chartFunctions.sortSummary();
@@ -361,16 +466,14 @@
 					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").html(data[i][1]);
 					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").html(data[i][2]);
 				}
-					
-				
-				
-				
+
 				//sorting
 				chartFunctions.sortStatistics();
 				
 				//descriptives
-				$("#cf-overview .cf-title h2").text(chartControl.summary.titleStats);
+				$("#cf-overview .cf-title h2").html(chartControl.summary.titleStats);
 				$("#cf-overview").append(chartControl.summary.footerStats);
+				$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 				
 				//styles
 				$("#cf-overview .summary-row:eq(0) .summary-cell:eq(2) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});;
@@ -440,9 +543,9 @@
 				}			
 				
 				//descriptives
-				$("#cf-donors .cf-title h2").text(chartControl.donors.titleTop);
+				$("#cf-donors .cf-title h2").html(chartControl.donors.titleTop);
 				$("#cf-donors").append(chartControl.donors.footerTop);
-				
+				$("#cf-donors .cf-title").append("<p>(Area below may be scrollable)</p>");
 				//remove unused cells
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
 					$("#cf-donors .donor-row:eq("+ i +") .donor-cell p").remove();
@@ -488,7 +591,7 @@
 
 				//meta
 				$(".bar-data").css("background","#91cf60");
-				$("#cf-summary .cf-title h2").text("Total Cash Raised 2013-14");
+				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.cashRaisedTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\">$" + utilityFunctions.commaSeparateNumber(all) + " contributed total</h4>");
 				$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
 				chartFunctions.sortBars();
@@ -534,7 +637,7 @@
 
 				//meta
 				$(".bar-data").css("background","#5FADCE");
-				$("#cf-summary .cf-title h2").text("Loans: 2013-14");
+				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.loansTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#5FADCE;>$" + utilityFunctions.commaSeparateNumber(all) + " contributed total</h4>");
 				$("#cf-summary").append("<p class=\"chart-footer\">A candidate or others can loan money to a committee, but that loan must be paid off by a predesignated time, such as through contributions.</p>");
 				chartFunctions.sortBars();
@@ -587,7 +690,7 @@
 				$(".bar-row[value='0']").css("display","none");
 							
 				$("#cf-expense-type .bar-data").css("background","#CE5F75");
-				$("#cf-expense-type .cf-title h2").text("Total Cash Spent by Expense Type 2013-14");
+				$("#cf-expense-type .cf-title h2").html(chartControl.cashSpent.expenseTypeTitle);
 				$("#cf-expense-type").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-expense-type").append("<p class=\"chart-footer\">Cash spent includes all expenses including accured expenses. Numbers are rounded to nearest dollar. Expense type omitted if no expense was made.</p>");
 			},
@@ -629,7 +732,7 @@
 
 				//meta
 				$(".bar-data").css("background","#91cf60");
-				$("#cf-summary .cf-title h2").text("Total Cash from Retirees: 2013-14");
+				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.retireeTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\">$" + utilityFunctions.commaSeparateNumber(all) + " contributed total</h4>");
 				$("#cf-summary").append("<p class=\"chart-footer\">This includes all reported contributions and miscellaneous increases to cash from people who identified themselves as Retired.</p>");
 				chartFunctions.sortBars();
@@ -674,7 +777,7 @@
 				}
 
 				$("#cf-summary .bar-data").css("background","#CE5F75");
-				$("#cf-summary .cf-title h2").text("Total Cash Spent 2013-14");
+				$("#cf-summary .cf-title h2").html(chartControl.cashSpent.cashSpentTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#CE5F75;\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses including accured expenses. Numbers are rounded to nearest dollar.</p>");
 				chartFunctions.sortBars();
@@ -715,7 +818,7 @@
 
 				//meta
 				$(".bar-data").css("background","#91cf60");
-				$("#cf-summary .cf-title h2").text("Cash Raised per Days Fundraising");
+				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.cashPerDayTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\">Average Overall $" + utilityFunctions.commaSeparateNumber(all) + "</h4>");
 				$("#cf-summary").append("<p class=\"chart-footer\">Figures represent the amount of cash contributions, including misc. increases to cash, divided by the number of days fundraising. Day one for fundraising is based off the earliest campaign contribution disclosed by the candidate.</p>");
 				chartFunctions.sortBars();
@@ -726,7 +829,6 @@
 				//unhide stacked option
 				$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#cf-choose-text h4:eq(2)").css("display","block");	
-				$(".cf-title h2").html("Where Contributions Came From <br>(hover over bars for details)");
 					
 				if (stacked === 0){
 					//size up data
@@ -765,8 +867,10 @@
 							})
 						}
 					}
-					//footer
+					//descriptives
 					$("#cf-stacked").append("<p class=\"chart-footer\">" + chartControl.geography.footer + "</p>");
+					$(".cf-title h2").html(chartControl.geography.geographyTitle);
+					$("#cf-stacked .cf-title").append("<p>(Hover over bars for details)</p>");
 				}		
 				else if (stacked === 1){
 					//size up data
@@ -817,8 +921,11 @@
 							width:dataWidth[i] + "px"
 						})
 					}
-					//footer
+					//descriptives
 					$("#cf-stacked").append("<p class=\"chart-footer\">" + chartControl.geography.footer + "</p>");
+					$(".cf-title h2").html(chartControl.geography.geographyTitle);
+					$("#cf-stacked .cf-title").append("<p>(Hover over bars for details)</p>");
+					
 				}		
 				chartFunctions.sortGeo();
 			},
@@ -827,7 +934,8 @@
 				$(".cf-iframe-hold").append(mainDB[28][thisCandidate]);	
 				
 				//descriptives
-				$("#cf-iframe .cf-title h2").text(chartControl.donors.titleAll);
+				$("#cf-iframe .cf-title h2").html(chartControl.donors.titleAll);
+				$("#cf-iframe .cf-title").append("<p>(Area below may be scrollable)</p>");
 			},
 			drawIEoverview:function(){
 				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0;
@@ -902,6 +1010,8 @@
 				$("#cf-ie .cf-title h2").html(chartControl.ie.titleOverview);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
+				$("#cf-ie .cf-title").append("<p>(Hover over bars for details)</p>");
+				
 				//sort
 				chartFunctions.sortIE();
 				//chartFunctions.sortGeo();
@@ -981,6 +1091,7 @@
 				$("#cf-ie .cf-title h2").html(chartControl.ie.titleCommittees);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
+				$("#cf-ie .cf-title").append("<p>(Hover over bars for details)</p>");
 				
 				//sort
 				chartFunctions.sortIE();
@@ -1056,6 +1167,8 @@
 				$("#cf-ie .cf-title h2").html(chartControl.ie.titleCandidates);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
+				$("#cf-ie .cf-title").append("<p>(Hover over bars for details)</p>");
+				
 				//sort
 				chartFunctions.sortIE();
 				//kill zero rows
@@ -1067,105 +1180,105 @@
 				//$("#cf-summary .bar-chart").css("display","block");
 				//$("#cf-summary").css("display","block");
 				//Change view
-				if (view === "Cash Raised" || view === "Raised Summary"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				if (chartControl.view === "Cash Raised" || chartControl.view === "Raised Summary"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block");
 					chartFunctions.drawContributions()
 				}
-				else if (view === "IE Summary" || view == "Outside Money"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-ie").css("display","block");
 					chartFunctions.drawIEoverview();
 				}
-				else if (view === "IE Committees"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "IE Committees"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-ie").css("display","block");
 					chartFunctions.drawIEcommittees();
 				}
-				else if (view === "IE Candidates"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "IE Candidates"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-ie").css("display","block");
 					chartFunctions.drawIEcandidates();
 				}
-				else if (view === "All Donors"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "All Donors"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-iframe").css("display","block");
 					chartFunctions.drawAllDonors();
 				}
-				else if (view === "Summary" || view === "Ranking"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Summary" || chartControl.view === "Ranking"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-overview").css("display","block");
 					chartFunctions.drawSummary();
 				}
-				else if (view === "Stats"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Stats"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-overview").css("display","block");
 					chartFunctions.drawStatistics();
 				}
-				else if (view === "CPD"){			
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "CPD"){			
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block");
 					chartFunctions.drawCashPerDays();
 				}
-				else if (view === "Top Donors"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Top Donors"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-donors").css("display","block");
 					chartFunctions.drawTopDonors();
 				}
-				else if (view === "Loans"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Loans"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block");
 					chartFunctions.drawLoans();
 				}
-				else if (view === "Retirees"){
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Retirees"){
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block");
 					chartFunctions.drawRetired();
 				}
-				else if (view === "Geography"){
+				else if (chartControl.view === "Geography"){
 					$(".cf-canvas").css("display","none");
 					$("#cf-stacked").css("display","block");
-					chartFunctions.resetCanvas(view);
-					chartFunctions.renameCanvas(view);
+					chartFunctions.resetCanvas(chartControl.view);
+					chartFunctions.renameCanvas(chartControl.view);
 					chartFunctions.drawGeography();
 				}
-				else if (view === "Cash Spent" || view === "Expenses Summary"){
-					chartFunctions.resetCanvas(view)
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){
+					chartFunctions.resetCanvas(chartControl.view)
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-summary").css("display","block");
 					chartFunctions.drawSpent()
 				}
-				else if (view === "Expense Type"){
-					chartFunctions.resetCanvas(view)
-					chartFunctions.renameCanvas(view);
+				else if (chartControl.view === "Expense Type"){
+					chartFunctions.resetCanvas(chartControl.view)
+					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-expense-type").css("display","block");
 					chartFunctions.drawExpenseType()
 				}
-				else if (view === "Achievements"){
+				else if (chartControl.view === "Achievements"){
 					$(".cf-canvas").css("display","none");
 					$("#cf-achieve").css("display","block").animate({
 						height:300
@@ -1184,15 +1297,17 @@
 				for (i = 0 ; i < raceTotal.length ; i++){
 					$("#candidates_options_"+i+"_chosen").css("visibility","hidden");
 				}
+				//reset title
+				$(".cf-title p").remove();
 				//reset text and colors for chart
 				$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".ie-bar-row").add(".cf-legend-opt").add(".cf-ie-legend-opt").add(".summary-row").add(".donor-row").remove();
 
-				if (view === "Cash Raised" || view === "Raised Summary" || view === "Retirees" || view === "CPD" || view === "Loans" || view === "Cash Spent" || view === "Expenses Summary"){			
+				if (chartControl.view === "Cash Raised" || chartControl.view === "Raised Summary" || chartControl.view === "Retirees" || chartControl.view === "CPD" || chartControl.view === "Loans" || chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){			
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 					}
 				}		
-				else if (view === "IE Summary" || view === "Outside Money"){
+				else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
 					$(".cf-ie-head").css("height","170px");
 					//populate bars based on number of candidates
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -1211,7 +1326,7 @@
 						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}					
 				}
-				else if (view === "IE Committees"){
+				else if (chartControl.view === "IE Committees"){
 					$(".cf-ie-head").css("height","170px");
 					//populate IE committees
 					for (i=1 ; i < ieNames.length + 1; i++){
@@ -1231,7 +1346,7 @@
 						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}
 				}
-				else if (view === "IE Candidates"){
+				else if (chartControl.view === "IE Candidates"){
 					$(".cf-ie-head").css("height","260px");
 					//populate IE committees
 					for (i=1 ; i < ieNames.length + 1 ; i++){
@@ -1250,16 +1365,16 @@
 						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}
 				}
-				else if (view === "Expense Type"){
+				else if (chartControl.view === "Expense Type"){
 					for (i = 1 ; i < 28; i++){
 						$("#cf-expense-type .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
 					}
 				}
-				else if (view === "All Donors"){
+				else if (chartControl.view === "All Donors"){
 					$("#cf-chart").css("overflow-y","hidden");
 					$("#cf-iframe iframe").remove();
 				}
-				else if (view === "Geography"){
+				else if (chartControl.view === "Geography"){
 					var geographyStackedSubBars;
 					//determine number of stacked sub bars
 					switch(chartControl.geography.legendItems){
@@ -1291,7 +1406,7 @@
 					}
 
 				}			
-				else if (view === "Summary" || view === "Ranking"){
+				else if (chartControl.view === "Summary" || chartControl.view === "Ranking"){
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div></div>");
 					}
@@ -1299,16 +1414,16 @@
 					$("#cf-head-label-1").html("<p style=\"left:54%\">Cash Raised</p>");
 					$("#cf-head-label-2").html("<p style=\"left:80%\">Cash Spent</p>");
 				}
-				else if (view === "Stats"){
+				else if (chartControl.view === "Stats"){
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div></div>");
 					}		
 					$("#cf-head-label-0").html("<p style=\"left:29%\">Contributions</p>");
-					$("#cf-head-label-1").html("<p style=\"left:52%\">Median Contribution *</p>");
+					$("#cf-head-label-1").html("<p style=\"left:52%\">Median *</p>");
 					$("#cf-head-label-2").html("<p style=\"left:78%\">Days Fundraising</p>");				
 					$("#cf-donors").append("<p class=\"chart-footer\">Average Amount is the total amount of reported cash contributions divided by the number of reported cash contributions. Days Fundraising starts with the first disclosed reported contribution listed on campaigin finance disclosure form.</p>");			
 				}
-				else if (view === "Top Donors"){
+				else if (chartControl.view === "Top Donors"){
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-donors").append("<div class=\"donor-row\" id=\""+i+"\"><div class=\"donor-cell\"><img src=\"\"><p></p><p></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div></div>");
 					}
@@ -1318,44 +1433,44 @@
 			},
 			renameCanvas:function(view){
 					var ii = raceColumns[race];
-					if (view === "Cash Raised" || view === "Raised Summary" || view === "Cash Spent" || view === "CPD" || view === "Retirees" || view === "Loans" || view === "Expenses Summary"){
+					if (chartControl.view === "Cash Raised" || chartControl.view === "Raised Summary" || chartControl.view === "Cash Spent" || chartControl.view === "CPD" || chartControl.view === "Retirees" || chartControl.view === "Loans" || chartControl.view === "Expenses Summary"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
 							ii = ii + 1;
 						}			
 					}
-					else if (view === "Expense Type"){
+					else if (chartControl.view === "Expense Type"){
 						var iii = 23;
 						for (i = 0; i < 27; i++){
 							$("#cf-expense-type .bar-row:eq("+ i +") .bar-label p").html(summaryDB[iii][0]);
 							iii = iii + 1;
 						}
 					}
-					else if (view === "IE Summary" || view === "Outside Money"){
+					else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-ie .ie-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
 							ii = ii + 1;
 						}
 					}
-					else if (view === "IE Committees"){
+					else if (chartControl.view === "IE Committees"){
 						for (i=0 ; i < ieNames.length ; i++){
 							$("#cf-ie .ie-bar-row:eq("+ i +") .bar-label p").html(ieNames[i]);
 						}
 						
 					}
-					else if (view === "IE Candidates"){
+					else if (chartControl.view === "IE Candidates"){
 						for (i=0 ; i < ieNames.length ; i++){
 							$("#cf-ie .ie-bar-row:eq("+ i +") .bar-label p").html(ieNames[i]);
 						}
 						
 					}
-					else if (view === "Geography"){
+					else if (chartControl.view === "Geography"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-stacked .stacked-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
 							ii = ii + 1;
 						}
 					}
-					else if (view === "Summary" || view === "Ranking" || view === "Stats"){
+					else if (chartControl.view === "Summary" || chartControl.view === "Ranking" || chartControl.view === "Stats"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(0) img").attr("src", mainDB[2][ii]);
 							$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(0) p:eq(0)").html(summaryDB[0][ii]);
@@ -1363,7 +1478,7 @@
 							ii = ii + 1;
 						}			
 					}
-					else if (view === "Top Donors"){
+					else if (chartControl.view === "Top Donors"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) img").attr("src", mainDB[2][ii]);
 							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) p:eq(0)").html(summaryDB[0][ii]);
@@ -1438,10 +1553,6 @@
 			}
 		}
 
-	// ------- ADJUST DIMENSIONS ------- //
-	$(document).ready(function(){
-		$("#loading").add("#cf-choose-text").add("#cf-container").add("#cf-options").add("#cf-chart").add("#cf-legend").add(".ie-bar-chart").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").add("#cf-overview").add(".summary-row").css("width",dimensions.overall);
-	});
 // ------- FUNNY GREETINGS ------- //
 	$(document).ready(function(){
 		var random = Math.round(Math.random() * 10);
@@ -1483,6 +1594,6 @@
 	$(document).ready(function(){
 			Tabletop.init( { key: gsheet,
 		                     callback: chartFunctions.setTheScene,
-		                     wanted: ["Summary","Main","IE_Overview"],
+		                     wanted: ["Control","Summary","Main","IE_Overview"],
 		                     debug: true } );
 	});
