@@ -7,7 +7,6 @@
 		var updated, ieUpdated; //when was the data updated?
 		var stacked = 0; //leave default
 		var thisCandidate = 2; //leave default
-		var defaultSubTopics = ["Ranking","Summary","IE Overview","Percent of Contributions"];
 		var ieLength; //ie length
 		
 		//input dimensions for graphic
@@ -16,19 +15,20 @@
 			label:125, //labels for bars
 			maxBarWidth:375 //max bar length
 		}
-		
 		//candidate names, IE committees and measures
 		var candidateDB = [], candidateList = [], ieNames = [];
 		
 		//input options for stacked bar graphs
 		var chartControl = {
 			view:"",
+			defaultSubTopics:[],
 			summary:{
 				ranking:true,
 				stats:true,
 				titleRanking:"",
 				titleStats:"",
-				footerStats:"<p class=\"chart-footer\">* Median Contribution means the contribution amount that falls in the middle of all the data. For example, if the median contribution for a candidate or ballot measure is $300, that means half of all the contributions are $300 or less.</p>"
+				footerRanking:"",
+				footerStats:""
 			},
 			cashRaised:{
 				cashRaised:true,
@@ -38,20 +38,27 @@
 				cashRaisedTitle:"",
 				cashPerDayTitle:"",
 				loansTitle:"",
-				retireeTitle:""
+				retireeTitle:"",
+				footerCashRaised:"",
+				footerCashPerDay:"",
+				footerLoans:"",
+				footerRetiree:""
 			},
 			cashSpent:{
 				cashSpent:true,
 				expenseType:true,
 				cashSpentTitle:"",
-				expenseTypeTitle:""
+				expenseTypeTitle:"",
+				footerCashSpent:"",
+				footerExpenseType:""
 			},
 			donors:{
 				topDonors:true,
 				allDonors:true,
 				titleTop:"",
 				titleAll:"",
-				footerTop:"<p class=\"chart-footer\">Top contributors include the total value of both cash and non-cash contributions from both individuals and entites that gave to the candidate. In the event of a tie, the top contributors are listed alphabetically. Top employers include the total value of both cash and non-cash contributions from both individuals who work for the employer and contributions made by the employer itself. Contributions where a person who identified themself as Retired have been excluded from this list as it is an entire category in and of itself.</p>"
+				footerTop:"",
+				footerAll:""
 			},
 			ie:{
 				overview:true,
@@ -60,7 +67,9 @@
 				titleOverview:"",
 				titleCommittees:"",
 				titleCandidates:"",
-				footer:"All money spent by independent expenditure committees in support or opposition to a candidate. If there is a huge difference between money supporting and opposing a candidate, it may not appear on the chart, but it will appear in the total amount of money spent on the candidate.",
+				footerOverview:"",
+				footerCommittees:"",
+				footerCandidates:"",
 				legendItems:2,
 				legendLabels:["Support","Oppose"],
 				legendColor:["rgb(145, 207, 96)","rgb(206, 95, 117)"],
@@ -69,7 +78,7 @@
 			geography:{
 				geography:true,
 				geographyTitle:"",
-				footer:"Contributions shown here refer to itemized cash contributions with a location attached. Bay Area refers to all donations from incorporated and unincorporated communities in what is generally considered the Bay Area Region, minus Oakland. California contributions include all contributions from California EXCLUDING the Bay Area and Oakland. Numbers may not add up to 100% due to rounding.",
+				footer:"",
 				legendItems:4,
 				legendLabels:["Oakland","Bay Area","California","Elsewhere"],
 				legendColor:["#47819A","#5fadce","#B0D6E7","#D7EAF2"],
@@ -103,6 +112,27 @@
 				chartControl.donors.titleTop = controlDB[37][1];
 				chartControl.donors.titleAll = controlDB[38][1];
 				chartControl.geography.geographyTitle = controlDB[39][1];
+				//default charts
+				var ii = 41;
+				for (i=0;i < 4;i++){
+					chartControl.defaultSubTopics[i] = controlDB[ii][1];
+					ii = ii + 1;
+				}
+				//footer
+				chartControl.summary.footerRanking = controlDB[49][1];
+				chartControl.summary.footerStats = controlDB[50][1];
+				chartControl.cashRaised.footerCashRaised = controlDB[51][1];
+				chartControl.cashRaised.footerCashPerDay = controlDB[52][1];
+				chartControl.cashRaised.footerLoans = controlDB[53][1];
+				chartControl.cashRaised.footerRetiree = controlDB[54][1];
+				chartControl.cashSpent.footerCashSpent = controlDB[55][1];
+				chartControl.cashSpent.footerExpenseType = controlDB[56][1];
+				chartControl.ie.footerOverview = controlDB[57][1];
+				chartControl.ie.footerCommittees = controlDB[58][1];
+				chartControl.ie.footerCandidates = controlDB[59][1];
+				chartControl.donors.footerTop = controlDB[60][1];
+				chartControl.donors.footerAll = controlDB[61][1];
+				chartControl.geography.footer = controlDB[62][1];
 			},
 			populateTopics:function(){
 				var ii = 2, iii = 10;
@@ -379,7 +409,7 @@
 			drawSummary:function(){
 				var data = [];
 				$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
-				$("#summary_options_chosen .chosen-single span").text(defaultSubTopics[0]);
+				$("#summary_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[0]);
 				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];				
@@ -440,6 +470,8 @@
 				//Descriptives
 				$(".cf-title h2").html(chartControl.summary.titleRanking);
 				$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
+				$("#cf-overview").append("<p class=\"chart-footer\">" + chartControl.summary.footerRanking + "</p>");
+				
 				
 				//Sorting
 				chartFunctions.sortSummary();
@@ -472,7 +504,7 @@
 				
 				//descriptives
 				$("#cf-overview .cf-title h2").html(chartControl.summary.titleStats);
-				$("#cf-overview").append(chartControl.summary.footerStats);
+				$("#cf-overview").append("<p class=\"chart-footer\">" + chartControl.summary.footerStats + "</p>");
 				$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 				
 				//styles
@@ -544,7 +576,7 @@
 				
 				//descriptives
 				$("#cf-donors .cf-title h2").html(chartControl.donors.titleTop);
-				$("#cf-donors").append(chartControl.donors.footerTop);
+				$("#cf-donors").append("<p class=\"chart-footer\">" + chartControl.donors.footerTop + "</p>");
 				$("#cf-donors .cf-title").append("<p>(Area below may be scrollable)</p>");
 				//remove unused cells
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
@@ -557,7 +589,7 @@
 				var dataWidth = [];
 				var commas = [];
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#contribute_options_chosen .chosen-single span").text(defaultSubTopics[1]);
+				$("#contribute_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[1]);
 				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
@@ -593,7 +625,7 @@
 				$(".bar-data").css("background","#91cf60");
 				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.cashRaisedTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\">$" + utilityFunctions.commaSeparateNumber(all) + " contributed total</h4>");
-				$("#cf-summary").append("<p class=\"chart-footer\">Cash raised includes all cash raised by the candidate excluding non-monetary contributions and loans, but including miscellaneous increases in cash, usually from auctioning items given to a candidate through non-monetary contributions.</p>");
+				$("#cf-summary").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerCashRaised + "</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
 			},
@@ -639,7 +671,7 @@
 				$(".bar-data").css("background","#5FADCE");
 				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.loansTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#5FADCE;>$" + utilityFunctions.commaSeparateNumber(all) + " contributed total</h4>");
-				$("#cf-summary").append("<p class=\"chart-footer\">A candidate or others can loan money to a committee, but that loan must be paid off by a predesignated time, such as through contributions.</p>");
+				$("#cf-summary").append("<p class=\"chart-footer\">" + chartControls.cashRaised.footerLoans + "</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
 			},
@@ -692,7 +724,7 @@
 				$("#cf-expense-type .bar-data").css("background","#CE5F75");
 				$("#cf-expense-type .cf-title h2").html(chartControl.cashSpent.expenseTypeTitle);
 				$("#cf-expense-type").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-expense-type").append("<p class=\"chart-footer\">Cash spent includes all expenses including accured expenses. Numbers are rounded to nearest dollar. Expense type omitted if no expense was made.</p>");
+				$("#cf-expense-type").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerExpenseType + "</p>");
 			},
 			drawRetired:function(){
 				var data = [];
@@ -734,7 +766,7 @@
 				$(".bar-data").css("background","#91cf60");
 				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.retireeTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\">$" + utilityFunctions.commaSeparateNumber(all) + " contributed total</h4>");
-				$("#cf-summary").append("<p class=\"chart-footer\">This includes all reported contributions and miscellaneous increases to cash from people who identified themselves as Retired.</p>");
+				$("#cf-summary").append("<p class=\"chart-footer\">"+ chartControl.cashRaised.footerRetiree +"</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
 			},
@@ -744,7 +776,7 @@
 				var dataWidth = [];
 				var commas = [];
 				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#expenses_options_chosen .chosen-single span").text(defaultSubTopics[1]);
+				$("#expenses_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[2]);
 				$("#cf-choose-text h4:eq(2)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
@@ -779,7 +811,7 @@
 				$("#cf-summary .bar-data").css("background","#CE5F75");
 				$("#cf-summary .cf-title h2").html(chartControl.cashSpent.cashSpentTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#CE5F75;\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-summary").append("<p class=\"chart-footer\">Cash spent includes all expenses including accured expenses. Numbers are rounded to nearest dollar.</p>");
+				$("#cf-summary").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerCashSpent +"</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
 			},
@@ -820,7 +852,7 @@
 				$(".bar-data").css("background","#91cf60");
 				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.cashPerDayTitle);
 				$("#cf-summary").append("<h4 class=\"chart-h4\">Average Overall $" + utilityFunctions.commaSeparateNumber(all) + "</h4>");
-				$("#cf-summary").append("<p class=\"chart-footer\">Figures represent the amount of cash contributions, including misc. increases to cash, divided by the number of days fundraising. Day one for fundraising is based off the earliest campaign contribution disclosed by the candidate.</p>");
+				$("#cf-summary").append("<p class=\"chart-footer\">"+chartControl.cashRaised.footerCashPerDay  +"</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
 			},
@@ -940,7 +972,7 @@
 			drawIEoverview:function(){
 				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0;
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#ie_options_chosen .chosen-single span").text(defaultSubTopics[2]);
+				$("#ie_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[3]);
 				$("#cf-choose-text h4:eq(2)").css("display","block");
 								
 				//size up data
@@ -1009,7 +1041,7 @@
 				//Descriptives
 				$("#cf-ie .cf-title h2").html(chartControl.ie.titleOverview);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
+				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footerOverview + "</p>");
 				$("#cf-ie .cf-title").append("<p>(Hover over bars for details)</p>");
 				
 				//sort
@@ -1090,7 +1122,7 @@
 				//Descriptives
 				$("#cf-ie .cf-title h2").html(chartControl.ie.titleCommittees);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
+				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footerCommittees + "</p>");
 				$("#cf-ie .cf-title").append("<p>(Hover over bars for details)</p>");
 				
 				//sort
@@ -1166,7 +1198,7 @@
 				//Descriptives
 				$("#cf-ie .cf-title h2").html(chartControl.ie.titleCandidates);
 				$("#cf-ie").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footer + "</p>");
+				$("#cf-ie").append("<p class=\"chart-footer\">" + chartControl.ie.footerCandidates + "</p>");
 				$("#cf-ie .cf-title").append("<p>(Hover over bars for details)</p>");
 				
 				//sort
