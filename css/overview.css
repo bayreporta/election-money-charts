@@ -15,12 +15,9 @@
 	
 	
 	#loading {
-		position:relative;
-		display:none;
+		display:block;
 		height:300px;
-		width:550px;
-		top:0;
-		left:0;
+		width:100%;
 		text-align:center;
 		margin:100px 0;
 	}
@@ -238,7 +235,7 @@
 	}
 
 		.bar-label p {
-			margin:10px 0
+			margin:0 0;
 		}
 
 	.bar-data, .ie-bar-data {
@@ -333,14 +330,20 @@
 		opacity:1;
 	}
 
-#cf-donors .cf-title p {
-	font: 300 1em "helvetica neue";
-	margin:45px 0 0 25%;
+#cf-donors .cf-title p:last-of-type {
+	font: 300 .8em "helvetica neue";
+	text-align:center;
+	margin:45px 0 0 0;
 	color:#8c9b93;
 }
 
 #cf-donors .cf-title span:first-of-type {
-	margin:0 22% 0 0;
+	margin:0 0 0 0;
+}
+
+#cf-donors .cf-title span:last-of-type {
+	left:22%;
+	position:relative;
 }
 
 .donor-row {
@@ -356,7 +359,6 @@
 		width:37.295454545%;
 		height:175px;
 		float:left;
-		border-left:1px solid #8c9b93;
 	}
 	.donor-cell:first-of-type {
 		border:none;
@@ -393,7 +395,6 @@
 	font-family:"helvetica neue",san-serif;
 }
 .summary-row {
-	height:125px;
 	margin: 0 0 10px 0;
 	padding: 0 0 10px 0;
 	border-bottom: 1px solid #8c9b93;
@@ -401,11 +402,13 @@
 .summary-row:last-of-type {
 	border:none;
 }
+
+
+
 	.summary-cell{
 		width:24.25%;
 		height:125px;
 		float:left;
-		border-left:1px solid #8c9b93;
 	}
 	.summary-cell:first-of-type {
 		border:none;
