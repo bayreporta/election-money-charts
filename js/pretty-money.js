@@ -533,6 +533,14 @@
 					else {
 						data[i][2] = data[i][2] + "th";
 					}
+					
+					//check for NaN
+					if (data[i][1] === "NaNth"){
+						data[i][1] = "None";
+					}
+					if (data[i][2] === "NaNth"){
+						data[i][2] = "None";
+					}
 										
 					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(1) p:eq(0)").html(data[i][0]);
 					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").html(data[i][1]);
