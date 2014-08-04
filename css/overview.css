@@ -17,7 +17,7 @@
 	#loading {
 		display:block;
 		height:300px;
-		width:100%;
+		width:620px;
 		text-align:center;
 		margin:100px 0;
 	}
@@ -100,7 +100,7 @@
 		border-bottom:double 10px #4c5b52;
 		border-top:10px double #4c5b52;
 		visibility:hidden;
-		height: 792px;
+		height: 1000px;
 		overflow-y: hidden;
 		overflow-x: hidden;
 	}	
@@ -358,7 +358,7 @@
 }
 
 .donor-row {
-	height:175px;
+	height:225px;
 	margin: 0 0 10px 0;
 	padding: 10px 0 10px 0;
 	border-bottom: 1px solid #8c9b93;

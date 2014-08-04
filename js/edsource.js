@@ -2,7 +2,7 @@
 		var race = 0; //leave default
 		var raceTotal = []; //manually enter the number of candidates for each race, in order you placed in list above
 		var raceColumns = [2]; // leave default
-		var gsheet = "https://docs.google.com/spreadsheets/d/1q5EO4otxPF-t6QsoHTbffkVlvKBjrt8Fopi_dAWQMe0/pubhtml"; 
+		var gsheet = "https://docs.google.com/spreadsheets/d/1buH0c4RPcNhivVEUfesh2q-ckEwslz8pC0yhpgclys0/pubhtml"; 
 		var summaryDB = [], mainDB = [], ieDB = [], controlDB = []; //stores all summary data
 		var updated, ieUpdated; //when was the data updated?
 		var stacked = 0; //leave default
@@ -354,28 +354,8 @@
 					var insertRow = [];
 					insertRow[0] = summary.category;
 					insertRow[1] = summary.all;
-					insertRow[2] = summary.anderson;
-					insertRow[3] = summary.mccullough;
-					insertRow[4] = summary.kaplan;
-					insertRow[5] = summary.parker;
-					insertRow[6] = summary.quan;
-					insertRow[7] = summary.ruby;
-					insertRow[8] = summary.schaaf;
-					insertRow[9] = summary.siegel;
-					insertRow[10] = summary.tuman;
-					insertRow[11] = summary.williams;
-					insertRow[12] = summary.blackburn;
-					insertRow[13] = summary.guillen;
-					insertRow[14] = summary.king;
-					insertRow[15] = summary.mao;
-					insertRow[16] = summary.park;
-					insertRow[17] = summary.broadhurst;
-					insertRow[18] = summary.campbellwashington;
-					insertRow[19] = summary.brooks;
-					insertRow[20] = summary.johnson;
-					insertRow[21] = summary.moore;
-					insertRow[22] = summary.nosakhare;
-					insertRow[23] = summary.liftup;
+					insertRow[2] = summary.torlakson;
+					insertRow[3] = summary.tuck;
 					summaryDB.push(insertRow);
 				});
 
@@ -383,61 +363,21 @@
 					var insertRow = [];
 					insertRow[0] = main.item;
 					insertRow[1] = main.all;
-					insertRow[2] = main.anderson;
-					insertRow[3] = main.mccullough;
-					insertRow[4] = main.kaplan;
-					insertRow[5] = main.parker;
-					insertRow[6] = main.quan;
-					insertRow[7] = main.ruby;
-					insertRow[8] = main.schaaf;
-					insertRow[9] = main.siegel;
-					insertRow[10] = main.tuman;
-					insertRow[11] = main.williams;
-					insertRow[12] = main.blackburn;
-					insertRow[13] = main.guillen;
-					insertRow[14] = main.king;
-					insertRow[15] = main.mao;
-					insertRow[16] = main.park;
-					insertRow[17] = main.broadhurst;
-					insertRow[18] = main.campbellwashington;
-					insertRow[19] = main.brooks;
-					insertRow[20] = main.johnson;
-					insertRow[21] = main.moore;
-					insertRow[22] = main.nosakhare;
-					insertRow[23] = main.liftup;
+					insertRow[2] = main.torlakson;
+					insertRow[3] = main.tuck;
 					mainDB.push(insertRow);
 				});	
 				
-				/*$.each( tabletop.sheets("IE_Overview").all(), function(i, ie) {
+				$.each( tabletop.sheets("IE_Overview").all(), function(i, ie) {
 					var insertRow = [];
 					insertRow[0] = ie.committee;
 					insertRow[1] = ie.position;
 					insertRow[2] = new Date(ie.updated);
 					insertRow[3] = ie.total;
-					insertRow[4] = ie.anderson;
-					insertRow[5] = ie.mccullough;
-					insertRow[6] = ie.kaplan;
-					insertRow[7] = ie.parker;
-					insertRow[8] = ie.quan;
-					insertRow[9] = ie.ruby;
-					insertRow[10] = ie.schaaf;
-					insertRow[11] = ie.siegel;
-					insertRow[12] = ie.tuman;
-					insertRow[13] = ie.williams;
-					insertRow[14] = ie.blackburn;
-					insertRow[15] = ie.guillen;
-					insertRow[16] = ie.king;
-					insertRow[17] = ie.mao;
-					insertRow[18] = ie.park;
-					insertRow[19] = ie.broadhurst;
-					insertRow[20] = ie.campbellwashington;
-					insertRow[21] = ie.brooks;
-					insertRow[22] = ie.johnson;
-					insertRow[23] = ie.moore;
-					insertRow[24] = ie.nosakhare;
-					insertRow[23] = ie.liftup;
+					insertRow[4] = ie.torlakson;
+					insertRow[5] = ie.tuck;
 					ieDB.push(insertRow);
-				});		*/
+				});	
 
 				$.each(tabletop.sheets("Control").all(), function(i, control){
 					var insertRow = [];
@@ -716,7 +656,7 @@
 				$("#cf-donors").append("<p class=\"chart-footer\">" + chartControl.donors.footerTop + "</p>");
 				$("#cf-donors .cf-title").append("<p>(Area below may be scrollable)</p>");
 				$("#cf-donors .cf-title").append("<p><span>Top Contributors</span><span>Top Employers</span></p>");
-				$("#cf-donors .donor-row:eq("+ i +") a").attr("href", data[i][6]); //link to candidate page
+				//$("#cf-donors .donor-row:eq("+ i +") a").attr("href", data[i][6]); //link to candidate page
 				
 				//remove unused cells
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
@@ -1057,8 +997,8 @@
 						data[i] = new Array();
 						commas[i] = new Array();
 						data[i][0] = parseInt(summaryDB[19][ii]);
-						data[i][1] = parseInt(summaryDB[20][ii]) - data[i][0];
-						data[i][2] = parseInt(summaryDB[21][ii]) - (data[i][0] + data[i][1]);
+						data[i][1] = parseInt(summaryDB[20][ii]);
+						data[i][2] = parseInt(summaryDB[21][ii]);
 						data[i][3] = parseInt(summaryDB[22][ii]);
 						data[i][4] = mainDB[3][ii];
 						commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
@@ -1103,8 +1043,8 @@
 						data[i] = new Array();
 						commas[i] = new Array();
 						data[i][0] = parseInt(summaryDB[19][ii]);
-						data[i][1] = parseInt(summaryDB[20][ii]) - data[i][0];
-						data[i][2] = parseInt(summaryDB[21][ii]) - (data[i][0] + data[i][1]);
+						data[i][1] = parseInt(summaryDB[20][ii]);
+						data[i][2] = parseInt(summaryDB[21][ii]);
 						data[i][3] = parseInt(summaryDB[22][ii]);
 						data[i][4] = mainDB[3][ii];
 						commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
@@ -1830,6 +1770,6 @@
 	$(document).ready(function(){
 			Tabletop.init( { key: gsheet,
 		                     callback: chartFunctions.setTheScene,
-		                     wanted: ["Control","Summary","Main"],
+		                     wanted: ["Control","Summary","Main","IE_Overview"],
 		                     debug: true } );
 	});
