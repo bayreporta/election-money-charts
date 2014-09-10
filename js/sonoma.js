@@ -2,7 +2,7 @@
 		var race = 0; //leave default
 		var raceTotal = []; //manually enter the number of candidates for each race, in order you placed in list above
 		var raceColumns = [2]; // leave default
-		var gsheet = "https://docs.google.com/spreadsheets/d/1fK-Hxk3IM63pL_ExIwXpRcDqP6Wh6ogs5TUWgrY4BvU/pubhtml"; 
+		var gsheet = "https://docs.google.com/spreadsheets/d/1g5KNx7xhMCE6Z3-wWWNVlPiZLWXEkCIhgJC9EHPiNm8/pubhtml"; 
 		var summaryDB = [], mainDB = [], ieDB = [], controlDB = []; //stores all summary data
 		var updated, ieUpdated; //when was the data updated?
 		var stacked = 0; //leave default
@@ -299,6 +299,7 @@
 					tempNames[ii] = mainDB[0][i];
 					tempRaces[ii] = mainDB[1][i];
 					ii = ii + 1;
+					console.log(tempNames)
 				}				
 		
 				
@@ -358,17 +359,8 @@
 					var insertRow = [];
 					insertRow[0] = summary.category;
 					insertRow[1] = summary.all;
-					insertRow[2] = summary.anderson;
-					insertRow[3] = summary.mccullough;
-					insertRow[4] = summary.kaplan;
-					insertRow[5] = summary.parker;
-					insertRow[6] = summary.quan;
-					insertRow[7] = summary.ruby;
-					insertRow[8] = summary.schaaf;
-					insertRow[9] = summary.siegel;
-					insertRow[10] = summary.tuman;
-					insertRow[11] = summary.washington;
-					insertRow[12] = summary.williams;
+					insertRow[2] = summary.fudge;
+					insertRow[3] = summary.gore;
 					summaryDB.push(insertRow);
 				});
 
@@ -376,21 +368,12 @@
 					var insertRow = [];
 					insertRow[0] = main.item;
 					insertRow[1] = main.all;
-					insertRow[2] = main.anderson;
-					insertRow[3] = main.mccullough;
-					insertRow[4] = main.kaplan;
-					insertRow[5] = main.parker;
-					insertRow[6] = main.quan;
-					insertRow[7] = main.ruby;
-					insertRow[8] = main.schaaf;
-					insertRow[9] = main.siegel;
-					insertRow[10] = main.tuman;
-					insertRow[11] = main.washington;
-					insertRow[12] = main.williams;
+					insertRow[2] = main.fudge;
+					insertRow[3] = main.gore;
 					mainDB.push(insertRow);
 				});	
 				
-				/*$.each( tabletop.sheets("IE_Overview").all(), function(i, ie) {
+				$.each( tabletop.sheets("IE_Overview").all(), function(i, ie) {
 					var insertRow = [];
 					insertRow[0] = ie.committee;
 					insertRow[1] = ie.position;
@@ -408,7 +391,7 @@
 					insertRow[11] = ie.washington;
 					insertRow[12] = ie.williams;
 					ieDB.push(insertRow);
-				});		*/
+				});		
 
 				$.each(tabletop.sheets("Control").all(), function(i, control){
 					var insertRow = [];
@@ -456,7 +439,7 @@
 				var data = [], maxRaisedArray = [], maxSpentArray = [];
 				$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
 				$("#summary_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[0]);
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				$(".summary-row").css("height", dimensions.cellHeight + "px");
 				
 				//size up data
@@ -545,7 +528,7 @@
 			drawStatistics:function(){
 				var data = [];
 				$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				$(".summary-row").css("height", dimensions.cellHeight + "px");
 				
 				//size up data
@@ -699,7 +682,7 @@
 				//unhide stacked option
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#contribute_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[1]);
-				$("#cf-choose-text h4:eq(2)").css("display","block");	
+				$("#cf-choose-text h4:eq(1)").css("display","block");	
 				
 					//size up data
 				var ii = raceColumns[race];
@@ -748,7 +731,7 @@
 				var all = 0;
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#contribute_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[1]);
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -794,7 +777,7 @@
 				var all = 0;
 				//$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				//$("#expenses_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[2]);
-				//$("#cf-choose-text h4:eq(2)").css("display","block");
+				//$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race] ;  i++){
@@ -838,7 +821,7 @@
 				var data = [], commas = [], dataWidth = [], links = [];
 				var all = 0;
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 
 				//size up data
 				var ii = raceColumns[race];
@@ -885,7 +868,7 @@
 				
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-expense-type .cf-title");
 				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");				
+				$("#cf-choose-text h4:eq(1)").css("display","block");				
 				//get data
 				for (i=0 ; i < 28;  i++){
 					data[i] = parseInt(summaryDB[ii][thisCandidate]);
@@ -935,7 +918,7 @@
 				var data = [], commas = [], dataWidth = [], links = [];
 				var all = 0;
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -981,7 +964,7 @@
 				var all = 0;
 				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#expenses_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[2]);
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race] ;  i++){
@@ -1024,7 +1007,7 @@
 			drawCashPerDays:function(){
 				var data = [], dataWidth = [], commas = [], all = 0, links = [];
 				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -1068,7 +1051,7 @@
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
 				//unhide stacked option
 				$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");	
+				$("#cf-choose-text h4:eq(1)").css("display","block");	
 					
 				if (stacked === 0){
 					//size up data
@@ -1076,15 +1059,13 @@
 					for (i=0 ; i < raceTotal[race] ;  i++){
 						data[i] = new Array();
 						commas[i] = new Array();
-						data[i][0] = parseInt(summaryDB[19][ii]);
-						data[i][1] = parseInt(summaryDB[20][ii]) - data[i][0];
-						data[i][2] = parseInt(summaryDB[21][ii]) - (data[i][0] + data[i][1]);
-						data[i][3] = parseInt(summaryDB[22][ii]);
-						data[i][4] = mainDB[3][ii];
-						commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
-						commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][1]);
-						commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][2]);
-						commas[i][3] = utilityFunctions.commaSeparateNumber(data[i][3]);
+						data[i][0] = parseInt(summaryDB[20][ii]);
+						data[i][1] = parseInt(summaryDB[21][ii]) - (data[i][0] + data[i][1]);
+						data[i][2] = parseInt(summaryDB[22][ii]);
+						data[i][3] = mainDB[3][ii];
+						commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][1]);
+						commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][2]);
+						commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][3]);
 						ii = ii + 1;
 					}
 					//calculate the total for each candidate
@@ -1122,15 +1103,13 @@
 					for (i=0 ; i < raceTotal[race] ;  i++){
 						data[i] = new Array();
 						commas[i] = new Array();
-						data[i][0] = parseInt(summaryDB[19][ii]);
-						data[i][1] = parseInt(summaryDB[20][ii]) - data[i][0];
-						data[i][2] = parseInt(summaryDB[21][ii]) - (data[i][0] + data[i][1]);
-						data[i][3] = parseInt(summaryDB[22][ii]);
-						data[i][4] = mainDB[3][ii];
-						commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
-						commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][1]);
-						commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][2]);
-						commas[i][3] = utilityFunctions.commaSeparateNumber(data[i][3]);
+						data[i][0] = parseInt(summaryDB[20][ii]);
+						data[i][1] = parseInt(summaryDB[21][ii]) - data[i][0];
+						data[i][2] = parseInt(summaryDB[22][ii]);
+						data[i][43] = mainDB[3][ii];
+						commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][1]);
+						commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][2]);
+						commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][3]);
 						ii = ii + 1;
 					}
 					//calculate the total for each candidate
@@ -1188,7 +1167,7 @@
 				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0;
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#ie_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[3]);
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 								
 				//size up data
 				var ii = raceColumns[race] + 2;
@@ -1268,7 +1247,7 @@
 			},
 			drawIEcommittees:function(){
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				var parseData = [], data = [], dataWidth = [], commas = [], colors = [], total = [], all = 0;
 				
 				var ii = raceColumns[race] + 2;
@@ -1350,11 +1329,11 @@
 			},
 			drawIEcandidates:function(){
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-ie-legend");
 				
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(2)").css("display","block");
+				$("#cf-choose-text h4:eq(1)").css("display","block");
 				var parseData = [], data = [], dataWidth = [], commas = [], colors = [], total = [], all = 0;
 								
 				//size up data
@@ -1430,14 +1409,7 @@
 				//$("#cf-summary .bar-chart").css("display","block");
 				//$("#cf-summary").css("display","block");
 				//Change view
-				if (chartControl.view === "Cash Raised" || chartControl.view === "Raised Summary"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-stacked").css("display","block");
-					chartFunctions.drawCashRaisedSummary();
-				}
-				else if (chartControl.view === "Cash Contributions"){
+				if (chartControl.view === "Cash Contributions" || chartControl.view === "Cash Raised"){
 					chartFunctions.resetCanvas(chartControl.view);
 					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
@@ -1556,7 +1528,7 @@
 				$("#contribute_options_chosen").css("visibility","hidden");
 				$("#expenses_options_chosen").css("visibility","hidden");
 				$("#ie_options_chosen").css("visibility","hidden");
-				$("#cf-choose-text h4:eq(2)").css("display","none");
+				$("#cf-choose-text h4:eq(1)").css("display","none");
 				$("#cf-chart").css("overflow-y","auto");
 				for (i = 0 ; i < raceTotal.length ; i++){
 					$("#candidates_options_"+i+"_chosen").css("visibility","hidden");
@@ -1566,7 +1538,7 @@
 				//reset text and colors for chart
 				$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".ie-bar-row").add(".cf-legend-opt").add(".cf-ie-legend-opt").add(".summary-row").add(".donor-row").remove();
 
-				if (chartControl.view === "Cash Contributions" || chartControl.view === "Non-Cash Givings" || chartControl.view === "Retirees" || chartControl.view === "CPD" || chartControl.view === "Loans" || chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){			
+				if (chartControl.view === "Cash Contributions" || chartControl.view === "Cash Raised"  || chartControl.view === "Non-Cash Givings" || chartControl.view === "Retirees" || chartControl.view === "CPD" || chartControl.view === "Loans" || chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){			
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><a href=\"\" target=\"_blank\"><p class=\"the-label\"></p></a></div><div class=\"bar-data\"><p></p></div></div>");
 					}
@@ -1668,7 +1640,7 @@
 						$(".cf-legend-opt:eq(" + i + ")").css("background", chartControl.geography.legendColor[i]);
 					}
 				}	
-				else if (chartControl.view === "Cash Raised" || chartControl.view === "Raised Summary"){
+				else if (chartControl.view === "Cash Raised"){
 						//populate bars based on number of candidates
 						for (i = 1 ; i < raceTotal[race] + 1; i++){
 							$(".stacked-bar-chart").append(chartControl.geography.legendBars.three);
@@ -1713,7 +1685,7 @@
 			},
 			renameCanvas:function(view){
 					var ii = raceColumns[race];
-					if (chartControl.view === "Cash Contributions" || chartControl.view === "Non-Cash Givings" || chartControl.view === "Cash Spent" || chartControl.view === "CPD" || chartControl.view === "Retirees" || chartControl.view === "Loans" || chartControl.view === "Expenses Summary"){
+					if (chartControl.view === "Cash Contributions" || chartControl.view === "Non-Cash Givings" || chartControl.view === "Cash Spent" || chartControl.view === "CPD" || chartControl.view === "Retirees" || chartControl.view === "Loans" || chartControl.view === "Expenses Summary" || chartControl.view === "Cash Raised"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
 							ii = ii + 1;
@@ -1744,7 +1716,7 @@
 						}
 						
 					}
-					else if (chartControl.view === "Geography" || chartControl.view === "Cash Raised" || chartControl.view === "Raised Summary"){
+					else if (chartControl.view === "Geography"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-stacked .stacked-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
 							ii = ii + 1;
