@@ -9,38 +9,31 @@
 <body>
 	<div id="cf-container">
 		<div id="loading">
-			<h1><strong></strong></h1>
+			<h1><strong>Retreiving Data</strong></h1>
 			<p>this should only take a moment</p>
 		</div>
+		<h1 id="cf-header">The Money Game: State Superintendent Race</h1>
 		<div id="cf-choose">
 			<div id="cf-choose-text">
-				<h4>Topics</h4>
-				<h4>Chart</h4>
+				<h4>Charts</h4>
+				<h4>Views</h4>
 			</div>
 			<div>
 				<select id="overall-options" class="chosen-select" style="width:120px;float:left;" tabindex="2">
-					<option value="Summary">Summary</option>
+					<option value="Summary">Overview</option>
+					<option value="Top Donors">Top Donors</option>
 					<option value="Cash Raised">Cash Raised</option>
 					<!--<option value="Non-Mon">Non-Cash Givings</option>-->
 					<option value="Cash Spent">Cash Spent</option>
 					<option value="Outside Money">Outside Money</option>
-					<option value="Top Donors">Top Donors</option>
-					<option value="All Donors">All Donors</option>
+					<option value="Loans">Loans</option>
+					<option value="Retirees">Retirees</option>
 					<option value="Geography">Geography</option>
+					<option value="All Donors">All Donors</option>
 				</select>
 				<select id="stacked-options" class="chosen-select" style="width:80px;float:left;" tabindex="2">
 					<option value="Percent of Contributions">Percent</option>
 					<option value="Total Contributions">Total</option>
-				</select>
-				<select id="summary-options" class="chosen-select" style="width:85px;float:left;" tabindex="2">
-					<option value="Ranking">Ranking</option>
-					<option value="Stats">Statistics</option>
-				</select>
-				<select id="contribute-options" class="chosen-select" style="width:108px;float:left;" tabindex="2">
-					<option value="Cash Contributions">Summary</option>
-					<option value="CPD">Cash Per Day</option>
-					<option value="Loans">Loans</option>
-					<option value="Retirees">Retirees</option>
 				</select>
 				<select id="expenses-options" class="chosen-select" style="width:113px;float:left;" tabindex="2">
 					<option value="Expenses Summary">Summary</option>
@@ -65,19 +58,19 @@
 				</div>
 			</div>
 			<div id="cf-ie" class="cf-canvas">
-						<div class="ie-bar-chart">
-							<div class="cf-ie-head">
-								<div class="cf-title">
-									<h2></h2>
-									<h4></h4>
-									<p></p>
-								</div>
-								<div id="cf-ie-legend">
-									
-								</div>
-							</div>
+				<div class="ie-bar-chart">
+					<div class="cf-ie-head">
+						<div class="cf-title">
+							<h2></h2>
+							<h4></h4>
+							<p></p>
 						</div>
+						<div id="cf-ie-legend">
+							
+						</div>
+					</div>
 				</div>
+			</div>
 			<div id="cf-overview" class="cf-canvas">
 				<div class="cf-head">
 					<div class="cf-title">

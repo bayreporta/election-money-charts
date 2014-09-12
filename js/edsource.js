@@ -229,7 +229,7 @@
 				})
 
 				$("#overall_options_chosen").on("click","ul > li", function(){
-					chartControl.view = $(this).html(); //detect view
+					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();
 				})
 
@@ -291,7 +291,7 @@
 					ii = ii + 2;
 				}
 			},
-			/*grabCandidates:function(){
+			grabCandidates:function(){
 				var tempNames = [], tempRaces = [], parseRaces = [];
 				var ii = 0, iii = 0, iv = 0, v = 2, vi = 2, countRaces = 0, countCandidates = 0;
 				//grab names and races
@@ -305,11 +305,6 @@
 				//Get unique races and count of total number of races
 				parseRaces = _.uniq(tempRaces);
 				countRaces = parseRaces.length;
-
-				//populate races in race tab
-				for (i=0 ; i < parseRaces.length ; i++){
-					$("#race-options").append("<option value=" + i + ">" + parseRaces[i] + "</option>")
-				}
 
 				//create arrays within candidateDB for each race
 				for (i = 0 ; i < countRaces ; i++){
@@ -347,7 +342,7 @@
 						vi = vi + 1;
 					}
 				}		
-			}*/
+			}
 		}
 		// ------- ALL CHARING FUNCTIONS HERE ------- //
 		var chartFunctions = {
@@ -416,10 +411,11 @@
 				//loading
 				$("#cf-chart").css("visibility","visible");
 				$("#cf-choose").css("visibility","visible");
+				$("#cf-header").css("display","block");
 				$("#loading").remove();
 
 				//populate candidates and measures
-				//utilityFunctions.grabCandidates();
+				utilityFunctions.grabCandidates();
 
 				//populate IE committees
 				utilityFunctions.grabIEcommittees();
@@ -433,94 +429,73 @@
 			},
 			// ------- DRAWING CHARTS BY TYPE ------- //
 			drawSummary:function(){
-				var data = [], maxRaisedArray = [], maxSpentArray = [];
-				$("#summary_options_chosen").css("visibility","visibile").insertAfter("#overall_options_chosen");
-				$("#summary_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[0]);
-				$("#cf-choose-text h4:eq(1)").css("display","block");
-				$(".summary-row").css("height", dimensions.cellHeight + "px");
-
-				//size up data
-				var ii = raceColumns[race];				
-				for (i=0 ; i < raceTotal[race]; i++){
-					var temp = parseInt(mainDB[26][ii]);
-					$(".summary-row:eq("+i+")").attr("value",temp);
+				var data = [], check = [], colors = [], ii = 2, iii = 1;
+				var titles = ["Cash on Hand","Money Raised","Money Spent","Outside Money Supporting","Outside Money Opposing","No. of Contributions","Days Fundraising","Average Contributions","Median Contributions"];
+				//var colors = ["#5FADCE","#91cf60","#CE5F75","#91cf60","#CE5F75","#5FADCE","#5FADCE","#91cf60","#91cf60"];
+				var color = "#4c5b52";
+				
+				//grab data
+				for (i=0 ; i < 2 ; i++){
 					data[i] = new Array();
-					data[i][0] = "$" + utilityFunctions.commaSeparateNumber(temp);
-					data[i][1] = parseInt(mainDB[27][ii]);
-					data[i][2] = parseInt(mainDB[28][ii]);
-					data[i][3] = mainDB[3][ii];
-					maxRaisedArray[i] = data[i][1];
-					maxSpentArray[i] = data[i][2];
+					data[i][0] = "$" + utilityFunctions.commaSeparateNumber(mainDB[26][ii]);
+					data[i][1] = "$" + utilityFunctions.commaSeparateNumber(summaryDB[5][ii]);
+					data[i][2] = "$" + utilityFunctions.commaSeparateNumber(summaryDB[18][ii]);
+					data[i][3] = "$" + utilityFunctions.commaSeparateNumber(mainDB[30][ii]);
+					data[i][4] = "$" + utilityFunctions.commaSeparateNumber(mainDB[31][ii]);
+					data[i][5] = utilityFunctions.commaSeparateNumber(mainDB[8][ii]);
+					data[i][6] = utilityFunctions.commaSeparateNumber(mainDB[6][ii]);
+					data[i][7] = "$" + utilityFunctions.commaSeparateNumber(mainDB[9][ii]);
+					data[i][8] = "$" + utilityFunctions.commaSeparateNumber(mainDB[10][ii]);
 					ii = ii + 1;
 				}
-				//caluculate lowest/highest
-				var maxRaised = _.max(maxRaisedArray);
-				var maxSpent = _.max(maxSpentArray);
-
+				ii = 2
+				
+				for (i=0 ; i < 2 ; i++){
+					check[i] = new Array();
+					check[i][0] = parseInt(mainDB[26][ii]);
+					check[i][1] = parseInt(summaryDB[5][ii]);
+					check[i][2] = parseInt(summaryDB[18][ii]);
+					check[i][3] = parseInt(mainDB[30][ii]);
+					check[i][4] = parseInt(mainDB[31][ii]);
+					check[i][5] = parseInt(mainDB[8][ii]);
+					check[i][6] = parseInt(mainDB[6][ii]);
+					check[i][7] = parseInt(mainDB[9][ii]);
+					check[i][8] = parseInt(mainDB[10][ii]);
+					ii = ii + 1;
+				}
+				//populate titles
+				for (i=0 ; i < titles.length ; i++){
+					$("#cf-overview .summary-row:eq("+iii+") p:eq(0)").text(titles[i]);
+					iii = iii + 1;
+				}
+				iii = 1;
+				
 				//populate data
-				for (i=0 ; i < data.length ; i++){
-					//deafult style
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css({color:"#8c9b93","font-weight":300});
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css({color:"#8c9b93","font-weight":300});
-
-					//Rank Raised
-					if (data[i][1] === maxRaised){
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css({color:"#CE5F75","font-weight":700,"font-size":"2em"});
+				for (i=0 ; i < 10 ; i++){
+					$("#cf-overview .summary-row:eq("+iii+") p:eq(1)").html(data[0][i]);
+					$("#cf-overview .summary-row:eq("+iii+") p:eq(2)").html(data[1][i]);
+					iii = iii + 1;
+				}
+				iii = 1;
+				
+				//color the data
+				for (i=0 ; i < 10 ; i++){
+					if (check[0][i] > check[1][i]){
+						$("#cf-overview .summary-row:eq("+iii+") p:eq(1)").css("color", color).css("font-weight", "700");
+						$("#cf-overview .summary-row:eq("+iii+") p:eq(2)").css("color", color);
 					}
-					if (data[i][1] === 1){
-						data[i][1] = data[i][1] + "st";
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});
+					else if (check[1][i] > check[0][i]){
+						$("#cf-overview .summary-row:eq("+iii+") p:eq(1)").css("color", color);
+						$("#cf-overview .summary-row:eq("+iii+") p:eq(2)").css("color", color).css("font-weight", "700");
 					}
-					else if (data[i][1] === 2){
-						data[i][1] = data[i][1] + "nd";
-					}
-					else if (data[i][1] === 3){
-						data[i][1] = data[i][1] + "rd";
-					}
-					else {
-						data[i][1] = data[i][1] + "th";
-					}
-
-					//Rank Spent
-					if (data[i][2] === maxSpent){
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css({color:"#CE5F75","font-weight":700,"font-size":"2em"});
-					}
-					if (data[i][2] === 1){
-						data[i][2] = data[i][2] + "st";
-						$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});
-					}
-					else if (data[i][2] === 2){
-						data[i][2] = data[i][2] + "nd";
-					}
-					else if (data[i][2] === 3){
-						data[i][2] = data[i][2] + "rd";
-					}
-					else {
-						data[i][2] = data[i][2] + "th";
-					}
-
-					//check for NaN
-					if (data[i][1] === "NaNth"){
-						data[i][1] = "None";
-					}
-					if (data[i][2] === "NaNth"){
-						data[i][2] = "None";
-					}
-
-					$("#cf-overview .summary-row:eq("+ i +") a").attr("href", data[i][3]);		
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(1) p:eq(0)").html(data[i][0]);
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(2) p:eq(0)").html(data[i][1]);
-					$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(3) p:eq(0)").html(data[i][2]);
+					iii = iii + 1;
 				}
 
 				//Descriptives
 				$(".cf-title h2").html(chartControl.summary.titleRanking);
-				$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
+				////$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 				$("#cf-overview").append("<p class=\"chart-footer\">" + chartControl.summary.footerRanking + "</p>");
 
-
-				//Sorting
-				chartFunctions.sortSummary();
 			},
 			drawStatistics:function(){
 				var data = [];
@@ -555,7 +530,7 @@
 				//descriptives
 				$("#cf-overview .cf-title h2").html(chartControl.summary.titleStats);
 				$("#cf-overview").append("<p class=\"chart-footer\">" + chartControl.summary.footerStats + "</p>");
-				$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
+				//$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 
 				//styles
 				$("#cf-overview .summary-row:eq(0) .summary-cell:eq(2) p:eq(0)").css({color:"#6aae35","font-weight":700,"font-size":"2em"});;
@@ -676,11 +651,6 @@
 			},
 			drawCashRaisedSummary:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
-				//unhide stacked option
-				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#contribute_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[1]);
-				$("#cf-choose-text h4:eq(1)").css("display","block");	
-
 					//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race] ;  i++){
@@ -697,7 +667,6 @@
 				//calculate the total for each candidate
 				for (i=0 ; i < raceTotal[race] ; i++){
 					total[i] = (data[i][0] + data[i][1] + data[i][2]);
-					console.log(total[i])
 				}
 				//sorting by first legend item
 				for (i=0 ; i < raceTotal[race] ; i++){
@@ -726,9 +695,6 @@
 			drawContributions:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
 				var all = 0;
-				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#contribute_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[1]);
-				$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -817,9 +783,6 @@
 			drawLoans:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
 				var all = 0;
-				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(1)").css("display","block");
-
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -914,8 +877,6 @@
 			drawRetired:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
 				var all = 0;
-				$("#contribute_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(1)").css("display","block");
 				//size up data
 				var ii = raceColumns[race];
 				for (i=0 ; i < raceTotal[race]; i++){
@@ -1642,12 +1603,10 @@
 					}
 				}	
 				else if (chartControl.view === "Summary" || chartControl.view === "Ranking"){
-					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><a href=\"\" target=\"_blank\"><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div><div class=\"summary-cell\"><p></p><p></p></div></a></div>");
+					$("#cf-overview").append("<div class=\"summary-row\" id=\"overview-header\"><div class=\"summary-cell\"></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div></div>");
+					for (i = 1 ; i < 11; i++){
+						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
 					}
-					$("#cf-head-label-0").html("<p style=\"left:31%\">War Chest</p>");
-					$("#cf-head-label-1").html("<p style=\"left:54%\">Cash Raised</p>");
-					$("#cf-head-label-2").html("<p style=\"left:80%\">Cash Spent</p>");
 				}
 				else if (chartControl.view === "Stats"){
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -1660,7 +1619,7 @@
 				}
 				else if (chartControl.view === "Top Donors"){
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$("#cf-donors").append("<div class=\"donor-row\" id=\""+i+"\"><a href=\"\" target=\"_blank\"><div class=\"donor-cell\"><img src=\"\"><p></p><p></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div></a></div>");
+						$("#cf-donors").append("<div class=\"donor-row\" id=\""+i+"\"><div class=\"donor-cell\"><img src=\"\"><p></p><p></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div></div>");
 					}
 				}	
 				//resize labels
@@ -1699,19 +1658,31 @@
 						}
 
 					}
-					else if (chartControl.view === "Summary" || chartControl.view === "Ranking" || chartControl.view === "Stats"){
+					else if (chartControl.view === "Geography"){
 						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(0) img").attr("src", mainDB[2][ii]);
-							$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(0) p:eq(0)").html(summaryDB[0][ii]);
-							$("#cf-overview .summary-row:eq("+ i +") .summary-cell:eq(0) p:eq(1)").html(summaryDB[1][ii]);
+							$("#cf-stacked .stacked-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
 							ii = ii + 1;
+						}
+					}
+					else if (chartControl.view === "Summary" || chartControl.view === "Ranking" || chartControl.view === "Stats"){
+						//populate candidates
+						for (i=1 ; i < 3 ; i++){
+							$("#overview-header .summary-cell:eq("+i+") img").attr("src", mainDB[2][ii]);
+							$("#overview-header .summary-cell:eq("+i+") p:eq(0)").html(summaryDB[0][ii]);
+							$("#overview-header .summary-cell:eq("+i+") p:eq(1)").html(mainDB[32][ii]);
+							ii = ii + 1;
+						}
+						
+						
+						for (i = 1; i < 11 ; i++){
+							
 						}			
 					}
 					else if (chartControl.view === "Top Donors"){
 						for (i = 0; i < raceTotal[race]; i++){
 							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) img").attr("src", mainDB[2][ii]);
 							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) p:eq(0)").html(summaryDB[0][ii]);
-							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) p:eq(1)").html(summaryDB[1][ii]);
+							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) p:eq(1)").html(mainDB[32][ii]);
 							ii = ii + 1;
 						}
 					}
@@ -1782,13 +1753,6 @@
 			}
 		}
 
-// ------- FUNNY GREETINGS ------- //
-	$(document).ready(function(){
-		var random = Math.round(Math.random() * 10);
-		if (random === 0){
-			$("#loading h1:eq(0)").html("Retreiving Data");
-		}
-	});
 // ------- TABLETOP ------- //
 	$(document).ready(function(){
 			Tabletop.init( { key: gsheet,
