@@ -72,7 +72,7 @@
     
     if(typeof(options.proxy) !== 'undefined') {
       // Remove trailing slash, it will break the app
-      this.endpoint = options.proxy.replace(/\/$/,'');
+      this.endpoint = options.proxy;
       this.simple_url = true;
       this.singleton = true;
       // Let's only use CORS (straight JSON request) when
