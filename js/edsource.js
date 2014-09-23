@@ -1,4 +1,5 @@
 	// ------- GLOBAL ------- //
+		var uagent = navigator.userAgent.toLowerCase();		
 		var race = 0; //leave default
 		var raceTotal = [2]; //manually enter the number of candidates for each race, in order you placed in list above
 		var raceColumns = [2]; // leave default
@@ -48,7 +49,7 @@
 				summaryLegendColors:["#479a60","#9a8a47","#47819a","#9a4781","#9a6047"],
 				summaryLegendLabels:["Retired","Homemaker","Not Employed","Candidate Committees","Union"],
 				legendBars:{
-					three:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><a href=\"\" target=\"_blank\"><p class=\"the-label\"></p></a></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div><div id=\"geo4\" class=\"bar-seg\"></div><div id=\"geo5\" class=\"bar-seg\"></div><p></p></div></div>",
+					three:"<div class=\"stacked-bar-row\" id=\"0\"><div class=\"bar-label\"><a href=\"\" target=\"_blank\"><p class=\"the-label\"></p></a></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><div id=\"geo3\" class=\"bar-seg\"></div><div id=\"geo4\" class=\"bar-seg\"></div><div id=\"geo5\" class=\"bar-seg\"></div><p class=\"interest-total\"></p></div></div>",
 				},
 				footerSummary:"",
 				footerCashRaised:"",
@@ -103,6 +104,20 @@
 		}
 		// ------- UTILITY FUNCTIONS------- //
 		var utilityFunctions = {
+			detectBrowser:function(device){
+				var expression = device;
+				var test = /(android|ipad|iphone|touch|nexus|tablet)/i
+				//var macTest = /macintosh/i;				
+				var result = expression.match(test);
+				console.log(test);
+				console.log(device);
+				if (result !== null){
+					$(".desktop-only").css("display","none");
+				}
+				else {
+					$(".desktop-only").css("display","block");
+				}
+			},
 			chartDefaults:function(){
 				//size of chart and items
 				dimensions.overall = controlDB[22][1];
@@ -235,6 +250,15 @@
 					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();
 				})
+				
+				//var overallElement = document.getElementById("mobile-options");
+				//overallElement.addEventListener("touchend", runOverall, false);
+				
+				function runOverall(){
+					console.log("works")
+					chartControl.view = "Top Donors"
+					chartFunctions.redrawCanvas();
+				}
 
 				$("#stacked_options_chosen").on("click","ul > li", function(){
 					var $x = $(this).html(); //detect view
@@ -968,7 +992,7 @@
 						width:dataWidth[i] + "px"
 					})
 					var test = total[i] / parseInt(summaryDB[5][ii]) * 100;
-					$("#cf-stacked .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]) + " ("+ Math.round(test) + "% of total raised)");
+					$("#cf-stacked .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]) + " ("+ Math.round(test) + "% of total)");
 					ii = ii + 1;
 				}
 				//descriptives
@@ -977,6 +1001,7 @@
 				$("#cf-stacked .cf-title").append("<p>(Hover over bars for details)</p>");
 				$(".stacked-bar-row[value='0']").add(".stacked-bar-row[value='NaN']").css("display","none");
 				chartFunctions.sortGeo();
+				chartFunctions.sortStacked();
 
 				
 			},
@@ -1648,7 +1673,7 @@
 					}					
 				}
 				else if (chartControl.view === "IE Committees"){
-					$(".cf-ie-head").css("height","170px");
+					$(".cf-ie-head").css("height","215px");
 					//populate IE committees
 					for (i=1 ; i < ieNames.length + 1; i++){
 						$(".ie-bar-chart").append(chartControl.ie.legendBars);
@@ -1817,6 +1842,28 @@
 					}
 			},
 			// ------- SORTING ------- //
+			sortStacked:function(){
+					var $wrapper = $('.stacked-bar-chart #0 .bar-data'),
+				        $articles = $wrapper.find('.bar-seg');
+				    [].sort.call($articles, function(a,b) {
+				        return +$(b).attr('value') - +$(a).attr('value');
+				    });
+				    $articles.each(function(){
+				        $wrapper.append(this);
+				    });
+				
+					var $wrapper = $('.stacked-bar-chart #1 .bar-data'),
+				        $articles = $wrapper.find('.bar-seg');
+				    [].sort.call($articles, function(a,b) {
+				        return +$(b).attr('value') - +$(a).attr('value');
+				    });
+				    $articles.each(function(){
+				        $wrapper.append(this);
+				    });
+				
+					$("#cf-stacked .bar-data:eq(0) p").insertAfter("#cf-stacked .bar-data:eq(0) .bar-seg:last");
+					$("#cf-stacked .bar-data:eq(1) p").insertAfter("#cf-stacked .bar-data:eq(1) .bar-seg:last");
+			},
 			sortSummary:function(){
 					var $wrapper = $('#cf-overview'),
 				        $articles = $wrapper.find('.summary-row');
@@ -1884,6 +1931,7 @@
 
 // ------- TABLETOP ------- //
 	$(document).ready(function(){
+			utilityFunctions.detectBrowser(uagent);
 			Tabletop.init( { key: gsheet,
 		                     callback: chartFunctions.setTheScene,
 		                     wanted: ["Control","Summary","Main","IE_Overview"],

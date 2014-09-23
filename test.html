@@ -1,0 +1,21 @@
+<style>
+	#test {
+		width:400px;
+		height:400px;
+		background:black;
+	}
+</style>
+<body>
+	<div id="test">
+		
+	</div>
+</body>
+
+<script>
+	var theElement = document.getElementById("test");
+	theElement.addEventListener("touchend", runMe, false);
+	
+	function runMe(){
+		console.log("it worked!")
+	}
+</script>

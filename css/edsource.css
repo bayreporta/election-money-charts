@@ -69,6 +69,7 @@
 
 	.stacked-bar-chart, .ie-bar-chart {
 		width:960px;
+		padding:0 0 10px 0;
 	}
 
 	.stacked-bar-chart .bar-data, .ie-bar-chart .bar-data {
@@ -105,7 +106,6 @@
 	#cf-chart {
 		border-bottom:double 10px #4c5b52;
 		visibility:hidden;
-		height: 825px;
 		overflow-y: hidden;
 		overflow-x: hidden;
 	}	
@@ -116,6 +116,12 @@
 		height:60px;
 		visibility:hidden;
 	}
+	
+	#stacked-options, #expenses-options, #ie-options {
+		visibility:hidden;
+	}
+	
+	
 	
 	#cf-choose-text {
 		width:960px;
@@ -218,7 +224,7 @@
 
 	.bar-row, .stacked-bar-row,.ie-bar-row {
 		height:30px;
-		margin:0 0 15px 0;
+		margin:0 0 31px 0;
 
 	}
 
@@ -267,12 +273,22 @@
 			font-weight:700;
 		}
 		
+		
+		
 		#cf-ie .bar-data p {
 			position: relative;
 			right: 0px;
 			top: -24px;
 			margin:0;
 			height:0;
+		}
+		
+		.interest-total {
+			text-align: right;
+			font-size: 14px;
+			margin: 6px 5px 6px 0;
+			color: #4c5b52 !important;
+			font-weight: 400 !important;
 		}
 
 	.chart-h4 {
