@@ -58,7 +58,7 @@
 				footerCashRaised:"",
 				footerCashPerDay:"",
 				footerLoans:"",
-				footerRetiree:""
+				footerRetiree:"The groups included here collectively represent a significant portion of the candidate's total contributions. This is based on how contributors voluntarily disclosed their employer and occupation. \"Candidate Committees\" are contributions from other candidates made through their candidate committees. \"Unions\" are contributions by organized labor groups, Political Action Committees, and other types of committees."
 			},
 			cashSpent:{
 				cashSpent:true,
@@ -1009,7 +1009,7 @@
 						}).attr("value", data[i][x]);
 						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
 							title:chartControl.cashRaised.summaryLegendLabels[x],
-							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
+							content:"$" + commas[i][x]
 						})
 					}
 				}
@@ -1024,7 +1024,7 @@
 					ii = ii + 1;
 				}
 				//descriptives
-				$("#cf-stacked").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerSummary + "</p>");
+				$("#cf-stacked").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerRetiree + "</p>");
 				$(".cf-title h2").html(chartControl.cashRaised.summaryTitle);
 				$("#cf-stacked .cf-title").append("<p>(Hover over bars for details)</p>");
 				$(".stacked-bar-row[value='0']").add(".stacked-bar-row[value='NaN']").css("display","none");
@@ -1294,7 +1294,9 @@
 				$("#cf-iframe .cf-title").append("<p>(Area below may be scrollable)</p>");
 			},
 			drawIEoverview:function(){
-				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0;
+				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0, dataCheck = [];
+				var candidate = ["Torlakson", "Tuck"];
+				
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#ie_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[3]);
 				$("#cf-choose-text h4:eq(1)").css("display","block");
@@ -1321,45 +1323,77 @@
 				for (i=0 ; i < raceTotal[race] ; i++){
 					total[i] = (data[i][0] + data[i][1]);
 				}
-
+				
+				//grab all values
+				ii = 1;
+				iii = 0;
+				for (i = 0 ; i < raceTotal[race] ; i++){
+					dataCheck[iii] = data[i][0];
+					dataCheck[ii] = data[i][1];
+					ii = ii + 2;
+					iii = iii + 2;
+				}
+				
+				//find highest value in array
+				var maxValue = parseInt(Math.max.apply(null, dataCheck));
+				console.log(maxValue)
 				//get total overall
 				for (i=0; i < total.length; i++){
 					all = all + total[i];
 				}
 
-				//find highest value in array
-				var maxValue = Math.max.apply(null, total);
-
 				//figure out the width for each bar
+				ii = 1;
+				var iii = 0;
 				for (i = 0 ; i < total.length ; i++){
-					dataWidth[i] = (total[i] / maxValue) * dimensions.maxBarWidth;
+					dataWidth[iii] = (data[i][0] / maxValue) * dimensions.maxBarWidth;
+					dataWidth[ii] = (data[i][1] / maxValue) * dimensions.maxBarWidth;
+					ii = ii + 2;
+					iii = iii + 2;
+				
+					
 				}
-
-				//sorting by first legend item
-				for (i=0 ; i < raceTotal[race] ; i++){
-					$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
-				}
-
+				
+				console.log(dataWidth)
 				//populate data
+				iii = 0;
+				ii = 1;
 				colors = chartControl.ie.legendColor;
 				for (i=0 ; i < raceTotal[race] ; i++){
-					for (x = 0 ; x < chartControl.ie.legendItems ; x++){
-						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
-							width:((data[i][x] / total[i]) * 100) + "%"
-						}).attr("value", data[i][x]);
-						$("#cf-ie .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]));
-						$("#cf-ie .ie-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:chartControl.ie.legendLabels[x],
-							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
+						$("#cf-ie .ie-bar-row-overview:eq(" + iii + ") .bar-data").css("background",colors[0] ).animate({
+							width:dataWidth[iii]
+						}).attr("value", data[i][0]);
+
+						$("#cf-ie .ie-bar-row-overview:eq(" + ii + ") .bar-data").css("background",colors[1] ).animate({
+							width:dataWidth[ii]
+						}).attr("value", data[i][1]);
+
+						$("#cf-ie .bar-data:eq(" + iii + ") p").text("$" + utilityFunctions.commaSeparateNumber(commas[i][0]));
+						$("#cf-ie .bar-data:eq(" + ii + ") p").text("$" + utilityFunctions.commaSeparateNumber(commas[i][1]));
+
+						$("#cf-ie .ie-bar-row-overview:eq(" + iii + ")").caltip({
+							title:"Outside Money Supporting " + candidate[i],
+							content:"$" + commas[i][0]
 						})
-					}
-				}								
-				for (i=0 ; i < total.length ; i++){
+
+						$("#cf-ie .ie-bar-row-overview:eq(" + ii + ")").caltip({
+							title:"Outside Money Opposing " + candidate[i],
+							content:"$" + commas[i][1]
+						})
+						
+						ii = ii + 2;
+						iii = iii + 2;
+				}	
+				
+			
+				
+			
+				/*for (i=0 ; i < total.length ; i++){
 					$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("value",total[i]);
 					$("#cf-ie .bar-data:eq(" + i + ")").animate({
 						width:dataWidth[i] + "px"
 					})
-				}
+				}*/
 
 
 				//Descriptives
@@ -1373,10 +1407,8 @@
 					utilityFunctions.mobileSubNavigation();
 				}
 				//sort
-				chartFunctions.sortIE();
-				//chartFunctions.sortGeo();
-				$(".ie-bar-row[value='NaN']").css("display","none");
-				$(".ie-bar-row[value='0']").css("display","none");
+				//$(".ie-bar-row[value='NaN']").css("display","none");
+				//$(".ie-bar-row[value='0']").css("display","none");
 
 			},
 			drawIEcommittees:function(){
@@ -1682,7 +1714,7 @@
 				//reset title
 				$(".cf-title p").remove();
 				//reset text and colors for chart
-				$(".chart-h4").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".ie-bar-row").add(".cf-legend-opt").add(".cf-ie-legend-opt").add(".summary-row").add(".donor-row").remove();
+				$(".chart-h4").add(".ie-bar-row-overview").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".ie-bar-row").add(".cf-legend-opt").add(".cf-ie-legend-opt").add(".summary-row").add(".donor-row").remove();
 
 				if (chartControl.view === "Cash Contributions" || chartControl.view === "Cash Raised" || chartControl.view === "Non-Cash Givings" || chartControl.view === "CPD" || chartControl.view === "Loans" || chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){			
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -1711,15 +1743,17 @@
 					$(".cf-ie-head").css("height","215px");
 					//populate bars based on number of candidates
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$(".ie-bar-chart").append(chartControl.ie.legendBars);
+						$(".ie-bar-chart").append("<div class=\"ie-bar-row-overview\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div>");
+						$(".ie-bar-chart").append("<div class=\"ie-bar-row-overview bar-buffer\"><div class=\"bar-label\"><p class=\"ie-overview-label\"></p></div><div class=\"bar-data\"><p></p></div>");
+						
 					}				
 					//tag each row with unique ID
-					for (i = 1 ; i < raceTotal[race] + 1; i++){
+					/*for (i = 1 ; i < raceTotal[race] + 1; i++){
 						$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("id", i);
-					}
+					}*/
 					//Give Max Width to Bars
-					$(".ie-bar-row").css("width", dimensions.overall);
-					$(".ie-bar-row .bar-data").css("width", dimensions.maxBarWidth);
+					$(".ie-bar-row-overview").css("width", dimensions.overall);
+					$(".ie-bar-row-overview .bar-data").css("width", dimensions.maxBarWidth);
 					//populate legend
 					for (i = 0 ; i < chartControl.ie.legendItems ; i++){
 						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + chartControl.ie.legendLabels[i] + "</p></div>");
@@ -1843,8 +1877,9 @@
 						}
 					}
 					else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
+						var iii = 0;
 						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-ie .ie-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
+							$("#cf-ie .bar-buffer .bar-label p:eq("+i+")").html(summaryDB[0][ii]);
 							ii = ii + 1;
 						}
 					}

@@ -248,6 +248,18 @@
 		margin:0 0 31px 0;
 
 	}
+	
+	.ie-bar-row-overview {
+		height:30px;
+	}
+	
+	.ie-overview-label {
+		margin:-5px 0 0 0 !important;
+	}
+	
+	.bar-buffer {
+		margin:0 0 25px 0;
+	}
 
 	.pointer {
 		cursor:pointer;
@@ -295,11 +307,18 @@
 		}
 		
 		
-		
 		#cf-ie .bar-data p {
 			position: relative;
 			right: 0px;
 			top: -24px;
+			margin:0;
+			height:0;
+		}
+		
+		#cf-ie .ie-bar-row-overview .bar-data p {
+			position: relative;
+			right: 0px;
+			top: 6px;
 			margin:0;
 			height:0;
 		}
@@ -345,7 +364,7 @@
 	.chart-footer {
 		font-style:italic;
 		font-size:10px;
-		color:#8c9b93;
+		color:#666;
 		margin:30px 0 15px 0;
 	}
 	
