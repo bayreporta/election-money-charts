@@ -388,12 +388,6 @@
 					controlDB.push(insertRow)
 				})
 
-				$.each(tabletop.sheets("Control").all(), function(i, control){
-					var insertRow = [];
-					insertRow[0] = control.option;
-					insertRow[1] = control.command;
-					controlDB.push(insertRow)
-				})
 
 				//chart defaults
 				utilityFunctions.chartDefaults();
