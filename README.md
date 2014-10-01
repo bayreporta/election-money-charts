@@ -6,14 +6,14 @@ README pending. <a href="mailto:bayreporta@gmail.com">Contact me if you want to 
 
 <strong>For Press-Democrat</strong>
 
-Needed files:
-sonoma.html
-css/sonoma.css
-css/chosen-sprite.png
-css/chosen-sprite@2x.png
-css/chosen.css
-js/caltip.min.js
-js/chosen.jquery.js
-js/sonoma.js
-js/tabletop.js
-js/underscore-min.js
+Needed files:<br>
+sonoma.html<br>
+css/sonoma.css<br>
+css/chosen-sprite.png<br>
+css/chosen-sprite@2x.png<br>
+css/chosen.css<br>
+js/caltip.min.js<br>
+js/chosen.jquery.js<br>
+js/sonoma.js<br>
+js/tabletop.js<br>
+js/underscore-min.js<br>
