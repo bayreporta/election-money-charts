@@ -927,9 +927,9 @@
 				for (i=0 ; i < raceTotal[race] ;  i++){
 					data[i] = new Array();
 					commas[i] = new Array();
-					data[i][0] = parseInt(summaryDB[19][ii]);
-					data[i][1] = parseInt(summaryDB[20][ii]);
-					data[i][2] = parseInt(summaryDB[21][ii]);
+					data[i][0] = parseInt(summaryDB[20][ii]);
+					data[i][1] = parseInt(summaryDB[21][ii]);
+					data[i][2] = parseInt(summaryDB[22][ii]);
 					commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
 					commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][1]);
 					commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][2]);
