@@ -116,8 +116,8 @@
 				if (result !== null){
 					$(".desktop-only").css("display","none");
 					$(".mobile-only").css("display","block");
-					$("#cf-header h1").css("font-size",".7em");
-					$("#cf-header h4").css("font-size",".4em");
+					$("#cf-header h1").css("font-size",".5em");
+					$("#cf-header h4").css("font-size",".3em");
 					mobileUser = true;
 				}
 				else {
@@ -195,7 +195,13 @@
 			mobileStyle:function(){
 				if (mobileUser == true){
 					$(".chart-footer").css("font-size","1em");
+					$(".cf-head").css("height","225px");
+					$(".cf-title").css("width","610px");
+					$(".cf-title h2").css("font-size","2em");
+					$(".cf-ie-head").css("height","325px");
+					$(".cf-stack-head").css("height","380px");
 				}
+				
 			},
 			populateTopics:function(){
 				var ii = 2, iii = 10;

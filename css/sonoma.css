@@ -14,7 +14,6 @@
 	
 	#cf-header {
 		display:none;
-		border-bottom: double 10px #4c5b52;
 		padding:0 0 10px 0;
 	}
 	
@@ -114,14 +113,14 @@
 	#cand-chart {
 		height:1px;
 		border-bottom:solid 2px #4c5b52;
-		border-top:10px double #4c5b52;
 		visibility:hidden;
 	}
 	#cf-chart {
-		border-bottom:double 10px #4c5b52;
 		visibility:hidden;
 		overflow-y: hidden;
 		overflow-x: hidden;
+		min-height:400px;
+		
 	}	
 
 	.mobile-only {
