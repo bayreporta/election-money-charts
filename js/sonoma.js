@@ -1,4 +1,5 @@
 	// ------- GLOBAL ------- //
+		var uagent = navigator.userAgent.toLowerCase();		
 		var race = 0; //leave default
 		var raceTotal = [2]; //manually enter the number of candidates for each race, in order you placed in list above
 		var raceColumns = [2]; // leave default
@@ -115,6 +116,8 @@
 				if (result !== null){
 					$(".desktop-only").css("display","none");
 					$(".mobile-only").css("display","block");
+					$("#cf-header h1").css("font-size",".7em");
+					$("#cf-header h4").css("font-size",".4em");
 					mobileUser = true;
 				}
 				else {
@@ -187,6 +190,11 @@
 				for (i=0 ; i < tempLabelSplit.length ; i++){
 					chartControl.geography.legendColor[i] = tempColorSplit[i];
 					chartControl.geography.legendLabels[i] = tempLabelSplit[i];
+				}
+			},
+			mobileStyle:function(){
+				if (mobileUser == true){
+					$(".chart-footer").css("font-size","1em");
 				}
 			},
 			populateTopics:function(){
@@ -550,6 +558,9 @@
 				$(".cf-title h2").html(chartControl.summary.titleRanking);
 				////$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.summary.footerRanking + "</p>");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 
 			},
 			drawTopDonors:function(){
@@ -701,6 +712,9 @@
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
 					$("#cf-donors .donor-row:eq("+ i +") .donor-cell p").remove();
 				}
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawContributions:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
@@ -743,6 +757,9 @@
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerCashRaised + "</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawExpenseType:function(){
 				var all = 0, data = [], commas = [], ii = 23, dataWidth = [], $thisBar, workaround = [], workaroundCommas = [];
@@ -794,6 +811,9 @@
 				$("#cf-expense-type .cf-title h2").html(chartControl.cashSpent.expenseTypeTitle);
 				$("#cf-expense-type").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$(".cf-title").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerExpenseType + "</p>");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawSpent:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
@@ -839,6 +859,9 @@
 				$(".cf-title").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerCashSpent +"</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawGeoPercent:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
@@ -890,6 +913,9 @@
 					$("#cf-stacked .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"Total Contributions\">Total</p>");
 					utilityFunctions.mobileSubNavigation();
 				}
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawGeoTotal:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
@@ -954,6 +980,9 @@
 					utilityFunctions.mobileSubNavigation();
 				}
 				chartFunctions.sortGeo();
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawAllDonors:function(){
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-iframe .cf-title");
@@ -962,6 +991,9 @@
 				//descriptives
 				$("#cf-iframe .cf-title h2").html(chartControl.donors.titleAll);
 				$("#cf-iframe .cf-title").append("<p>(Area below may be scrollable)</p>");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawIEoverview:function(){
 				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0, dataCheck = [];
@@ -1064,6 +1096,9 @@
 					$("#cf-ie .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"IE Candidates\">Candidate Breakdown</p>");
 					utilityFunctions.mobileSubNavigation();
 				}
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawIEcandidates:function(){
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
@@ -1138,6 +1173,8 @@
 				$(".cf-title h2").html(chartControl.ie.titleCandidates);
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.ie.footerCandidates + "</p>");
 				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			// ------- REFRESHING CANVAS ------- //
 			redrawCanvas:function(){
@@ -1490,6 +1527,7 @@
 
 // ------- TABLETOP ------- //
 	$(document).ready(function(){
+			utilityFunctions.detectBrowser(uagent);
 			Tabletop.init( { key: gsheet,
 		                     callback: chartFunctions.setTheScene,
 		                     wanted: ["Control","Summary","Main","IE_Overview"],

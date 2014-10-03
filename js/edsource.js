@@ -116,6 +116,8 @@
 				if (result !== null){
 					$(".desktop-only").css("display","none");
 					$(".mobile-only").css("display","block");
+					$("#cf-header h1").css("font-size",".7em");
+					$("#cf-header h4").css("font-size",".4em");
 					mobileUser = true;
 				}
 				else {
@@ -188,6 +190,11 @@
 				for (i=0 ; i < tempLabelSplit.length ; i++){
 					chartControl.geography.legendColor[i] = tempColorSplit[i];
 					chartControl.geography.legendLabels[i] = tempLabelSplit[i];
+				}
+			},
+			mobileStyle:function(){
+				if (mobileUser == true){
+					$(".chart-footer").css("font-size","1em");
 				}
 			},
 			populateTopics:function(){
@@ -551,7 +558,9 @@
 				$(".cf-title h2").html(chartControl.summary.titleRanking);
 				////$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.summary.footerRanking + "</p>");
-
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawTopDonors:function(){
 				var data = [], real = [];
@@ -649,7 +658,7 @@
 					}
 				}
 				
-
+				
 				//populate data
 				for (i=0 ; i < data.length ; i++){
 					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(0)").html(data[i][0]);
@@ -702,6 +711,9 @@
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
 					$("#cf-donors .donor-row:eq("+ i +") .donor-cell p").remove();
 				}
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawContributions:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
@@ -744,6 +756,9 @@
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerCashRaised + "</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawExpenseType:function(){
 				var all = 0, data = [], commas = [], ii = 23, dataWidth = [], $thisBar, workaround = [], workaroundCommas = [];
@@ -795,6 +810,9 @@
 				$("#cf-expense-type .cf-title h2").html(chartControl.cashSpent.expenseTypeTitle);
 				$("#cf-expense-type").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
 				$(".cf-title").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerExpenseType + "</p>");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawInterest:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
@@ -859,7 +877,10 @@
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerRetiree + "</p>");
 				$(".stacked-bar-row[value='0']").add(".stacked-bar-row[value='NaN']").css("display","none");
 				chartFunctions.sortGeo();
-				chartFunctions.sortStacked();				
+				chartFunctions.sortStacked();		
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();		
 			},
 			drawSpent:function(){
 				var data = [], commas = [], dataWidth = [], links = [];
@@ -906,6 +927,9 @@
 				$(".cf-title").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerCashSpent +"</p>");
 				chartFunctions.sortBars();
 				$(".bar-row[value='0']").css("display","none");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawGeoPercent:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
@@ -960,6 +984,9 @@
 					$("#cf-stacked .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"Total Contributions\">Total</p>");
 					utilityFunctions.mobileSubNavigation();
 				}
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawGeoTotal:function(){
 				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
@@ -1027,6 +1054,9 @@
 					utilityFunctions.mobileSubNavigation();
 				}
 				chartFunctions.sortGeo();
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawAllDonors:function(){
 				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-iframe .cf-title");
@@ -1137,6 +1167,9 @@
 					$("#cf-ie .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"IE Candidates\">Candidate Breakdown</p>");
 					utilityFunctions.mobileSubNavigation();
 				}
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 			},
 			drawIEcandidates:function(){
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
@@ -1210,6 +1243,9 @@
 				//Descriptives
 				$(".cf-title h2").html(chartControl.ie.titleCandidates);
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.ie.footerCandidates + "</p>");
+				
+				//adjust for new elements just added, style for mobile
+				utilityFunctions.mobileStyle();
 				
 			},
 			// ------- REFRESHING CANVAS ------- //
