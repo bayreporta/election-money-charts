@@ -1327,7 +1327,7 @@
 				}
 				else if (chartControl.view === "IE Candidates"){
 					$("#cf-overview").append("<div class=\"summary-row\" id=\"overview-header\"><div class=\"summary-cell\"></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div></div>");
-					for (i = 1 ; i < ieNames.length; i++){
+					for (i = 1 ; i < ieNames.length + 1; i++){
 						$("#cf-overview").append("<div style=\"height:15px;\" class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
 					}
 				}

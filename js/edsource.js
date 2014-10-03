@@ -1268,20 +1268,6 @@
 					$("#cf-ie").css("display","block");
 					chartFunctions.drawIEoverview();
 				}
-				else if (chartControl.view === "Non-Cash Givings"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					chartFunctions.drawNonMon();
-				}
-				else if (chartControl.view === "IE Committees"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-ie").css("display","block");
-					chartFunctions.drawIEcommittees();
-				}
 				else if (chartControl.view === "IE Candidates"){
 					chartFunctions.resetCanvas(chartControl.view);
 					chartFunctions.renameCanvas(chartControl.view);
@@ -1303,33 +1289,12 @@
 					$("#cf-overview").css("display","block");
 					chartFunctions.drawSummary();
 				}
-				else if (chartControl.view === "Stats"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-overview").css("display","block");
-					chartFunctions.drawStatistics();
-				}
-				else if (chartControl.view === "CPD"){			
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					chartFunctions.drawCashPerDays();
-				}
 				else if (chartControl.view === "Top Donors"){
 					chartFunctions.resetCanvas(chartControl.view);
 					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
 					$("#cf-donors").css("display","block");
 					chartFunctions.drawTopDonors();
-				}
-				else if (chartControl.view === "Loans"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					chartFunctions.drawLoans();
 				}
 				else if (chartControl.view === "Retirees"){
 					chartFunctions.resetCanvas(chartControl.view);
@@ -1430,28 +1395,9 @@
 						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
 					}					
 				}
-				else if (chartControl.view === "IE Committees"){
-					$(".cf-ie-head").css("height","215px");
-					//populate IE committees
-					for (i=1 ; i < ieNames.length + 1; i++){
-						$(".ie-bar-chart").append(chartControl.ie.legendBars);
-					}
-					//tag each row with unique ID
-					for (i = 1 ; i < ieNames.length + 1; i++){
-						$("#cf-ie .ie-bar-row:eq(" + i + ")").attr("id", i);
-					}
-					//Give Max Width to Bars
-					$(".ie-bar-row").css("width", dimensions.overall);
-					$(".ie-bar-row .bar-data").css("width", dimensions.maxBarWidth);
-					//populate legend
-					for (i = 0 ; i < chartControl.ie.legendItems ; i++){
-						$("#cf-ie-legend").append("<div class=\"cf-ie-legend-opt\"><p>" + chartControl.ie.legendLabels[i] + "</p></div>");
-						$(".cf-ie-legend-opt:eq(" + i + ")").css("background", chartControl.ie.legendColor[i]);
-					}
-				}
 				else if (chartControl.view === "IE Candidates"){
 					$("#cf-overview").append("<div class=\"summary-row\" id=\"overview-header\"><div class=\"summary-cell\"></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div></div>");
-					for (i = 1 ; i < ieNames.length; i++){
+					for (i = 1 ; i < ieNames.length + 1; i++){
 						$("#cf-overview").append("<div style=\"height:15px;\" class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
 					}
 				}
