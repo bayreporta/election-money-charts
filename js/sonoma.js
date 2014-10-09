@@ -88,7 +88,7 @@
 				footerCommittees:"",
 				footerCandidates:"",
 				legendItems:2,
-				legendLabels:["Supporting Candidate","Opposing Candidate"],
+				legendLabels:["Outside Groups Supporting Candidate","Outisde Groups Opposing Candidate"],
 				legendColor:["#91cf60","#6C9B48"],
 				legendBars:"<div class=\"ie-bar-row\" id=\"0\"><div class=\"bar-label\"><a href=\"\" target=\"_blank\"><p class=\"the-label\"></p></a></div><div class=\"bar-data\"><div id=\"geo1\" class=\"bar-seg\"></div><div id=\"geo2\" class=\"bar-seg\"></div><p></p></div>"
 			},
@@ -123,6 +123,7 @@
 				else {
 					$(".desktop-only").css("display","block");
 					$(".mobile-only").css("display","none");
+					
 				}
 			},
 			chartDefaults:function(){
@@ -200,7 +201,13 @@
 					$(".cf-title h2").css("font-size","2em");
 					$(".cf-ie-head").css("height","325px");
 					$(".cf-stack-head").css("height","380px");
-				}		
+					
+					
+				}	
+				
+				if (chartFunctions.view === "All Donors"){
+					$("#cf-chart").css("height","700px");
+				}	
 			},
 			populateTopics:function(){
 				var ii = 2, iii = 10;
@@ -558,6 +565,8 @@
 					}
 					iii = iii + 1;
 				}
+				$("#cf-overview .summary-row:eq(4) p:eq(1)").add("#cf-overview .summary-row:eq(4) p:eq(2)").css("color","#6aae35");
+				$("#cf-overview .summary-row:eq(5) p:eq(1)").add("#cf-overview .summary-row:eq(5) p:eq(2)").css("color","#ac354c");
 
 				//Descriptives
 				$(".cf-title h2").html(chartControl.summary.titleRanking);
@@ -711,7 +720,6 @@
 				//descriptives
 				$("#cf-donors .cf-title h2").html(chartControl.donors.titleTop);
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.donors.footerTop + "</p>");
-				$("#cf-donors .cf-title").append("<p style=\"border-bottom: 1px solid #8c9b93;padding:0 0 10px 0;\"><span>Top Contributors</span><span>Top Entities</span></p>");
 
 				//remove unused cells
 				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
@@ -996,13 +1004,14 @@
 				//descriptives
 				$("#cf-iframe .cf-title h2").html(chartControl.donors.titleAll);
 				$("#cf-iframe .cf-title").append("<p>(Area below may be scrollable)</p>");
+				$("#cf-chart").css("height","800px");
 				
 				//adjust for new elements just added, style for mobile
 				utilityFunctions.mobileStyle();
 			},
 			drawIEoverview:function(){
 				var data = [], split, ieUpdated, dataWidth = [], commas = [], colors = [], total = [], all = 0, dataCheck = [];
-				var candidate = ["Torlakson", "Tuck"];
+				var candidate = ["Fudge", "Gore"];
 				
 				$("#ie_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
 				$("#ie_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[3]);
@@ -1281,6 +1290,8 @@
 				$("#ie_options_chosen").css("visibility","hidden");
 				$("#cf-choose-text h4:eq(1)").css("display","none");
 				$("#cf-chart").css("overflow-y","auto");
+				$("#cf-chart").css("height","auto");
+				
 				for (i = 0 ; i < raceTotal.length ; i++){
 					$("#candidates_options_"+i+"_chosen").css("visibility","hidden");
 				}
