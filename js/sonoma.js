@@ -505,7 +505,7 @@
 			// ------- DRAWING CHARTS BY TYPE ------- //
 			drawSummary:function(){
 				var data = [], check = [], colors = [], ii = 2, iii = 1;
-				var titles = ["Cash on Hand","Money Raised","Money Spent","Outside Money Supporting","Outside Money Opposing","No. of Contributions","Days Fundraising","Average Contributions","Median Contributions"];
+				var titles = ["Cash on Hand","Money Raised","Money Spent","Outside Money Supporting","Outside Money Opposing","No. of Contributions","Average Contributions","Median Contributions"];
 				//var colors = ["#5FADCE","#91cf60","#CE5F75","#91cf60","#CE5F75","#5FADCE","#5FADCE","#91cf60","#91cf60"];
 				var color = "#4c5b52";
 				
@@ -518,9 +518,8 @@
 					data[i][3] = "$" + utilityFunctions.commaSeparateNumber(mainDB[30][ii]);
 					data[i][4] = "$" + utilityFunctions.commaSeparateNumber(mainDB[31][ii]);
 					data[i][5] = utilityFunctions.commaSeparateNumber(mainDB[8][ii]);
-					data[i][6] = utilityFunctions.commaSeparateNumber(mainDB[6][ii]);
-					data[i][7] = "$" + utilityFunctions.commaSeparateNumber(mainDB[9][ii]);
-					data[i][8] = "$" + utilityFunctions.commaSeparateNumber(mainDB[10][ii]);
+					data[i][6] = "$" + utilityFunctions.commaSeparateNumber(mainDB[9][ii]);
+					data[i][7] = "$" + utilityFunctions.commaSeparateNumber(mainDB[10][ii]);
 					ii = ii + 1;
 				}
 				ii = 2
@@ -533,9 +532,8 @@
 					check[i][3] = parseInt(mainDB[30][ii]);
 					check[i][4] = parseInt(mainDB[31][ii]);
 					check[i][5] = parseInt(mainDB[8][ii]);
-					check[i][6] = parseInt(mainDB[6][ii]);
-					check[i][7] = parseInt(mainDB[9][ii]);
-					check[i][8] = parseInt(mainDB[10][ii]);
+					check[i][6] = parseInt(mainDB[9][ii]);
+					check[i][7] = parseInt(mainDB[10][ii]);
 					ii = ii + 1;
 				}
 				//populate titles
@@ -1389,7 +1387,7 @@
 				}	
 				else if (chartControl.view === "Summary" || chartControl.view === "Ranking"){
 					$("#cf-overview").append("<div class=\"summary-row\" id=\"overview-header\"><div class=\"summary-cell\"></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div></div>");
-					for (i = 1 ; i < 11; i++){
+					for (i = 1 ; i < 10; i++){
 						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
 					}
 				}
