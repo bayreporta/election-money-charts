@@ -23,7 +23,7 @@
 		}
 		//candidate names, IE committees and measures
 		var candidateDB = [], candidateList = [], ieNames = [];
-
+		
 		//input options for stacked bar graphs
 		var chartControl = {
 			view:"",
@@ -114,16 +114,15 @@
 				//var macTest = /macintosh/i;				
 				var result = expression.match(test);
 				if (result !== null){
-					$(".desktop-only").css("display","none");
 					$(".mobile-only").css("display","block");
 					$("#cf-header h1").css("font-size",".5em");
 					$("#cf-header h4").css("font-size",".3em");
 					mobileUser = true;
 				}
 				else {
-					$(".desktop-only").css("display","block");
-					$(".mobile-only").css("display","none");
+					$(".mobile-only").css("display","block");					
 				}
+				
 			},
 			chartDefaults:function(){
 				//size of chart and items
@@ -137,7 +136,7 @@
 				
 				//CSS for mobile and desktop checker
 				if (mobileUser == false){
-					$("#cf-overview .cf-head").css("height","117px");
+					$("#cf-overview .cf-head").css("height","35px");
 					$("#loading").add("#cf-choose-text").add("#cf-container").add("#cf-options").add("#cf-chart").add("#cf-legend").add(".ie-bar-chart").add(".stacked-bar-chart").add("#cand-highlight").add("#cf-options").add("#cf-choose").add("#cf-contribute").add(".bar-chart").add(".cf-stack-head").add(".cf-head").add(".cf-title").add("#cf-summary").add("#cf-overview").add(".summary-row").css("width",dimensions.overall);
 				}
 				else {
@@ -257,52 +256,14 @@
 
 			},
 			executeChosen:function(){
-				var config = {
-			      '.chosen-select'           : {},
-			      '.chosen-select-deselect'  : {allow_single_deselect:true},
-			      '.chosen-select-no-single' : {disable_search_threshold:10},
-			      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
-			      '.chosen-select-width'     : {width:"95%"}
-			    }
-			    for (var selector in config) {
-			      $(selector).chosen(config[selector]);
-			    }
-
 				//connect listeners to Chosen elements
-				$("#race_options_chosen").on("click","ul > li", function(){
-					race = parseInt($(this).attr("value"));	
-					thisCandidate = raceColumns[race];
-					$("#candidates_options_"+race+"_chosen .chosen-single span").text(candidateDB[race][0]);
-					chartFunctions.redrawCanvas();			
-				})
-
-				$("#overall_options_chosen").on("click","ul > li", function(){
+				$(".mobile-only p").on("click", function(){
 					chartControl.view = $(this).attr("value"); //detect view
 					chartFunctions.redrawCanvas();
 				})
 	
-				$("#stacked_options_chosen").on("click","ul > li", function(){
-					chartControl.view = $(this).attr("value"); //detect view
-					chartFunctions.redrawCanvas();
-				})
-				$("#contribute_options_chosen").on("click","ul > li", function(){
-					chartControl.view = $(this).attr("value"); //detect view
-					chartFunctions.redrawCanvas();			
-				})
-				$("#expenses_options_chosen").on("click","ul > li", function(){
-					chartControl.view = $(this).attr("value"); //detect view
-					chartFunctions.redrawCanvas();			
-				})
-				$("#summary_options_chosen").on("click","ul > li", function(){
-					chartControl.view = $(this).attr("value"); //detect view
-					chartFunctions.redrawCanvas();			
-				})
-				$("#ie_options_chosen").on("click","ul > li", function(){
-					chartControl.view = $(this).attr("value"); //detect view
-					chartFunctions.redrawCanvas();			
-				})
 				for(i=0 ; i < raceTotal.length ; i++){
-					$("#candidates_options_"+i+"_chosen").on("click","ul > li", function(){
+					$(".candidate-options p").on("click",function(){
 						thisCandidate = parseInt($(this).attr("value")); //detect candidate
 						chartFunctions.redrawCanvas();			
 					})
@@ -410,15 +371,6 @@
 			// ------- INITIALIZE FIRST CHART ------- //
 			setTheScene:function(data, tabletop){
 				//pull spreadsheet data into arrays
-				$.each( tabletop.sheets("Summary").all(), function(i, summary) {
-					var insertRow = [];
-					insertRow[0] = summary.category;
-					insertRow[1] = summary.all;
-					insertRow[2] = summary.torlakson;
-					insertRow[3] = summary.tuck;
-					summaryDB.push(insertRow);
-				});
-
 				$.each( tabletop.sheets("Main").all(), function(i, main) {
 					var insertRow = [];
 					insertRow[0] = main.item;
@@ -446,13 +398,6 @@
 					controlDB.push(insertRow)
 				})
 
-				$.each(tabletop.sheets("Control").all(), function(i, control){
-					var insertRow = [];
-					insertRow[0] = control.option;
-					insertRow[1] = control.command;
-					controlDB.push(insertRow)
-				})
-
 				//chart defaults
 				utilityFunctions.chartDefaults();
 
@@ -463,7 +408,7 @@
 				ieLength = ieDB.length;
 
 				//when last updated non-IE
-				updated = mainDB[5][1];
+				updated = mainDB[3][1];
 				$("#cf-header h4").html("Data Updated on " + updated); 
 
 				//when last updated IE
@@ -499,39 +444,31 @@
 			// ------- DRAWING CHARTS BY TYPE ------- //
 			drawSummary:function(){
 				var data = [], check = [], colors = [], ii = 2, iii = 1;
-				var titles = ["Cash on Hand by Candidate","Funds Raised by Candidate","Funds Spent by Candidate","Independent Spending Supporting Candidate","Independent Spending Opposing Candidate","Issue Advocacy Spending Involving Candidate","No. of Contributions","Days Since First Contribution","Average Contributions","Median Contributions"];
+				var titles = ["Candidate's Cash on Hand","Direct Contributions to Candidate","Funds Spent by Candidate","Independent Spending Supporting This Candidate","Independent Spending Opposing This Candidate","Issue Advocacy Spending Involving This Candidate"];
 				//var colors = ["#5FADCE","#91cf60","#CE5F75","#91cf60","#CE5F75","#5FADCE","#5FADCE","#91cf60","#91cf60"];
 				var color = "#4c5b52";
 				
 				//grab data
 				for (i=0 ; i < 2 ; i++){
 					data[i] = new Array();
-					data[i][0] = "$" + utilityFunctions.commaSeparateNumber(mainDB[26][ii]);
-					data[i][1] = "$" + utilityFunctions.commaSeparateNumber(summaryDB[5][ii]);
-					data[i][2] = "$" + utilityFunctions.commaSeparateNumber(summaryDB[18][ii]);
-					data[i][3] = "$" + utilityFunctions.commaSeparateNumber(mainDB[30][ii]);
-					data[i][4] = "$" + utilityFunctions.commaSeparateNumber(mainDB[31][ii]);
-					data[i][5] = "$" + utilityFunctions.commaSeparateNumber(mainDB[41][ii]);
-					data[i][6] = utilityFunctions.commaSeparateNumber(mainDB[8][ii]);
-					data[i][7] = utilityFunctions.commaSeparateNumber(mainDB[6][ii]);
-					data[i][8] = "$" + utilityFunctions.commaSeparateNumber(mainDB[9][ii]);
-					data[i][9] = "$" + utilityFunctions.commaSeparateNumber(mainDB[10][ii]);
+					data[i][0] = "$" + utilityFunctions.commaSeparateNumber(Math.round(mainDB[4][ii]));
+					data[i][1] = "$" + utilityFunctions.commaSeparateNumber(Math.round(mainDB[5][ii]));
+					data[i][2] = "$" + utilityFunctions.commaSeparateNumber(Math.round(mainDB[6][ii]));
+					data[i][3] = "$" + utilityFunctions.commaSeparateNumber(Math.round(mainDB[7][ii]));
+					data[i][4] = "$" + utilityFunctions.commaSeparateNumber(Math.round(mainDB[8][ii]));
+					data[i][5] = "$" + utilityFunctions.commaSeparateNumber(Math.round(mainDB[9][ii]));
 					ii = ii + 1;
 				}
 				ii = 2
 				
 				for (i=0 ; i < 2 ; i++){
 					check[i] = new Array();
-					check[i][0] = parseInt(mainDB[26][ii]);
-					check[i][1] = parseInt(summaryDB[5][ii]);
-					check[i][2] = parseInt(summaryDB[18][ii]);
-					check[i][3] = parseInt(mainDB[30][ii]);
-					check[i][4] = parseInt(mainDB[31][ii]);
-					check[i][5] = parseInt(mainDB[41][ii]);
-					check[i][6] = parseInt(mainDB[8][ii]);
-					check[i][7] = parseInt(mainDB[6][ii]);
-					check[i][8] = parseInt(mainDB[9][ii]);
-					check[i][9] = parseInt(mainDB[10][ii]);
+					check[i][0] = parseInt(Math.round(mainDB[4][ii]));
+					check[i][1] = parseInt(Math.round(mainDB[5][ii]));
+					check[i][2] = parseInt(Math.round(mainDB[6][ii]));
+					check[i][3] = parseInt(Math.round(mainDB[7][ii]));
+					check[i][4] = parseInt(Math.round(mainDB[8][ii]));
+					check[i][5] = parseInt(Math.round(mainDB[9][ii]));
 					ii = ii + 1;
 				}
 				//populate titles
@@ -568,515 +505,16 @@
 
 				//Descriptives
 				$(".cf-title h2").html(chartControl.summary.titleRanking);
-				//(".summary-row").css("height","15px");
-				////$("#cf-overview .cf-title").append("<p>(Area below may be scrollable)</p>");
-				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.summary.footerRanking + "</p>");
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();
-			},
-			drawTopDonors:function(){
-				var data = [], real = [];
-				//size up data
-				var ii = raceColumns[race];				
-				for (i=0 ; i < raceTotal[race]; i++){
-					//top contributors
-					data[i] = new Array();
-					data[i][0] = mainDB[12][ii];
-					data[i][1] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[11][ii]));
-					data[i][2] = mainDB[14][ii];
-					data[i][3] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[13][ii]));
-					data[i][4] = mainDB[16][ii];
-					data[i][5] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[15][ii]));
-					
-					//top employers
-					data[i][6] = mainDB[18][ii];
-					data[i][7] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[17][ii]));
-					data[i][8] = mainDB[20][ii];
-					data[i][9] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[19][ii]));
-					data[i][10] = mainDB[22][ii];
-					data[i][11] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[21][ii]));
-					data[i][12] = mainDB[24][ii];
-					data[i][13] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[23][ii]));
-					data[i][14] = mainDB[36][ii];
-					data[i][15] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[35][ii]));
-					data[i][16] = mainDB[38][ii];
-					data[i][17] = "$" + utilityFunctions.commaSeparateNumber(parseInt(mainDB[37][ii]));
-					ii = ii + 1;
-				}
-				
-				//filer our retired, homemakers, and not employed
-				for (i=0 ; i < raceTotal[race]; i++){
-					real[i] = new Array();
-					var ii = 0, iii = 1;
-					//1
-					if (data[i][6] === "Retired" || data[i][6] === "Homemaker" || data[i][6] === "Not Employed" || data[i][6] === "Candidate Committees"){
-						
-					}
-					else {
-						real[i][ii] = data[i][6];
-						real[i][iii] = data[i][7];
-						ii = ii + 2;
-						iii = iii + 2;
-					}
-					//2
-					if (data[i][8] === "Retired" || data[i][8] === "Homemaker" || data[i][8] === "Not Employed" || data[i][8] === "Candidate Committees"){
-						
-					}
-					else {
-						real[i][ii] = data[i][8];
-						real[i][iii] = data[i][9];
-						ii = ii + 2;
-						iii = iii + 2;
-					}
-					//3
-					if (data[i][10] === "Retired" || data[i][10] === "Homemaker" || data[i][10] === "Not Employed" || data[i][10] === "Candidate Committees"){
-						
-					}
-					else {
-						real[i][ii] = data[i][10];
-						real[i][iii] = data[i][11];
-						ii = ii + 2;
-						iii = iii + 2;
-					}
-					//4
-					if (data[i][12] === "Retired" || data[i][12] === "Homemaker" || data[i][12] === "Not Employed" || data[i][12] === "Candidate Committees"){
-						
-					}
-					else {
-						real[i][ii] = data[i][12];
-						real[i][iii] = data[i][13];
-						ii = ii + 2;
-						iii = iii + 2;
-					}
-					//5
-					if (data[i][14] === "Retired" || data[i][14] === "Homemaker" || data[i][14] === "Not Employed" || data[i][14] === "Candidate Committees"){
-						
-					}
-					else {
-						real[i][ii] = data[i][14];
-						real[i][iii] = data[i][15];
-						ii = ii + 2;
-						iii = iii + 2;
-					}
-					//6
-					if (data[i][16] === "Retired" || data[i][16] === "Homemaker" || data[i][16] === "Not Employed" || data[i][16] === "Candidate Committees"){
-						
-					}
-					else {
-						real[i][ii] = data[i][16];
-						real[i][iii] = data[i][17];
-						ii = ii + 2;
-						iii = iii + 2;
-					}
-				}
-				
-				
-				//populate data
-				for (i=0 ; i < data.length ; i++){
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(0)").html(data[i][0]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(1)").html(data[i][1]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(0)").html(data[i][2]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(1)").html(data[i][3]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(0)").html(data[i][4]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(1)").html(data[i][5]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(0)").html(real[i][0]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").html(real[i][1]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(0)").html(real[i][2]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").html(real[i][3]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(0)").html(real[i][4]);
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").html(real[i][5]);
-
-					var $a = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(1)").html();
-					var $b = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(1)").html();
-					var $c = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(1)").html();
-					var $d = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").html();
-					var $e = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").html();
-					var $f = $("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").html();
-
-					if ($a === "$NaN"){
-						$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(0) span:eq(1)").remove();
-					}
-					if ($b === "$NaN"){
-						$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(1) span:eq(1)").remove();
-					}
-					if ($c === "$NaN"){
-						$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(1) p:eq(2) span:eq(1)").remove();
-					}
-					if ($d === "$NaN"){
-						$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(0) span:eq(1)").remove();
-					}
-					if ($e === "$NaN"){
-						$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(1) span:eq(1)").remove();
-					}
-					if ($f === "$NaN"){
-						$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(2) p:eq(2) span:eq(1)").remove();
-					}
-
-				}			
-
-				//descriptives
-				$("#cf-donors .cf-title h2").html(chartControl.donors.titleTop);
-				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.donors.footerTop + "</p>");
-
-				//remove unused cells
-				if ($("#cf-donors .donor-row .donor-cell p span").html() === "$NaN"){
-					$("#cf-donors .donor-row:eq("+ i +") .donor-cell p").remove();
-				}
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();
-			},
-			drawContributions:function(){
-				var data = [], commas = [], dataWidth = [], links = [];
-				var all = 0;
-				//size up data
-				var ii = raceColumns[race];
-				for (i=0 ; i < raceTotal[race]; i++){
-					data[i] = parseInt(summaryDB[5][ii]);
-					commas[i] = utilityFunctions.commaSeparateNumber(data[i]);
-					links[i] = mainDB[3][ii];
-					ii = ii + 1;
-				}
-
-				//find total
-				for (i=0 ; i < data.length ; i++){
-					all = all + data[i]
-				}
-
-				//find highest value in array
-				var maxValue = Math.max.apply(null, data);
-
-				//figure out the width for each bar
-				for (i = 0 ; i < data.length ; i++){
-					dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
-				}
-
-				//populate data
-				for (i=0 ; i < data.length ; i++){
-					$("#cf-summary .bar-row:eq(" + i + ")").attr("value",data[i]);
-					$("#cf-summary .bar-data:eq(" + i + ") p").text("$" + commas[i]);
-					$("#cf-summary .bar-data:eq(" + i + ")").animate({
-						width:dataWidth[i]
-					})
-				}
-
-				//meta
-				$(".bar-data").css("background","#91cf60");
-				$("#cf-summary .cf-title h2").html(chartControl.cashRaised.cashRaisedTitle);
-				$("#cf-summary").append("<h4 class=\"chart-h4\">$" + utilityFunctions.commaSeparateNumber(all) + " total contributed</h4>");
-				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerCashRaised + "</p>");
-				chartFunctions.sortBars();
-				$(".bar-row[value='0']").css("display","none");
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();
-			},
-			drawExpenseType:function(){
-				var all = 0, data = [], commas = [], ii = 23, dataWidth = [], $thisBar, workaround = [], workaroundCommas = [];
-
-				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-expense-type .cf-title");
-				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				//$("#cf-choose-text h4:eq(1)").css("display","block");	
-				
-				//get data
-				for (i=0 ; i < 28;  i++){
-					data[i] = parseInt(summaryDB[ii][thisCandidate]);
-					commas[i] = utilityFunctions.commaSeparateNumber(data[i]);
-					all = all + data[i];
-					ii = ii + 1;
-				}
-				//find highest value in array
-				var maxValue = Math.max.apply(null, data);
-
-				//figure out the width for each bar
-				for (i = 0 ; i < data.length ; i++){
-					dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
-				}
-
-				//populate data vlaues for sorting
-				for (i=0 ; i < data.length ; i++){
-					$("#cf-expense-type .bar-row:eq(" + i + ")").attr("value",data[i]);
-				}
-
-				//sort
-				chartFunctions.sortBars();
-
-				//weird sorting/drawing workaround (EVALUATE MORE LATER)
-				for (i=0 ; i < data.length ; i++){
-					workaround[i] = parseInt($("#cf-expense-type .bar-row:eq(" + i + ")").attr("id") - 1);
-				}
-
-				//draw charts
-				for (i=0 ; i < data.length ; i++){
-					$("#cf-expense-type .bar-data:eq(" + i + ") p").text("$" + commas[workaround[i]]);
-					$("#cf-expense-type .bar-data:eq(" + i + ")").animate({
-						width:dataWidth[workaround[i]]
-					})
-				}
-
-				//destroy no value bars
-				$(".bar-row[value='0']").css("display","none");
-
-				$("#cf-expense-type .bar-data").css("background","#CE5F75");
-				$("#cf-expense-type .cf-title h2").html(chartControl.cashSpent.expenseTypeTitle);
-				$("#cf-expense-type").append("<h4 class=\"chart-h4\" style=\"color:rgb(206, 95, 117);\">$" + utilityFunctions.commaSeparateNumber(all) + " spent total</h4>");
-				$(".cf-title").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerExpenseType + "</p>");
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();
-			},
-			drawInterest:function(){
-				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
-				
-				//size up data
-				var ii = raceColumns[race];
-				for (i=0 ; i < raceTotal[race] ;  i++){
-					data[i] = new Array();
-					commas[i] = new Array();
-					data[i][0] = (parseInt(mainDB[25][ii]));
-					data[i][1] = (parseInt(mainDB[33][ii]));
-					data[i][2] = (parseInt(mainDB[34][ii]));
-					data[i][3] = (parseInt(mainDB[39][ii]));
-					data[i][4] = (parseInt(mainDB[40][ii]));
-					commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
-					commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][1]);
-					commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][2]);
-					commas[i][3] = utilityFunctions.commaSeparateNumber(data[i][3]);
-					commas[i][4] = utilityFunctions.commaSeparateNumber(data[i][4]);
-					ii = ii + 1;
-				}
-				//calculate the total for each candidate
-				for (i=0 ; i < raceTotal[race] ; i++){
-					total[i] = (data[i][0] + data[i][1] + data[i][2] + data[i][3] + data[i][4]);
-				}
-				//sorting by first legend item
-				for (i=0 ; i < raceTotal[race] ; i++){
-					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
-				}
-				//find highest value in array
-				var maxValue = Math.max.apply(null, total);
-				//figure out the width for each bar
-				for (i = 0 ; i < total.length ; i++){
-					dataWidth[i] = (total[i] / maxValue) * dimensions.maxBarWidth;
-				}
-				//populate data
-				colors = chartControl.cashRaised.summaryLegendColors;
-				for (i=0 ; i < raceTotal[race] ; i++){
-					for (x = 0 ; x < 5 ; x++){
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
-							width:((data[i][x] / total[i]) * 100) + "%"
-						}).attr("value", data[i][x]);
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:chartControl.cashRaised.summaryLegendLabels[x],
-							content:"$" + commas[i][x]
-						})
-					}
-				}
-				ii = raceColumns[race];
-				for (i=0 ; i < total.length ; i++){
-					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",total[i]);
-					$("#cf-stacked .bar-data:eq(" + i + ")").animate({
-						width:dataWidth[i] + "px"
-					})
-					var test = total[i] / parseInt(summaryDB[5][ii]) * 100;
-					$("#cf-stacked .bar-data:eq(" + i + ") p").text("$" + utilityFunctions.commaSeparateNumber(total[i]) + " ("+ Math.round(test) + "% of total)");
-					ii = ii + 1;
-				}
-				//descriptives
-				$(".cf-title h2").html(chartControl.cashRaised.summaryTitle);
-				$("#cf-stacked .cf-title").append("<p style=\"color:#8c9b93\">(Hover over bars for details)</p>");
-				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.cashRaised.footerRetiree + "</p>");
-				$(".stacked-bar-row[value='0']").add(".stacked-bar-row[value='NaN']").css("display","none");
-				chartFunctions.sortGeo();
-				chartFunctions.sortStacked();		
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();		
-			},
-			drawSpent:function(){
-				var data = [], commas = [], dataWidth = [], links = [];
-				var all = 0;
-				$("#expenses_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#expenses_options_chosen .chosen-single span").text(chartControl.defaultSubTopics[2]);
-				//$("#cf-choose-text h4:eq(1)").css("display","block");
-				
-				//size up data
-				var ii = raceColumns[race];
-				for (i=0 ; i < raceTotal[race] ;  i++){
-					data[i] = parseInt(summaryDB[18][ii]);
-					commas[i] = utilityFunctions.commaSeparateNumber(data[i]);
-					links[i] = mainDB[3][ii];
-					ii = ii + 1;
-				}
-
-				//find total
-				for (i=0 ; i < data.length ; i++){
-					all = all + data[i]
-				}
-
-				//find highest value in array
-				var maxValue = Math.max.apply(null, data);
-
-				//figure out the width for each bar
-				for (i = 0 ; i < data.length ; i++){
-					dataWidth[i] = (data[i] / maxValue) * dimensions.maxBarWidth;
-				}
-
-				//populate data
-				for (i=0 ; i < data.length ; i++){
-					$("#cf-summary .bar-row:eq(" + i + ")").attr("value",data[i]);
-					$("#cf-summary .bar-row:eq("+ i +") a").attr("href", links[i]);
-					$("#cf-summary .bar-data:eq(" + i + ") p").text("$" + commas[i]);
-					$("#cf-summary .bar-data:eq(" + i + ")").animate({
-						width:dataWidth[i]
-					})
-				}
-
-				$("#cf-summary .bar-data").css("background","#CE5F75");
-				$("#cf-summary .cf-title h2").html(chartControl.cashSpent.cashSpentTitle);
-				$("#cf-summary").append("<h4 class=\"chart-h4\" style=\"color:#CE5F75;\">$" + utilityFunctions.commaSeparateNumber(all) + " total spent</h4>");
-				$(".cf-title").append("<p class=\"chart-footer\">"+ chartControl.cashSpent.footerCashSpent +"</p>");
-				chartFunctions.sortBars();
-				$(".bar-row[value='0']").css("display","none");
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();
-			},
-			drawGeoPercent:function(){
-				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
-				//unhide stacked option
-				$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(1)").css("display","block");
-				//size up data
-				var ii = raceColumns[race];
-				for (i=0 ; i < raceTotal[race] ;  i++){
-					data[i] = new Array();
-					commas[i] = new Array();
-					data[i][0] = parseInt(summaryDB[19][ii]);
-					data[i][1] = parseInt(summaryDB[20][ii]);
-					data[i][2] = parseInt(summaryDB[21][ii]);
-					data[i][3] = parseInt(summaryDB[22][ii]);
-					data[i][4] = mainDB[3][ii];
-					commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
-					commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][1]);
-					commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][2]);
-					commas[i][3] = utilityFunctions.commaSeparateNumber(data[i][3]);
-					ii = ii + 1;
-				}
-				//calculate the total for each candidate
-				for (i=0 ; i < raceTotal[race] ; i++){
-					total[i] = (data[i][0] + data[i][1] + data[i][2] + data[i][3]);
-				}
-				//sorting by first legend item
-				for (i=0 ; i < raceTotal[race] ; i++){
-					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
-					$("#cf-stacked a").attr("href", data[i][4]);
-				}
-				//populate data
-				colors = chartControl.geography.legendColor;
-				for (i=0 ; i < raceTotal[race] ; i++){
-					for (x = 0 ; x < chartControl.geography.legendItems ; x++){
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
-							width:((data[i][x] / total[i]) * 100) + "%"
-						}).attr("value", data[i][x]);
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:chartControl.geography.legendLabels[x],
-							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
-						})
-					}
-				}
-				//descriptives
-				$(".cf-title h2").html(chartControl.geography.geographyTitle);
-				$("#cf-stacked .cf-title").append("<p style=\"color:#8c9b93\">(Hover over bars for details)</p>");
-				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.geography.footer + "</p>");
-				$(".stacked-bar-row[value='0']").add(".stacked-bar-row[value='NaN']").css("display","none");
-				if (mobileUser == true){
-					$("#cf-stacked .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"Percent of Contributions\">Percent</p>");
-					$("#cf-stacked .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"Total Contributions\">Total</p>");
-					utilityFunctions.mobileSubNavigation();
-				}
-				
-				//adjust for new elements just added, style for mobile
-				utilityFunctions.mobileStyle();
-			},
-			drawGeoTotal:function(){
-				var data = [], dataWidth = [], total = [], commas = [], colors = [], links = [];
-				//unhide stacked option
-				$("#stacked_options_chosen").css("visibility","visible").insertAfter("#overall_options_chosen");
-				$("#cf-choose-text h4:eq(1)").css("display","block");
-				//size up data
-				var ii = raceColumns[race];
-				for (i=0 ; i < raceTotal[race] ;  i++){
-					data[i] = new Array();
-					commas[i] = new Array();
-					data[i][0] = parseInt(summaryDB[19][ii]);
-					data[i][1] = parseInt(summaryDB[20][ii]);
-					data[i][2] = parseInt(summaryDB[21][ii]);
-					data[i][3] = parseInt(summaryDB[22][ii]);
-					data[i][4] = mainDB[3][ii];
-					commas[i][0] = utilityFunctions.commaSeparateNumber(data[i][0]);
-					commas[i][1] = utilityFunctions.commaSeparateNumber(data[i][1]);
-					commas[i][2] = utilityFunctions.commaSeparateNumber(data[i][2]);
-					commas[i][3] = utilityFunctions.commaSeparateNumber(data[i][3]);
-					ii = ii + 1;
-				}
-				//calculate the total for each candidate
-				for (i=0 ; i < raceTotal[race] ; i++){
-					total[i] = (data[i][0] + data[i][1] + data[i][2] + data[i][3]);
-				}
-				//sorting by first legend item
-				for (i=0 ; i < raceTotal[race] ; i++){
-					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",((data[i][0] / total[i]) * 100));
-				}
-				//find highest value in array
-				var maxValue = Math.max.apply(null, total);
-				//figure out the width for each bar
-				for (i = 0 ; i < total.length ; i++){
-					dataWidth[i] = (total[i] / maxValue) * dimensions.maxBarWidth;
-				}
-				//populate data
-				colors = chartControl.geography.legendColor;
-				for (i=0 ; i < raceTotal[race] ; i++){
-					for (x = 0 ; x < chartControl.geography.legendItems ; x++){
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").css("background",colors[x] ).animate({
-							width:((data[i][x] / total[i]) * 100) + "%"
-						}).attr("value", data[i][x]);
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ") .bar-seg:eq(" + x + ")").caltip({
-							title:chartControl.geography.legendLabels[x],
-							content:"$" + commas[i][x] + " (" + Math.round(((data[i][x] / total[i]) * 100)) + "%" + ")"
-						})
-					}
-				}				
-				for (i=0 ; i < total.length ; i++){
-					$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("value",total[i]);
-					$("#cf-stacked a").attr("href", data[i][4]);
-					$("#cf-stacked .bar-data:eq(" + i + ")").animate({
-						width:dataWidth[i] + "px"
-					})
-				}
-				//descriptives
-				$(".cf-title h2").html(chartControl.geography.geographyTitle);
-				$("#cf-stacked .cf-title").append("<p style=\"color:#8c9b93\">(Hover over bars for details)</p>");
-				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.geography.footer + "</p>");
-				$(".stacked-bar-row[value='0']").add(".stacked-bar-row[value='NaN']").css("display","none");
-				if (mobileUser == true){
-					$("#cf-stacked .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"Percent of Contributions\">Percent</p>");
-					$("#cf-stacked .cf-title").append("<p name=\"mobile-sub-nav\" style=\"display:block;\" value=\"Total Contributions\">Total</p>");
-					utilityFunctions.mobileSubNavigation();
-				}
-				chartFunctions.sortGeo();
+				$("#cf-chart").append("<p class=\"chart-footer\">" + chartControl.summary.footerRanking + "</p>");
 				
 				//adjust for new elements just added, style for mobile
 				utilityFunctions.mobileStyle();
 			},
 			drawAllDonors:function(){
-				$("#candidates_options_" + race + "_chosen").css("visibility","visible").insertAfter("#cf-iframe .cf-title");
-				$(".cf-iframe-hold").append(mainDB[29][thisCandidate]);	
+				$(".cf-iframe-hold").append(mainDB[11][1]);	
 
 				//descriptives
-				$("#cf-iframe .cf-title h2").html(chartControl.donors.titleAll);
-				$("#cf-chart").css("height","800px");
+				$("#cf-chart").css("height","1200px");
 				$("#cf-iframe .cf-title").append("<p>(Area below may be scrollable)</p>");
 			},
 			drawIEoverview:function(){
@@ -1282,12 +720,10 @@
 					iii = iii + 1;
 					
 				}
-				
-				//temp coloring
-				$("#cf-overview .summary-row:eq(4) p:eq(1)").css("color", issueColor);
-				
+								
 				//Descriptives
 				$(".cf-title h2").html(chartControl.ie.titleCandidates);
+				$(".cf-head").css("height","100px");
 				$(".cf-title").append("<p class=\"chart-footer\">" + chartControl.ie.footerCandidates + "</p>");
 				
 				//adjust for new elements just added, style for mobile
@@ -1296,18 +732,8 @@
 			},
 			// ------- REFRESHING CANVAS ------- //
 			redrawCanvas:function(){
-				//magically hide and show chart divs
-				//$("#cf-summary .bar-chart").css("display","block");
-				//$("#cf-summary").css("display","block");
 				//Change view
-				if (chartControl.view === "Cash Contributions" || chartControl.view === "Cash Raised"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					chartFunctions.drawContributions();
-				}
-				else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
+				if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
 					chartFunctions.resetCanvas(chartControl.view);
 					chartFunctions.renameCanvas(chartControl.view);
 					$(".cf-canvas").css("display","none");
@@ -1335,97 +761,17 @@
 					$("#cf-overview").css("display","block");
 					chartFunctions.drawSummary();
 				}
-				else if (chartControl.view === "Top Donors"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-donors").css("display","block");
-					chartFunctions.drawTopDonors();
-				}
-				else if (chartControl.view === "Retirees"){
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-stacked").css("display","block");
-					chartFunctions.drawInterest();
-				}
-				else if (chartControl.view === "Geography" || chartControl.view === "Percent of Contributions"){
-					$(".cf-canvas").css("display","none");
-					$("#cf-stacked").css("display","block");
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					chartFunctions.drawGeoPercent();
-				}
-				else if (chartControl.view === "Total Contributions"){
-					$(".cf-canvas").css("display","none");
-					$("#cf-stacked").css("display","block");
-					chartFunctions.resetCanvas(chartControl.view);
-					chartFunctions.renameCanvas(chartControl.view);
-					chartFunctions.drawGeoTotal();
-				}
-				else if (chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){
-					chartFunctions.resetCanvas(chartControl.view)
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-summary").css("display","block");
-					chartFunctions.drawSpent()
-				}
-				else if (chartControl.view === "Expense Type"){
-					chartFunctions.resetCanvas(chartControl.view)
-					chartFunctions.renameCanvas(chartControl.view);
-					$(".cf-canvas").css("display","none");
-					$("#cf-expense-type").css("display","block");
-					chartFunctions.drawExpenseType()
-				}
-				else if (chartControl.view === "Achievements"){
-					$(".cf-canvas").css("display","none");
-					$("#cf-achieve").css("display","block").animate({
-						height:300
-					});
-				}
 			},
 			resetCanvas:function(view){
 				//visibility stacked and summary options
-				$("#stacked_options_chosen").css("visibility","hidden");
-				$("#summary_options_chosen").css("visibility","hidden");
-				$("#contribute_options_chosen").css("visibility","hidden");
-				$("#expenses_options_chosen").css("visibility","hidden");
-				$("#ie_options_chosen").css("visibility","hidden");
-				$("#cf-choose-text h4:eq(1)").css("display","none");
-				$("#cf-chart").css("overflow-y","auto");
-				for (i = 0 ; i < raceTotal.length ; i++){
-					$("#candidates_options_"+i+"_chosen").css("visibility","hidden");
-				}
+				$("#cf-chart").css("overflow-y","auto");				
 				//reset title
 				$(".cf-title p").remove();
 				$("#cf-chart").css("height","auto");
 				//reset text and colors for chart
 				$(".chart-h4").add(".ie-bar-row-overview").add(".chart-footer").add(".bar-row").add(".stacked-bar-row").add(".ie-bar-row").add(".cf-legend-opt").add(".cf-ie-legend-opt").add(".summary-row").add(".donor-row").remove();
 
-				if (chartControl.view === "Cash Contributions" || chartControl.view === "Cash Raised" || chartControl.view === "Non-Cash Givings" || chartControl.view === "CPD" || chartControl.view === "Loans" || chartControl.view === "Cash Spent" || chartControl.view === "Expenses Summary"){			
-					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$("#cf-summary .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
-					}
-				}		
-				else if (chartControl.view === "Retirees") {
-						//populate bars based on number of candidates
-						for (i = 1 ; i < raceTotal[race] + 1; i++){
-							$(".stacked-bar-chart").append(chartControl.cashRaised.legendBars.three);
-						}				
-						//tag each row with unique ID
-						for (i = 1 ; i < raceTotal[race] + 1; i++){
-							$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("id", i);
-						}
-						//Give Max Width to Bars
-						$(".stacked-bar-row").css("width", dimensions.overall);
-						$(".stacked-bar-row .bar-data").css("width", dimensions.maxBarWidth);
-						//populate legend
-						for (i = 0 ; i < 5 ; i++){
-							$("#cf-legend").append("<div class=\"cf-legend-opt\"><p>" + chartControl.cashRaised.summaryLegendLabels[i] + "</p></div>");
-							$(".cf-legend-opt:eq(" + i + ")").css("background", chartControl.cashRaised.summaryLegendColors[i]);
-						}
-				}
-				else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
+				if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
 					$(".cf-ie-head").css("height","215px");
 					//populate bars based on number of candidates
 					for (i = 1 ; i < raceTotal[race] + 1; i++){
@@ -1446,100 +792,28 @@
 				else if (chartControl.view === "IE Candidates"){
 					$("#cf-overview").append("<div class=\"summary-row\" id=\"overview-header\"><div class=\"summary-cell\"></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div></div>");
 					for (i = 1 ; i < ieNames.length + 1; i++){
-						$("#cf-overview").append("<div style=\"height:30px;\" class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
-					}
-				}
-				else if (chartControl.view === "Expense Type"){
-					for (i = 1 ; i < 29; i++){
-						$("#cf-expense-type .bar-chart").append("<div class=\"bar-row\" id=\"" + i + "\"><div class=\"bar-label\"><p class=\"the-label\"></p></div><div class=\"bar-data\"><p></p></div></div>");
+						$("#cf-overview").append("<div style=\"height:45px;\" class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
 					}
 				}
 				else if (chartControl.view === "All Donors"){
 					$("#cf-chart").css("overflow-y","hidden");
 					$("#cf-iframe iframe").remove();
 				}
-				else if (chartControl.view === "Geography" || chartControl.view === "Percent of Contributions" || chartControl.view === "Total Contributions"){				
-					var geographyStackedSubBars;
-					//determine number of stacked sub bars
-					switch(chartControl.geography.legendItems){
-						case 2:
-							geographyStackedSubBars = chartControl.geography.legendBars.two;
-							break;
-						case 3:
-							geographyStackedSubBars = chartControl.geography.legendBars.three;
-							break;
-						case 4:
-							geographyStackedSubBars = chartControl.geography.legendBars.four;
-							break;
-					}
-					//populate bars based on number of candidates
-					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$(".stacked-bar-chart").append(geographyStackedSubBars);
-					}				
-					//tag each row with unique ID
-					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$("#cf-stacked .stacked-bar-row:eq(" + i + ")").attr("id", i);
-					}
-					//Give Max Width to Bars
-					$(".stacked-bar-row").css("width", dimensions.overall);
-					$(".stacked-bar-row .bar-data").css("width", dimensions.maxBarWidth);
-					//populate legend
-					for (i = 0 ; i < chartControl.geography.legendItems ; i++){
-						$("#cf-legend").append("<div class=\"cf-legend-opt\"><p>" + chartControl.geography.legendLabels[i] + "</p></div>");
-						$(".cf-legend-opt:eq(" + i + ")").css("background", chartControl.geography.legendColor[i]);
-					}
-				}	
 				else if (chartControl.view === "Summary" || chartControl.view === "Ranking"){
 					$("#cf-overview").append("<div class=\"summary-row\" id=\"overview-header\"><div class=\"summary-cell\"></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div><div class=\"summary-cell\"><img src=\"\"><p></p><p></p></div></div>");
-					for (i = 1 ; i < 12; i++){
+					for (i = 1 ; i < 7; i++){
 						$("#cf-overview").append("<div class=\"summary-row\" id=\""+i+"\"><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div><div class=\"summary-cell\"><p></p></div></div>");
 					}
 				}
-				else if (chartControl.view === "Top Donors"){
-					for (i = 1 ; i < raceTotal[race] + 1; i++){
-						$("#cf-donors").append("<div class=\"donor-row\" id=\""+i+"\"><div class=\"donor-cell\"><img src=\"\"><p></p><p></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div><div class=\"donor-cell\"><p><span></span><br><span></span></p><p><span></span><br><span></span></p><p><span></span><br><span></span></p></div></div>");
-					}
-				}	
 				//resize labels
 				$(".bar-label").css("width",dimensions.label);
 			},
 			renameCanvas:function(view){
 					var ii = raceColumns[race];
-					if (chartControl.view === "Cash Contributions" || chartControl.view === "Cash Raised" || chartControl.view === "Non-Cash Givings" || chartControl.view === "Cash Spent" || chartControl.view === "CPD" || chartControl.view === "Loans" || chartControl.view === "Expenses Summary"){
-						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-summary .bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
-							ii = ii + 1;
-						}			
-					}
-					else if (chartControl.view === "Expense Type"){
-						var iii = 23;
-						for (i = 0; i < 28; i++){
-							$("#cf-expense-type .bar-row:eq("+ i +") .bar-label p").html(summaryDB[iii][0]);
-							iii = iii + 1;
-						}
-					}
-					else if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
+					if (chartControl.view === "IE Overview" || chartControl.view === "Outside Money"){
 						var iii = 0;
 						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-ie .bar-buffer .bar-label p:eq("+i+")").html(summaryDB[0][ii]);
-							ii = ii + 1;
-						}
-					}
-					else if (chartControl.view === "IE Committees"){
-						for (i=0 ; i < ieNames.length ; i++){
-							$("#cf-ie .ie-bar-row:eq("+ i +") .bar-label p").html(ieNames[i]);
-						}
-
-					}
-					else if (chartControl.view === "Retirees"){
-						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-stacked .stacked-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
-							ii = ii + 1;
-						}
-					}
-					else if (chartControl.view === "Geography" || chartControl.view === "Percent of Contributions" || chartControl.view === "Total Contributions"){
-						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-stacked .stacked-bar-row:eq("+ i +") .bar-label p").html(summaryDB[0][ii]);
+							$("#cf-ie .bar-buffer .bar-label p:eq("+i+")").html(mainDB[0][ii]);
 							ii = ii + 1;
 						}
 					}
@@ -1547,16 +821,8 @@
 						//populate candidates
 						for (i=1 ; i < 3 ; i++){
 							$("#overview-header .summary-cell:eq("+i+") img").attr("src", mainDB[2][ii]);
-							$("#overview-header .summary-cell:eq("+i+") p:eq(0)").html(summaryDB[0][ii]);
-							$("#overview-header .summary-cell:eq("+i+") p:eq(1)").html(mainDB[32][ii]);
-							ii = ii + 1;
-						}
-					}
-					else if (chartControl.view === "Top Donors"){
-						for (i = 0; i < raceTotal[race]; i++){
-							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) img").attr("src", mainDB[2][ii]);
-							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) p:eq(0)").html(summaryDB[0][ii]);
-							$("#cf-donors .donor-row:eq("+ i +") .donor-cell:eq(0) p:eq(1)").html(mainDB[32][ii]);
+							$("#overview-header .summary-cell:eq("+i+") p:eq(0)").html(mainDB[0][ii]);
+							$("#overview-header .summary-cell:eq("+i+") p:eq(1)").html(mainDB[10][ii]);
 							ii = ii + 1;
 						}
 					}

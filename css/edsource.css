@@ -146,6 +146,7 @@
 		float: left;
 		margin: 10px;
 		border-radius: 10px;
+		cursor:pointer;
 	}
 	
 	
@@ -374,6 +375,7 @@
 		font-size:13px;
 		color:#666;
 		margin:30px 0 15px 0;
+		font-family:"helvetica neue",helvetica,san-serif;
 	}
 	
 #cf-options {
