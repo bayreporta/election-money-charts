@@ -7,7 +7,7 @@ App is meant to be as non-coder friendly as possible upon completion. Goal is to
 
 Has been featured at EdSource, Santa Rosa Press-Democrat, and Lost Coast Outpost. 
 
-Currently in beta. Mucho work needs to be done. 
+Currently in <strong>BETA</strong>. Mucho work needs to be done. 
 
 README pending. <a href="mailto:bayreporta@gmail.com">Contact me if you want to chat</a>.
 
